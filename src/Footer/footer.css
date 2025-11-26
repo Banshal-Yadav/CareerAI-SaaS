@@ -1,0 +1,145 @@
+.footer-container {
+    background-color: #0a0a0a;
+    color: #ffffff;
+    padding: 4rem 2rem 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+    border-top: 1px solid #333;
+}
+
+/* Infographic Section */
+.footer-infographic {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4rem;
+    padding-bottom: 4rem;
+    border-bottom: 1px solid #222;
+}
+
+.info-block {
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.info-block:hover {
+    transform: translateY(-5px);
+}
+
+.big-text {
+    font-size: 5rem;
+    font-weight: 800;
+    margin: 0;
+    line-height: 1;
+    background: linear-gradient(180deg, #fff, #666);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -2px;
+}
+
+.label-text {
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 3px;
+    color: #888;
+    margin-top: 1rem;
+    text-transform: uppercase;
+}
+
+.info-divider {
+    width: 1px;
+    height: 80px;
+    background-color: #333;
+    transform: rotate(15deg);
+}
+
+/* Links Section */
+.footer-content {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 2rem;
+    text-align: left;
+}
+
+.ftr-div {
+    min-width: 200px;
+}
+
+.ftr-div h3.info {
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+    color: #fff;
+    font-weight: 600;
+}
+
+.ftr-div p {
+    color: #888;
+    margin: 0.8rem 0;
+    cursor: pointer;
+    transition: color 0.2s;
+    font-size: 0.95rem;
+}
+
+.ftr-div p:hover {
+    color: #fff;
+}
+
+.social-links {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.social-links span {
+    color: #888;
+    cursor: pointer;
+    font-size: 0.9rem;
+    border: 1px solid #333;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    transition: all 0.2s;
+}
+
+.social-links span:hover {
+    border-color: #fff;
+    color: #fff;
+    background-color: #1a1a1a;
+}
+
+/* Bottom Section */
+.footer-bottom {
+    text-align: center;
+    padding-top: 2rem;
+    color: #444;
+    font-size: 0.9rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .footer-infographic {
+        flex-direction: column;
+        gap: 3rem;
+    }
+
+    .info-divider {
+        width: 80px;
+        height: 1px;
+        transform: none;
+    }
+
+    .big-text {
+        font-size: 3.5rem;
+    }
+
+    .footer-content {
+        flex-direction: column;
+        text-align: center;
+        align-items: center;
+    }
+
+    .ftr-div {
+        text-align: center;
+    }
+}

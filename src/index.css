@@ -1,0 +1,105 @@
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+
+  /* color variables */
+
+  /* Background Colors */
+  --primary-bg: hsla(0, 0%, 8%);
+  --secondary-bg: hsla(0, 0%, 12%);
+  --card-bg: hsla(0, 0%, 15%);
+  --hover-bg: hsla(0, 0%, 18%);
+  --border-color: hsla(0, 0%, 25%);
+  --border-color-hover: hsla(0, 1%, 41%);
+  
+  /* Text Colors */
+  --text-primary: hsla(0, 0%, 95%);
+  --text-secondary: hsla(0, 0%, 75%);
+  --text-muted: hsla(0, 0%, 60%);
+  --text-disabled: hsla(0, 0%, 45%);
+  
+  /* Title Colors */
+  --title-main: hsla(0, 0%, 98%);
+  --title-section: hsla(0, 0%, 90%);
+  --subtitle: hsla(0, 0%, 80%);
+  
+  /* Accent Colors */
+  --accent-primary: grey; /* Purple for AI theme */
+  --accent-secondary: hsla(200, 85%, 60%); /* Blue for tech feel */
+  --accent-tertiary: hsla(160, 60%, 55%); /* Teal for success */
+  
+  /* Button Colors */
+  --btn-primary: rgb(255, 255, 255);
+  --btn-primary-hover: rgb(215, 214, 214);
+  --btn-secondary: hsla(0, 0%, 25%);
+  --btn-secondary-hover: hsla(0, 0%, 30%);
+  
+  /* Chip/Tag Colors */
+  --chip-ai: hsla(270, 60%, 60%); /* Purple for AI */
+  --chip-frontend: hsla(200, 75%, 55%); /* Blue for Frontend */
+  --chip-java: hsla(25, 85%, 60%); /* Orange for Java */
+  --chip-researcher: hsla(160, 65%, 50%); /* Green for Research */
+  --chip-cloud: hsla(190, 70%, 55%); /* Cyan for Cloud */
+  --chip-bigdata: hsla(45, 80%, 60%); /* Yellow for Big Data */
+  
+  /* Chip Background Variants */
+  --chip-ai-bg: hsla(270, 60%, 20%);
+  --chip-frontend-bg: hsla(200, 75%, 20%);
+  --chip-java-bg: hsla(25, 85%, 20%);
+  --chip-researcher-bg: hsla(160, 65%, 20%);
+  --chip-cloud-bg: hsla(190, 70%, 20%);
+  --chip-bigdata-bg: hsla(45, 80%, 20%);
+  
+  /* Status Colors */
+  --success: hsla(140, 65%, 55%);
+  --success-bg: hsla(140, 65%, 15%);
+  --warning: hsla(45, 85%, 60%);
+  --warning-bg: hsla(45, 85%, 15%);
+  --error: hsla(0, 70%, 60%);
+  --error-bg: hsla(0, 70%, 15%);
+  --info: hsla(200, 80%, 60%);
+  --info-bg: hsla(200, 80%, 15%);
+  
+  /* Feature Icon Colors */
+  --icon-career: hsla(245, 70%, 65%);
+  --icon-interview: hsla(200, 85%, 60%);
+  --icon-insight: hsla(160, 60%, 55%);
+  --icon-resume: hsla(270, 60%, 60%);
+  
+  /* Interactive States */
+  --hover-overlay: hsla(0, 0%, 100%, 0.05);
+  --active-overlay: hsla(0, 0%, 100%, 0.1);
+  --focus-ring: hsla(245, 70%, 65%, 0.4);
+  
+  /* Title Gradients */
+  --gradient-main-title: linear-gradient(to bottom, #ffffff, #666666);
+  --gradient-section-title: linear-gradient(to bottom, #f0f0f0, #707070);
+  --gradient-subtitle: linear-gradient(to bottom, #e0e0e0, #606060);
+  --gradient-accent-title-one: linear-gradient(to bottom, #ffffff, #653f9f);
+  --gradient-accent-title-two: linear-gradient(to bottom, #ffffff, #4831f460);
+  
+  /* Other Gradients */
+  --gradient-card: linear-gradient(135deg, 
+    hsla(0, 0%, 15%, 0.9) 0%, 
+    hsla(0, 0%, 12%, 0.9) 100%);
+  --gradient-button: linear-gradient(135deg, 
+    hsla(245, 70%, 65%) 0%, 
+    hsla(270, 60%, 60%) 100%);
+    
+  /* Shadow Colors */
+  --shadow-light: hsla(0, 0%, 0%, 0.1);
+  --shadow-medium: hsla(0, 0%, 0%, 0.2);
+  --shadow-heavy: hsla(0, 0%, 0%, 0.4);
+  --shadow-colored: hsla(245, 70%, 30%, 0.3);
+
+}

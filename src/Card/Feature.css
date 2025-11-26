@@ -1,0 +1,39 @@
+.feature-section {
+    padding: 4rem 1rem;
+    text-align: center;
+    /* background-color: #0a0a0a; Removed to show grid background */
+}
+
+.feature-title {
+    font-size: 3.5rem;
+    margin: 0 0 1rem 0;
+    font-weight: 800;
+    letter-spacing: -1px;
+    background: linear-gradient(135deg, #7fc2cc 0%, #7dafa6 50%, #7da68f 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+}
+
+.feature-subtitle {
+    font-size: 1.2rem;
+    color: #888;
+    max-width: 600px;
+    margin: 0 auto 3rem auto;
+    line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+    .feature-title {
+        font-size: 1.75rem;
+        padding: 0 0.5rem;
+    }
+    .feature-subtitle {
+        font-size: 0.9rem;
+        padding: 0 0.5rem;
+    }
+    .feature-section {
+        padding: 2.5rem 1rem;
+    }
+}

@@ -1,0 +1,22 @@
+.chip-btn {
+    border: 1px solid gray ;
+    border-radius: 12px;
+    padding: 0.7rem;
+    background-color: transparent;
+    color:var(--text-secondary);
+    cursor: pointer;
+    transition: 0.1s ease-in;
+}
+
+.chip-btn:hover {
+    color: var(--text-primary);
+    border: 1px solid var(--text-secondary) ;
+}
+
+
+@media (max-width: 768px) {
+    .chip-btn {
+        padding: 0.5rem 0.8rem;
+        font-size: 0.9rem;
+    }
+}

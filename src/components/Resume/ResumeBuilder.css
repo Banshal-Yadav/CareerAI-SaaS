@@ -1,0 +1,328 @@
+.resume-builder-container {
+  padding: 2rem 2.5rem;
+  max-width: 1000px;
+  margin: 4rem auto;
+  background-color: var(--primary-bg);
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+}
+.resume-header-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    gap: 1rem;
+}
+.resume-header-actions .resume-builder-title {
+    margin-bottom: 0;
+    flex-grow: 1;
+}
+.resume-builder-title {
+  text-align: center;
+  color: #a2a1a1;
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+.dummy-data-controls {
+    text-align: left;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: var(--text-muted);
+    flex-wrap: wrap; 
+}
+.dummy-data-select {
+    padding: 0.5rem 0.8rem;
+    background-color: var(--secondary-bg);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+.dummy-data-select:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+}
+.feedback-message {
+    color: var(--success);
+    width: 100%;
+    text-align: center;
+    font-style: italic;
+    margin-bottom: 1rem;
+    margin-top: -1rem;
+}
+.resume-form {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+.form-section {
+  background-color: var(--secondary-bg);
+  padding: 1.5rem;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  text-align: left;
+}
+.form-section h3 {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 0.75rem;
+}
+.form-section input,
+.form-section textarea {
+  width: 100%;
+  padding: 0.8rem;
+  margin-bottom: 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 1rem;
+  color: var(--text-primary);
+  background-color: var(--primary-bg);
+  box-sizing: border-box;
+}
+.form-subsection {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+.form-subsection:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+.date-inputs {
+    display: flex;
+    gap: 1rem;
+}
+.add-section-btn {
+  padding: 0.6rem 1.2rem;
+  background: var(--btn-secondary);
+  color: white;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  cursor: pointer;
+}
+.submit-resume-btn {
+  padding: 1rem 2rem;
+  background: var(--accent-primary);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 1rem;
+}
+.resume-preview-wrapper {
+    background-color: var(--secondary-bg);
+    border-radius: 8px;
+    padding: 2rem 1rem;
+    display: flex;
+    justify-content: center;
+    height: 820px;
+    overflow: hidden; 
+}
+#resume-to-download {
+    background-color: #fff;
+    color: #333;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    padding: 2rem;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    width: 8.5in;
+    height: 11in;
+    transform-origin: top center;
+    transform: scale(0.75);
+    margin: 0;
+    transition: transform 0.3s ease; 
+}
+.resume-preview-container {
+    display: flex;
+    gap: 1.5rem;
+    text-align: left;
+}
+.resume-main-content, .resume-sidebar, .resume-header {
+    text-align: left;
+}
+.resume-main-content {
+    flex: 2;
+}
+.resume-sidebar {
+    flex: 1;
+    border-left: 1px solid #ddd;
+    padding-left: 1.5rem;
+}
+.resume-header {
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #333;
+}
+.resume-header h1 {
+    margin: 0;
+    font-size: 2.2rem;
+}
+.resume-section {
+    margin-bottom: 1.2rem;
+}
+.resume-section-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.1rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #333;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 0.4rem;
+    margin-bottom: 0.8rem;
+}
+.resume-summary p {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: #555;
+}
+.job, .school, .project {
+    margin-bottom: 1.2rem;
+}
+.job-title, .degree, .project-title {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #000;
+    margin: 0;
+}
+.company, .university, .project-link {
+    font-size: 0.9rem;
+    font-style: italic;
+    color: #555;
+    margin: 0.2rem 0;
+    word-break: break-all; 
+}
+.job-date, .grad-year {
+    font-size: 0.85rem;
+    color: #777;
+    margin: 0.2rem 0 0.5rem 0;
+}
+.job-description, .project-description {
+    font-size: 0.9rem;
+    color: #555;
+    padding-left: 1rem;
+    list-style-type: disc;
+}
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.6rem;
+    font-size: 0.9rem;
+    color: #555;
+    word-break: break-all; 
+}
+.skill-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+.skill-chip {
+    background-color: #f0f0f0;
+    color: #333;
+    padding: 0.4rem 0.8rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+}
+.resume-actions {
+    margin-top: 2rem;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap; 
+}
+ .resume-actions button {
+    padding: 0.8rem 1.5rem;
+    cursor: pointer;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    font-size: 1rem;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.download-btn {
+    background-color: var(--success);
+    color: white;
+    border-color: var(--success);
+}
+.share-btn {
+    background-color: var(--accent-primary);
+    color: white;
+    border-color: var(--accent-primary);
+}
+ .edit-btn {
+    background-color: var(--btn-secondary);
+    color: var(--text-primary);
+}
+.back-btn {
+    padding: 0.6rem 1.2rem;
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+.back-btn:hover {
+    background-color: var(--secondary-bg);
+    color: var(--text-primary);
+}
+
+
+@media (max-width: 768px) {
+    .resume-builder-container {
+        padding: 1rem;
+        margin: 1.5rem;
+    }
+
+    .resume-builder-title {
+        font-size: 1.8rem;
+    }
+
+    .resume-header-actions {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .date-inputs {
+        flex-direction: column;
+    }
+
+   
+    #resume-to-download {
+        transform: scale(0.55);
+    }
+    .resume-preview-wrapper {
+        height: 550px; 
+        padding: 1rem 0;
+    }
+
+    .resume-actions button {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    #resume-to-download {
+        transform: scale(0.4);
+    }
+    .resume-preview-wrapper {
+        height: 450px;
+    }
+}

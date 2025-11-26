@@ -1,0 +1,412 @@
+.profile-container {
+  padding: 2rem 2.5rem;
+  max-width: 900px;
+  margin: 4rem auto;
+  background-color: var(--primary-bg);
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border-color);
+  animation: fadeIn 0.6s ease-out;
+}
+.profile-dashboard {
+  background-color: var(--secondary-bg);
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  padding: 1.5rem 2rem;
+  margin-bottom: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-align: left;
+}
+.dashboard-header {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+.dashboard-name {
+  margin: 0;
+  font-size: 1.8rem;
+  color: var(--text-primary);
+}
+.dashboard-subtitle {
+  margin: 0.2rem 0 0 0;
+  color: var(--text-muted);
+}
+.dashboard-btn {
+  padding: 0.8rem 1.5rem;
+  background: var(--btn-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+}
+.dashboard-btn:hover {
+  background-color: var(--btn-secondary-hover);
+  border-color: var(--border-color-hover);
+}
+.dashboard-btn:disabled {
+    background-color: var(--secondary-bg);
+    color: var(--text-muted);
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+.resume-card {
+    background-color: var(--secondary-bg);
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    padding: 1.5rem 2rem;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+.resume-card-header {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+.resume-card-title {
+    margin: 0;
+    font-size: 1.5rem;
+    color: var(--text-primary);
+}
+.resume-card-subtitle {
+    margin: 0.2rem 0 0 0;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+.resume-card-actions {
+    display: flex;
+    flex-wrap: wrap; 
+    gap: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+    align-items: center;
+}
+.primary-action-btn {
+    background-color: var(--btn-secondary);
+    color: white;
+    border-color: var(--accent-primary);
+}
+.primary-action-btn:hover {
+    background-color: var(--btn-secondary-hover);
+}
+.delete-resume-btn {
+    background-color: var(--error-bg);
+    color: var(--error);
+    border-color: var(--error);
+    margin-right: auto;
+}
+.delete-resume-btn:hover {
+    background-color: var(--error);
+    color: white;
+}
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    margin-top: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+.resumes-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+.section-heading {
+  text-align: left;
+  color: var(--text-secondary);
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+.assessments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.assessment-card {
+  background-color: var(--secondary-bg);
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  transition: all 0.3s ease;
+  overflow: hidden; 
+}
+.assessment-card:hover {
+  border-color: var(--accent-primary);
+  transform: translateY(-4px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+.assessment-card-header {
+  padding: 1rem 1.5rem;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.assessment-card-header > div {
+  text-align: left;
+}
+.assessment-date {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin: 0 0 0.5rem 0;
+}
+.assessment-skills {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+  max-width: 600px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.expand-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+.assessment-card-body {
+  padding: 0 1.5rem 1.5rem;
+  border-top: 1px solid var(--border-color);
+  animation: fadeIn 0.5s;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+.card-section {
+  text-align: left;
+}
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 1rem 0 0.75rem;
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.card-section p {
+  margin: 0;
+  color: var(--text-primary);
+  line-height: 1.6;
+}
+.strengths-growth-grid-profile {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  border-top: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 1rem;
+}
+.custom-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+.custom-list li {
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+  padding-left: 1.5rem;
+  position: relative;
+}
+.custom-list li::before {
+  content: '✓';
+  color: var(--success);
+  position: absolute;
+  left: 0;
+  top: 2px;
+}
+.strengths-growth-grid-profile div:last-child .custom-list li::before {
+  content: '△';
+  color: var(--warning);
+}
+.careers-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.career-item {
+  background-color: var(--primary-bg);
+  padding: 1rem;
+  border-radius: 8px;
+  border-left: 4px solid var(--accent-secondary);
+}
+.career-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+.career-item-header h6 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: var(--text-primary);
+}
+.match-score {
+  background-color: var(--accent-secondary);
+  color: var(--primary-bg);
+  padding: 0.2rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+.career-fit {
+  font-size: 0.9rem;
+  color: var(--text-secondary) !important;
+}
+.career-fit strong {
+  color: var(--text-muted);
+}
+.salary-info {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-top: 0.5rem;
+  font-weight: 500;
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@media (max-width: 768px) {
+  .strengths-growth-grid-profile {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+}
+
+/* styles for detailed assessment view in profile */
+.career-item-detailed {
+  background-color: var(--primary-bg);
+  padding: 1.5rem;
+  border-radius: 8px;
+  border-left: 4px solid var(--accent-secondary);
+}
+
+.details-section {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.details-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-secondary);
+  margin: 0 0 1rem 0;
+}
+
+.details-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.details-grid.projects {
+  grid-template-columns: 1fr;
+}
+
+/* resource card styles for courses/certs */
+.profile-resource-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background-color: var(--secondary-bg);
+  border: 1px solid var(--border-color);
+  padding: 1rem;
+  border-radius: 8px;
+}
+.profile-resource-icon {
+  color: var(--accent-secondary);
+}
+.profile-resource-text {
+  text-align: left;
+}
+.profile-resource-name {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.profile-resource-issuer {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+/* project card styles */
+.profile-project-card {
+  background-color: var(--secondary-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 1rem 1.2rem;
+  text-align: left;
+  position: relative;
+}
+.profile-project-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+.profile-project-header h5 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: var(--text-primary);
+}
+.profile-project-objective {
+  color: var(--text-secondary);
+  margin-bottom: 1rem;
+  font-style: italic;
+  font-size: 0.9rem;
+}
+.profile-project-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color);
+}
+.profile-skill-tag {
+  font-size: 0.8rem;
+  background-color: var(--primary-bg);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  padding: 0.3rem 0.7rem;
+  border-radius: 12px;
+}
+.profile-project-difficulty {
+  position: absolute;
+  top: 0.8rem;
+  right: 0.8rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.2rem 0.6rem;
+  border-radius: 6px;
+}

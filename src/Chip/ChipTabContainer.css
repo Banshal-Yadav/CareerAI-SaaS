@@ -1,0 +1,12 @@
+.cardtab-container-title {
+    margin: 4rem 0 0.2rem 0;
+    font-size: 1.5rem;
+    color: var(--text-secondary);
+}
+
+@media (max-width: 768px) {
+    .cardtab-container-title {
+        font-size: 1.1rem;
+        margin: 3rem 1rem 0.2rem 1rem;
+    }
+}

@@ -1,0 +1,37 @@
+.stats-tab {
+    margin: 0rem auto 0.5rem auto;
+    padding: 0 0.5rem;
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    max-width: 1200px;
+}
+
+.stats-card {
+    background: linear-gradient(145deg, #1a1a1a, #111) !important;
+    border: 1px solid #333 !important;
+    width: 100% !important;
+    max-width: 300px;
+    min-height: auto !important;
+    flex: 1;
+}
+
+.stats-card:hover {
+    transform: translateY(-10px);
+    border-color: #555 !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+@media (max-width: 768px) {
+    .stats-tab {
+        flex-direction: column;
+        gap: 1.5rem;
+        align-items: center;
+        padding: 0 1rem;
+    }
+    .stats-card {
+        width: 100% !important;
+        max-width: 100%;
+        font-size: 1rem;
+    }
+}

@@ -1,0 +1,14 @@
+.chip-tab {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    padding-top: 1rem;
+}
+
+.chip-tab {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap; 
+    gap: 10px;
+    padding-top: 1rem;
+}
