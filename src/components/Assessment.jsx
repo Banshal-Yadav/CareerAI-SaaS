@@ -1,5 +1,5 @@
 import { doc, setDoc, getDoc, updateDoc, arrayUnion } from 'firebase/firestore';
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { db } from '../firebase/config';
@@ -10,114 +10,114 @@ import * as icons from 'lucide-react';
 
 // a helper to dynamically render an icon by its name string
 const Icon = ({ name, ...props }) => {
-    const LucideIcon = icons[name];
-    if (!LucideIcon) {
-        return <icons.HelpCircle {...props} />;
-    }
-    return <LucideIcon {...props} />;
+  const LucideIcon = icons[name];
+  if (!LucideIcon) {
+    return <icons.HelpCircle {...props} />;
+  }
+  return <LucideIcon {...props} />;
 };
 
 
 const StrengthCard = ({ skill, context, icon }) => (
-    <div className="strength-card">
-        <div className="strength-card-header">
-            <Icon name={icon} size={20} className="strength-icon" />
-            <span className="strength-skill">{skill}</span>
-        </div>
-        <p className="strength-context">{context}</p>
+  <div className="strength-card">
+    <div className="strength-card-header">
+      <Icon name={icon} size={20} className="strength-icon" />
+      <span className="strength-skill">{skill}</span>
     </div>
+    <p className="strength-context">{context}</p>
+  </div>
 );
 
 const GrowthOpportunityCard = ({ skill, context, icon }) => (
-    <div className="growth-card">
-        <div className="growth-card-header">
-            <Icon name={icon} size={20} className="growth-icon" />
-            <span className="growth-skill">{skill}</span>
-        </div>
-        <p className="growth-context">{context}</p>
+  <div className="growth-card">
+    <div className="growth-card-header">
+      <Icon name={icon} size={20} className="growth-icon" />
+      <span className="growth-skill">{skill}</span>
     </div>
+    <p className="growth-context">{context}</p>
+  </div>
 );
 
 const EvidenceCard = ({ userTrait, jobRequirement, icon }) => (
-    <div className="evidence-card">
-        <Icon name={icon} size={24} className="evidence-icon" />
-        <div className="evidence-text">
-            <p><span>your skill/interest:</span> {userTrait}</p>
-            <p><span>aligns with requirement:</span> {jobRequirement}</p>
-        </div>
+  <div className="evidence-card">
+    <Icon name={icon} size={24} className="evidence-icon" />
+    <div className="evidence-text">
+      <p><span>your skill/interest:</span> {userTrait}</p>
+      <p><span>aligns with requirement:</span> {jobRequirement}</p>
     </div>
+  </div>
 );
 
 const SkillToBuildCard = ({ skill, suggestedFirstStep, icon }) => (
-    <div className="skill-to-build-card">
-        <Icon name={icon} size={24} className="skill-build-icon" />
-        <div className="skill-build-text">
-            <h6>{skill}</h6>
-            <p><span>suggested first step:</span> {suggestedFirstStep}</p>
-        </div>
+  <div className="skill-to-build-card">
+    <Icon name={icon} size={24} className="skill-build-icon" />
+    <div className="skill-build-text">
+      <h6>{skill}</h6>
+      <p><span>suggested first step:</span> {suggestedFirstStep}</p>
     </div>
+  </div>
 );
 
 const ProjectBriefCard = ({ title, objective, skillsUsed, difficulty, featureSuggestions }) => (
-    <div className={`project-brief-card difficulty-${difficulty}`}>
-        <div className="project-brief-header">
-            <icons.FolderKanban size={20} />
-            <h5>{title}</h5>
-        </div>
-        <p className="project-objective">{objective}</p>
-        <div className="project-features-section">
-            <h6 className="project-section-title">suggested features</h6>
-            <ul className="project-features-list">
-                {featureSuggestions.map((feature, i) => <li key={i}>{feature}</li>)}
-            </ul>
-        </div>
-        <div className="project-skills-used">
-            {skillsUsed.map((skill, i) => <span key={i} className="skill-tag">{skill}</span>)}
-        </div>
-        <span className="project-difficulty">{difficulty}</span>
+  <div className={`project-brief-card difficulty-${difficulty}`}>
+    <div className="project-brief-header">
+      <icons.FolderKanban size={20} />
+      <h5>{title}</h5>
     </div>
+    <p className="project-objective">{objective}</p>
+    <div className="project-features-section">
+      <h6 className="project-section-title">suggested features</h6>
+      <ul className="project-features-list">
+        {featureSuggestions.map((feature, i) => <li key={i}>{feature}</li>)}
+      </ul>
+    </div>
+    <div className="project-skills-used">
+      {skillsUsed.map((skill, i) => <span key={i} className="skill-tag">{skill}</span>)}
+    </div>
+    <span className="project-difficulty">{difficulty}</span>
+  </div>
 );
 
 const ResourceCard = ({ name, issuer, platform, icon }) => (
-    <div className="resource-card">
-        <Icon name={icon} size={32} className="resource-icon" />
-        <div className="resource-text">
-            <span className="resource-name">{name}</span>
-            <span className="resource-issuer">by {issuer || platform}</span>
-        </div>
+  <div className="resource-card">
+    <Icon name={icon} size={32} className="resource-icon" />
+    <div className="resource-text">
+      <span className="resource-name">{name}</span>
+      <span className="resource-issuer">by {issuer || platform}</span>
     </div>
+  </div>
 );
 
 const CareerAccordion = ({ career, isOpen, onClick }) => (
-    <div className={`career-accordion-item ${isOpen ? 'open' : ''}`}>
-        <button className="career-accordion-header" onClick={onClick}>
-            <div className="accordion-header-content">
-                <icons.Briefcase size={24} />
-                <span className="accordion-title">{career.title}</span>
-            </div>
-            {isOpen ? <icons.ChevronUp size={20} /> : <icons.ChevronDown size={20} />}
-        </button>
-        {isOpen && (
-            <div className="career-accordion-body">
-                <div className="career-section">
-                    <h4 className="career-section-title"><icons.Info size={16} /> why it's a match</h4>
-                    <p className="career-reasoning">{career.reasoning}</p>
-                    <div className="salary-outlook-grid">
-                        <div className="info-card"><h5 className='info-card-title'><icons.IndianRupee size={16} /> salary (entry-level)</h5><p className='info-card-content highlight-text big-text'>{career.salaryRange}</p></div>
-                        <div className="info-card"><h5 className='info-card-title'><icons.BarChartHorizontal size={16} /> job outlook</h5><p className='info-card-content'>{career.jobOutlook}</p></div>
-                    </div>
-                </div>
-                <div className="career-section">
-                    <h4 className="career-section-title"><icons.CheckCircle2 size={16} className="icon-green"/> key alignments</h4>
-                    <div className="evidence-grid">{career.keyAlignments.map((item, i) => <EvidenceCard key={i} {...item} />)}</div>
-                </div>
-                 <div className="career-section">
-                    <h4 className="career-section-title"><icons.XCircle size={16} className="icon-red"/> skills to build</h4>
-                    <div className="evidence-grid">{career.skillsToBuild.map((item, i) => <SkillToBuildCard key={i} {...item} />)}</div>
-                </div>
-            </div>
-        )}
-    </div>
+  <div className={`career-accordion-item ${isOpen ? 'open' : ''}`}>
+    <button className="career-accordion-header" onClick={onClick}>
+      <div className="accordion-header-content">
+        <icons.Briefcase size={24} />
+        <span className="accordion-title">{career.title}</span>
+      </div>
+      {isOpen ? <icons.ChevronUp size={20} /> : <icons.ChevronDown size={20} />}
+    </button>
+    {isOpen && (
+      <div className="career-accordion-body">
+        <div className="career-section">
+          <h4 className="career-section-title"><icons.Info size={16} /> why it's a match</h4>
+          <p className="career-reasoning">{career.reasoning}</p>
+          <div className="salary-outlook-grid">
+            <div className="info-card"><h5 className='info-card-title'><icons.IndianRupee size={16} /> salary (entry-level)</h5><p className='info-card-content highlight-text big-text'>{career.salaryRange}</p></div>
+            <div className="info-card"><h5 className='info-card-title'><icons.BarChartHorizontal size={16} /> job outlook</h5><p className='info-card-content'>{career.jobOutlook}</p></div>
+          </div>
+        </div>
+        <div className="career-section">
+          <h4 className="career-section-title"><icons.CheckCircle2 size={16} className="icon-green" /> key alignments</h4>
+          <div className="evidence-grid">{career.keyAlignments.map((item, i) => <EvidenceCard key={i} {...item} />)}</div>
+        </div>
+        <div className="career-section">
+          <h4 className="career-section-title"><icons.XCircle size={16} className="icon-red" /> skills to build</h4>
+          <div className="evidence-grid">{career.skillsToBuild.map((item, i) => <SkillToBuildCard key={i} {...item} />)}</div>
+        </div>
+      </div>
+    )}
+  </div>
 );
 
 const AnalysisResults = ({ analysis, onRetry }) => {
@@ -128,69 +128,69 @@ const AnalysisResults = ({ analysis, onRetry }) => {
   const topCareer = analysis?.careerAnalysis?.[0];
 
   const handleCreateResume = () => {
-     const skillsToPass = [...(analysis.strengths?.map(s => s.skill) || []), ...(topCareer?.skillsToBuild.map(s => s.skill) || [])];
-     navigate('/resume-builder', { state: { isNew: true, prefillSkills: skillsToPass.join(', ') } });
+    const skillsToPass = [...(analysis.strengths?.map(s => s.skill) || []), ...(topCareer?.skillsToBuild.map(s => s.skill) || [])];
+    navigate('/resume-builder', { state: { isNew: true, prefillSkills: skillsToPass.join(', ') } });
   };
 
   return (
     <div className="results-container">
-        <div className="stepper-container">
-            <div className={`step ${currentStep >= 1 ? 'active' : ''}`}><icons.User size={20} /><div className="step-label">1. your profile</div></div>
-            <div className="step-connector"></div>
-            <div className={`step ${currentStep >= 2 ? 'active' : ''}`}><icons.Briefcase size={20} /><div className="step-label">2. career matches</div></div>
-            <div className="step-connector"></div>
-            <div className={`step ${currentStep >= 3 ? 'active' : ''}`}><icons.Rocket size={20} /><div className="step-label">3. action plan</div></div>
+      <div className="stepper-container">
+        <div className={`step ${currentStep >= 1 ? 'active' : ''}`}><icons.User size={20} /><div className="step-label">1. your profile</div></div>
+        <div className="step-connector"></div>
+        <div className={`step ${currentStep >= 2 ? 'active' : ''}`}><icons.Briefcase size={20} /><div className="step-label">2. career matches</div></div>
+        <div className="step-connector"></div>
+        <div className={`step ${currentStep >= 3 ? 'active' : ''}`}><icons.Rocket size={20} /><div className="step-label">3. action plan</div></div>
+      </div>
+
+      {currentStep === 1 && (
+        <div className="results-step-content">
+          <div className="results-header"><h2 className="success-title">your profile summary</h2><p className="results-subtitle">{analysis.summary}</p></div>
+          <div className="key-insights-grid">
+            <div className="insights-column"><h3 className="insights-title"><icons.Target size={24} /> your top strengths</h3><div className="cards-container">{analysis.strengths?.map((s, i) => <StrengthCard key={i} {...s} />)}</div></div>
+            <div className="insights-column"><h3 className="insights-title"><icons.TrendingUp size={24} /> your top opportunities</h3><div className="cards-container">{analysis.growthAreas?.map((g, i) => <GrowthOpportunityCard key={i} {...g} />)}</div></div>
+          </div>
+          <button className="stepper-nav-btn" onClick={() => setCurrentStep(2)}>view career matches <icons.ArrowRight size={18} /></button>
         </div>
+      )}
 
-        {currentStep === 1 && (
-            <div className="results-step-content">
-                <div className="results-header"><h2 className="success-title">your profile summary</h2><p className="results-subtitle">{analysis.summary}</p></div>
-                <div className="key-insights-grid">
-                    <div className="insights-column"><h3 className="insights-title"><icons.Target size={24}/> your top strengths</h3><div className="cards-container">{analysis.strengths?.map((s, i) => <StrengthCard key={i} {...s} />)}</div></div>
-                    <div className="insights-column"><h3 className="insights-title"><icons.TrendingUp size={24}/> your top opportunities</h3><div className="cards-container">{analysis.growthAreas?.map((g, i) => <GrowthOpportunityCard key={i} {...g} />)}</div></div>
-                </div>
-                <button className="stepper-nav-btn" onClick={() => setCurrentStep(2)}>view career matches <icons.ArrowRight size={18} /></button>
-            </div>
-        )}
+      {currentStep === 2 && (
+        <div className="results-step-content">
+          <div className="results-header"><h2 className="success-title">top career recommendations</h2><p className="results-subtitle">explore roles that align with your profile</p></div>
+          <div className="career-accordion-container">{analysis.careerAnalysis.map((career, index) => (<CareerAccordion key={index} career={career} isOpen={index === openAccordion} onClick={() => setOpenAccordion(index === openAccordion ? null : index)} />))}</div>
+          <div className="stepper-nav-container">
+            <button className="stepper-nav-btn secondary" onClick={() => setCurrentStep(1)}>back to profile</button>
+            <button className="stepper-nav-btn" onClick={() => setCurrentStep(3)}>create your action plan <icons.ArrowRight size={18} /></button>
+          </div>
+        </div>
+      )}
 
-        {currentStep === 2 && (
-             <div className="results-step-content">
-                <div className="results-header"><h2 className="success-title">top career recommendations</h2><p className="results-subtitle">explore roles that align with your profile</p></div>
-                <div className="career-accordion-container">{analysis.careerAnalysis.map((career, index) => (<CareerAccordion key={index} career={career} isOpen={index === openAccordion} onClick={() => setOpenAccordion(index === openAccordion ? null : index)} />))}</div>
-                 <div className="stepper-nav-container">
-                    <button className="stepper-nav-btn secondary" onClick={() => setCurrentStep(1)}>back to profile</button>
-                    <button className="stepper-nav-btn" onClick={() => setCurrentStep(3)}>create your action plan <icons.ArrowRight size={18} /></button>
-                </div>
-            </div>
-        )}
-        
-        {currentStep === 3 && topCareer && (
-             <div className="results-step-content">
-                <div className="results-header"><h2 className="success-title">your action plan</h2><p className="results-subtitle">take the next steps to launch your career as a {topCareer.title}</p></div>
-                <div className="action-plan-section">
-                    <h3 className="action-plan-title"><icons.Award size={22} /> recommended certifications</h3>
-                    <div className="resource-grid">{topCareer.suggestedCertifications.map((cert, i) => <ResourceCard key={i} {...cert} />)}</div>
-                </div>
-                <div className="action-plan-section">
-                    <h3 className="action-plan-title"><icons.BookOpen size={22} /> recommended courses</h3>
-                    <div className="resource-grid">{topCareer.suggestedCourses.map((course, i) => <ResourceCard key={i} name={course.courseName} platform={course.platform} icon={course.icon} />)}</div>
-                </div>
-                <div className="action-plan-section">
-                    <h3 className="action-plan-title"><icons.FolderKanban size={22} /> portfolio project briefs</h3>
-                    <div className="project-brief-grid">{topCareer.suggestedProjects.map((proj, i) => <ProjectBriefCard key={i} {...proj} />)}</div>
-                </div>
-                <div className="cta-card">
-                    <icons.Rocket size={32}/>
-                    <h4>ready to get noticed?</h4>
-                    <p>use these insights to build a professional resume that stands out to recruiters</p>
-                    <button onClick={handleCreateResume} className="cta-button">build my resume now</button>
-                </div>
-                 <div className="stepper-nav-container">
-                    <button className="stepper-nav-btn secondary" onClick={() => setCurrentStep(2)}>back to careers</button>
-                    <button className="retry-btn" onClick={onRetry}>start a new assessment</button>
-                </div>
-            </div>
-        )}
+      {currentStep === 3 && topCareer && (
+        <div className="results-step-content">
+          <div className="results-header"><h2 className="success-title">your action plan</h2><p className="results-subtitle">take the next steps to launch your career as a {topCareer.title}</p></div>
+          <div className="action-plan-section">
+            <h3 className="action-plan-title"><icons.Award size={22} /> recommended certifications</h3>
+            <div className="resource-grid">{topCareer.suggestedCertifications.map((cert, i) => <ResourceCard key={i} {...cert} />)}</div>
+          </div>
+          <div className="action-plan-section">
+            <h3 className="action-plan-title"><icons.BookOpen size={22} /> recommended courses</h3>
+            <div className="resource-grid">{topCareer.suggestedCourses.map((course, i) => <ResourceCard key={i} name={course.courseName} platform={course.platform} icon={course.icon} />)}</div>
+          </div>
+          <div className="action-plan-section">
+            <h3 className="action-plan-title"><icons.FolderKanban size={22} /> portfolio project briefs</h3>
+            <div className="project-brief-grid">{topCareer.suggestedProjects.map((proj, i) => <ProjectBriefCard key={i} {...proj} />)}</div>
+          </div>
+          <div className="cta-card">
+            <icons.Rocket size={32} />
+            <h4>ready to get noticed?</h4>
+            <p>use these insights to build a professional resume that stands out to recruiters</p>
+            <button onClick={handleCreateResume} className="cta-button">build my resume now</button>
+          </div>
+          <div className="stepper-nav-container">
+            <button className="stepper-nav-btn secondary" onClick={() => setCurrentStep(2)}>back to careers</button>
+            <button className="retry-btn" onClick={onRetry}>start a new assessment</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
@@ -204,6 +204,7 @@ const Assessment = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [analysis, setAnalysis] = useState(null);
+  const [loadingMessage, setLoadingMessage] = useState('analyzing...');
 
   const suggestedSkills = useMemo(() => {
     const allSkills = {
@@ -214,11 +215,11 @@ const Assessment = () => {
 
     switch (persona) {
       case 'highSchool':
-        return [ ...allSkills.technical.slice(3, 6), 'python', 'javascript', ...allSkills.soft.slice(0, 5), ...allSkills.industry.slice(3, 5) ];
+        return [...allSkills.technical.slice(3, 6), 'python', 'javascript', ...allSkills.soft.slice(0, 5), ...allSkills.industry.slice(3, 5)];
       case 'college':
-        return [ 'react', 'node.js', 'git', 'java', 'mongodb', ...allSkills.soft.slice(0, 2), 'problem solving', 'teamwork', ...allSkills.industry.slice(0, 4) ];
+        return ['react', 'node.js', 'git', 'java', 'mongodb', ...allSkills.soft.slice(0, 2), 'problem solving', 'teamwork', ...allSkills.industry.slice(0, 4)];
       case 'jobSeeker':
-        return [ 'aws', 'docker', 'python', 'react', 'sql', 'leadership', 'time management', 'project management', 'data analysis' ];
+        return ['aws', 'docker', 'python', 'react', 'sql', 'leadership', 'time management', 'project management', 'data analysis'];
       default:
         return [];
     }
@@ -231,6 +232,26 @@ const Assessment = () => {
       setSkills(currentSkills.length > 0 ? `${skills}, ${skillToAdd}` : skillToAdd);
     }
   };
+
+  useEffect(() => {
+    let interval;
+    if (loading) {
+      const messages = [
+        "analyzing your profile...",
+        "identifying your top strengths...",
+        "matching you with career paths...",
+        "generating your personalized roadmap...",
+        "finalizing your results..."
+      ];
+      let i = 0;
+      setLoadingMessage(messages[0]);
+      interval = setInterval(() => {
+        i = (i + 1) % messages.length;
+        setLoadingMessage(messages[i]);
+      }, 2500);
+    }
+    return () => clearInterval(interval);
+  }, [loading]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -263,13 +284,13 @@ const Assessment = () => {
         interests,
         experience: persona === 'jobSeeker' ? experience : null,
       });
-      
+
       if (analysisResult.error) {
         setError(analysisResult.message || "the analysis failed. please try again.");
         setLoading(false);
         return;
       }
-      
+
       setAnalysis(analysisResult);
 
       if (user) {
@@ -348,7 +369,7 @@ const Assessment = () => {
         {persona === 'jobSeeker' && (<div className="form-group"><label className="form-label">years of professional experience</label><select value={experience} onChange={(e) => setExperience(e.target.value)} className="form-select"><option value="0-1 years (beginner)">0 - 1 years (beginner)</option><option value="2-4 years (intermediate)">2 - 4 years (intermediate)</option><option value="5+ years (advanced)">5+ years (advanced)</option></select></div>)}
         <div className="form-actions">
           <button type="button" className="back-btn" onClick={() => setPersona(null)}>back</button>
-          <button type="submit" disabled={loading} className={`submit-btn ${loading ? 'loading' : ''}`}>{loading ? 'analyzing...' : 'generate my roadmap'}</button>
+          <button type="submit" disabled={loading} className={`submit-btn ${loading ? 'loading' : ''}`}>{loading ? loadingMessage : 'generate my roadmap'}</button>
         </div>
       </form>
     </div>
