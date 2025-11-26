@@ -199,25 +199,6 @@
   cursor: not-allowed;
 }
 
-.submit-btn.loading {
-  cursor: wait;
-  position: relative;
-}
-
-.submit-btn.loading::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 20px;
-  height: 20px;
-  margin: -10px 0 0 -10px;
-  border: 3px solid #ffffff55;
-  border-top-color: #fff;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
 .retry-btn {
   padding: 0.8rem 1.8rem;
   background: var(--btn-secondary);
@@ -515,6 +496,9 @@
     flex-direction: column;
     gap: 2rem;
 }
+.career-section {
+    margin-bottom: 2.5rem;
+}
 .career-section-title {
     display: flex;
     align-items: center;
@@ -527,28 +511,73 @@
     margin: 0 0 1.5rem 0;
 }
 .career-reasoning {
-    font-size: 1rem;
     color: var(--text-secondary);
-    line-height: 1.7;
+    line-height: 1.6;
     margin-bottom: 1.5rem;
 }
 .salary-outlook-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+.evidence-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+}
+.evidence-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    background-color: var(--primary-bg);
+    border: 1px solid var(--border-color);
+    padding: 1rem;
+    border-radius: 8px;
+}
+.evidence-icon {
+    color: var(--accent-secondary);
+    flex-shrink: 0;
+}
+.evidence-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+.evidence-text p {
+    margin: 0;
     color: var(--text-secondary);
 }
-.evidence-text p:first-child, .skill-build-text p:first-child {
-    margin-bottom: 0.25rem;
-}
-.evidence-text span, .skill-build-text span {
+.evidence-text span {
     font-weight: 600;
     color: var(--text-muted);
-    margin-right: 0.5rem;
+}
+.skill-to-build-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    background-color: var(--primary-bg);
+    border: 1px solid var(--border-color);
+    padding: 1rem;
+    border-radius: 8px;
+}
+.skill-build-icon {
+    color: var(--warning);
+    flex-shrink: 0;
 }
 .skill-build-text h6 {
-    margin: 0 0 0.3rem 0;
-    font-size: 1.1rem;
+    margin: 0 0 0.5rem 0;
     color: var(--text-primary);
+    font-size: 1rem;
 }
-
+.skill-build-text p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+.skill-build-text span {
+    font-weight: 600;
+    color: var(--text-muted);
+}
 
 /* action plan section */
 .action-plan-section {
@@ -640,6 +669,9 @@
     letter-spacing: 0.5px;
     margin: 0 0 0.75rem 0;
 }
+.project-features-section {
+    margin-bottom: 1rem;
+}
 .project-features-list {
     list-style-type: '✓';
     padding-left: 1rem;
@@ -698,6 +730,52 @@
     margin-top: 2.5rem;
     text-align: center;
     color: var(--text-primary);
+}
+.cta-card h4 {
+    margin: 1rem 0 0.5rem;
+    font-size: 1.5rem;
+}
+.cta-card p {
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+}
+.cta-button {
+    padding: 1rem 2rem;
+    background: var(--accent-primary);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.cta-button:hover {
+    background: hsla(245, 70%, 75%);
+    transform: translateY(-2px);
+}
+
+/* LOADING ANIMATION STYLES */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(10, 10, 10, 0.95);
+  backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  animation: fadeIn 0.3s ease;
+}
+
+.loading-content {
+  text-align: center;
+  max-width: 400px;
+  padding: 2rem;
+}
 
 .loading-spinner-wrapper {
   position: relative;
@@ -736,7 +814,7 @@
 }
 
 .spinner-icon {
-  color: #e0e0e0; /* Off-white for better contrast on dark */
+  color: #e0e0e0;
   animation: float 3s ease-in-out infinite;
   filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.2));
 }
@@ -762,7 +840,7 @@
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: #4a4a4a; /* Dark gray particles */
+  background: #4a4a4a;
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
   animation: orbit 4s linear infinite;
 }
@@ -847,6 +925,7 @@
   }
 }
 
+/* RESPONSIVE STYLES */
 @media (max-width: 768px) {
   .assessment-container, .results-container {
     margin: 1.5rem;
@@ -861,5 +940,16 @@
   .persona-selection {
       flex-direction: column;
   }
-}
+  
+  .key-insights-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .project-brief-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .salary-outlook-grid {
+    grid-template-columns: 1fr;
+  }
 }
