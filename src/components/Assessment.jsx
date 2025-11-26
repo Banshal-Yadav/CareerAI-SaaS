@@ -17,6 +17,27 @@ const Icon = ({ name, ...props }) => {
   return <LucideIcon {...props} />;
 };
 
+// NEW: Loading Animation Component
+const LoadingAnimation = ({ message }) => (
+  <div className="loading-overlay">
+    <div className="loading-content">
+      <div className="loading-spinner-wrapper">
+        <div className="loading-spinner">
+          <icons.Brain className="spinner-icon" size={48} />
+        </div>
+        <div className="loading-particles">
+          <span className="particle"></span>
+          <span className="particle"></span>
+          <span className="particle"></span>
+        </div>
+      </div>
+      <h3 className="loading-title">{message}</h3>
+      <div className="loading-progress-bar">
+        <div className="loading-progress-fill"></div>
+      </div>
+    </div>
+  </div>
+);
 
 const StrengthCard = ({ skill, context, icon }) => (
   <div className="strength-card">
@@ -360,6 +381,7 @@ const Assessment = () => {
 
   return (
     <div className="assessment-container">
+      {loading && <LoadingAnimation message={loadingMessage} />}
       <h2 className="assessment-title">your career assessment</h2>
       <p className="assessment-subtitle">tell us about yourself to get a personalized career roadmap.</p>
       {error && <p className="error-message">{error}</p>}
@@ -369,7 +391,7 @@ const Assessment = () => {
         {persona === 'jobSeeker' && (<div className="form-group"><label className="form-label">years of professional experience</label><select value={experience} onChange={(e) => setExperience(e.target.value)} className="form-select"><option value="0-1 years (beginner)">0 - 1 years (beginner)</option><option value="2-4 years (intermediate)">2 - 4 years (intermediate)</option><option value="5+ years (advanced)">5+ years (advanced)</option></select></div>)}
         <div className="form-actions">
           <button type="button" className="back-btn" onClick={() => setPersona(null)}>back</button>
-          <button type="submit" disabled={loading} className={`submit-btn ${loading ? 'loading' : ''}`}>{loading ? loadingMessage : 'generate my roadmap'}</button>
+          <button type="submit" disabled={loading} className="submit-btn">generate my roadmap</button>
         </div>
       </form>
     </div>
