@@ -559,20 +559,26 @@
     border: 1px solid var(--border-color);
     padding: 1rem;
     border-radius: 8px;
+    text-align: left;
 }
 .skill-build-icon {
     color: var(--warning);
     flex-shrink: 0;
 }
+.skill-build-text {
+    text-align: left;
+}
 .skill-build-text h6 {
     margin: 0 0 0.5rem 0;
     color: var(--text-primary);
     font-size: 1rem;
+    text-align: left;
 }
 .skill-build-text p {
     margin: 0;
     color: var(--text-secondary);
     font-size: 0.9rem;
+    text-align: left;
 }
 .skill-build-text span {
     font-weight: 600;
