@@ -533,32 +533,6 @@
     margin-bottom: 1.5rem;
 }
 .salary-outlook-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-}
-
-/* evidence & skill-to-build cards */
-.evidence-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1rem;
-}
-.evidence-card, .skill-to-build-card {
-    display: flex;
-    align-items: flex-start;
-    gap: 1rem;
-    background-color: var(--primary-bg);
-    border: 1px solid var(--border-color);
-    padding: 1rem;
-    border-radius: 8px;
-    text-align: left;
-}
-.evidence-icon { color: var(--success); }
-.skill-build-icon { color: var(--error); }
-.evidence-text p, .skill-build-text p {
-    margin: 0;
-    line-height: 1.6;
     color: var(--text-secondary);
 }
 .evidence-text p:first-child, .skill-build-text p:first-child {
@@ -739,33 +713,184 @@
 .cta-button {
     padding: 0.8rem 2rem;
     font-size: 1rem;
-    font-weight: 600;
+.evidence-card, .skill-to-build-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    background-color: var(--primary-bg);
+    border: 1px solid var(--border-color);
+    padding: 1rem;
     border-radius: 8px;
-    cursor: pointer;
-    background: white;
-    color: black;
-    border: none;
-    transition: all 0.3s ease;
+    text-align: left;
 }
-.cta-button:hover {
-    background: #ddd;
+.evidence-icon { color: var(--success); }
+.skill-build-icon { color: var(--error); }
+.evidence-text p, .skill-build-text p {
+    margin: 0;
+    line-height: 1.6;
+    color: var(--text-secondary);
+}
+.evidence-text p:first-child, .skill-build-text p:first-child {
+    margin-bottom: 0.25rem;
+}
+.evidence-text span, .skill-build-text span {
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-right: 0.5rem;
+}
+.skill-build-text h6 {
+    margin: 0 0 0.3rem 0;
+    font-size: 1.1rem;
+    color: var(--text-primary);
 }
 
-@media (max-width: 768px) {
-  .assessment-container, .results-container {
-    margin: 1.5rem;
+
+/* action plan section */
+.action-plan-section {
+    margin-bottom: 2.5rem;
+}
+.action-plan-title {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 1.5rem;
+    color: var(--text-primary);
+    margin: 0 0 1.5rem 0;
+}
+
+/* resource cards certs/courses */
+.resource-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1rem;
+}
+.resource-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background-color: var(--secondary-bg);
+    border: 1px solid var(--border-color);
+    padding: 1rem;
+    border-radius: 8px;
+}
+.resource-icon {
+    color: var(--accent-secondary);
+}
+.resource-text {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    overflow: hidden; 
+}
+.resource-name {
+    font-weight: 600;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.resource-issuer {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+/* project brief cards */
+.project-brief-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+.project-brief-card {
+    background-color: var(--secondary-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
     padding: 1.5rem;
-  }
+    text-align: left;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+.project-brief-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+.project-brief-header h5 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: var(--text-primary);
+}
+.project-objective {
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+    font-style: italic;
+}
+.project-section-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 0 0 0.75rem 0;
+}
+.project-features-list {
+    list-style-type: '✓';
+    padding-left: 1rem;
+    margin: 0 0 1.5rem 0;
+    color: var(--text-secondary);
+}
+.project-features-list li {
+    padding-left: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+.project-skills-used {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: auto; 
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+}
+.skill-tag {
+    font-size: 0.8rem;
+    background-color: var(--primary-bg);
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    padding: 0.3rem 0.7rem;
+    border-radius: 12px;
+}
+.project-difficulty {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    padding: 0.2rem 0.6rem;
+    border-radius: 6px;
+}
+.difficulty-beginner {
+    background-color: var(--success-bg);
+    color: var(--success);
+}
+.difficulty-intermediate {
+    background-color: var(--warning-bg);
+    color: var(--warning);
+}
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  animation: fadeIn 0.4s ease;
+}
 
-  .assessment-title,
-  .success-title {
-    font-size: 1.8rem;
-  }
-
-  .persona-selection {
-      flex-direction: column;
-  }
-
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
 
 .loading-content {
   text-align: center;
@@ -781,36 +906,38 @@
 }
 
 .loading-spinner {
+  position: relative;
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  /* Premium Glassmorphism Look */
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.02) 100%);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+  border: 2px solid #3a3a3a;
   display: flex;
   align-items: center;
   justify-content: center;
-  animation: pulse 3s ease-in-out infinite;
-  box-shadow: 0 0 40px rgba(255, 255, 255, 0.05); /* Subtle white glow */
+  animation: pulse 2s ease-in-out infinite;
+  box-shadow: 0 0 30px rgba(255, 255, 255, 0.05),
+              inset 0 0 20px rgba(255, 255, 255, 0.05);
+  z-index: 2;
 }
 
 @keyframes pulse {
   0%, 100% {
     transform: scale(1);
-    box-shadow: 0 0 40px rgba(255, 255, 255, 0.05);
-    border-color: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.05), inset 0 0 20px rgba(255, 255, 255, 0.05);
+    border-color: #3a3a3a;
   }
   50% {
     transform: scale(1.02);
-    box-shadow: 0 0 60px rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 0 50px rgba(255, 255, 255, 0.1), inset 0 0 30px rgba(255, 255, 255, 0.1);
+    border-color: #555;
   }
 }
 
 .spinner-icon {
-  color: rgba(255, 255, 255, 0.9); /* Pure white icon */
+  color: #e0e0e0; /* Off-white for better contrast on dark */
   animation: float 3s ease-in-out infinite;
-  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.2));
 }
 
 @keyframes float {
@@ -825,6 +952,7 @@
   transform: translate(-50%, -50%);
   width: 100%;
   height: 100%;
+  z-index: 1;
   pointer-events: none;
 }
 
@@ -833,8 +961,8 @@
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.8); /* White particles */
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
+  background: #4a4a4a; /* Dark gray particles */
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
   animation: orbit 4s linear infinite;
 }
 
@@ -872,7 +1000,7 @@
 }
 
 .loading-title {
-  color: rgba(255, 255, 255, 0.95);
+  color: #f0f0f0;
   font-size: 1.1rem;
   font-weight: 500;
   letter-spacing: 0.5px;
@@ -888,7 +1016,7 @@
 
 .loading-progress-bar {
   width: 100%;
-  height: 2px; /* Thinner, more elegant line */
+  height: 2px;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 4px;
   overflow: hidden;
@@ -897,15 +1025,14 @@
 
 .loading-progress-fill {
   height: 100%;
-  /* Elegant silver/white gradient */
   background: linear-gradient(90deg, 
     rgba(255, 255, 255, 0) 0%, 
-    rgba(255, 255, 255, 0.8) 50%, 
+    rgba(255, 255, 255, 0.6) 50%, 
     rgba(255, 255, 255, 0) 100%
   );
   background-size: 200% 100%;
   animation: progressMove 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-  width: 50%; /* Shorter moving segment for elegance */
+  width: 50%;
   position: absolute;
   left: 0;
 }
@@ -918,4 +1045,19 @@
     left: 100%;
   }
 }
+
+@media (max-width: 768px) {
+  .assessment-container, .results-container {
+    margin: 1.5rem;
+    padding: 1.5rem;
+  }
+
+  .assessment-title,
+  .success-title {
+    font-size: 1.8rem;
+  }
+
+  .persona-selection {
+      flex-direction: column;
+  }
 }
