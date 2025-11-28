@@ -61,6 +61,7 @@ function App() {
         } />
         <Route path="/AssessmentPg" element={
           <>
+            <div className="glow-overlay"></div>
             <Navbar />
             <AssessmentPg />
             <Footer />
