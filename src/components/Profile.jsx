@@ -38,12 +38,28 @@ const ProjectBriefCard = ({ title, objective, skillsUsed, difficulty }) => (
   </div>
 );
 
+const UsageProgressBar = ({ current, limit, label }) => {
+  const percentage = Math.min((current / limit) * 100, 100);
+  let colorClass = 'progress-green';
+  if (current >= limit) colorClass = 'progress-red';
+  else if (current >= limit - 1) colorClass = 'progress-yellow';
+
+  return (
+    <div className="usage-tracker">
+      <span className="usage-label">{label}: {current}/{limit}</span>
+      <div className="progress-bar-container">
+        <div className={`progress-bar-fill ${colorClass}`} style={{ width: `${percentage}%` }}></div>
+      </div>
+    </div>
+  );
+};
+
 const AssessmentCard = ({ assessment }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const formatDate = (timestamp) => {
     if (!timestamp || !timestamp.seconds) return "Invalid Date";
     const date = new Date(timestamp.seconds * 1000);
-    return date.toLocaleDateString('en-GB');
+    return date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
   };
 
   const ContextualChipDisplay = ({ skill, context, type }) => (
@@ -52,12 +68,20 @@ const AssessmentCard = ({ assessment }) => {
     </li>
   );
 
+  // Parse raw skills for preview tags
+  const skillTags = assessment.rawSkills ? assessment.rawSkills.split(',').slice(0, 4) : [];
+
   return (
     <div className="assessment-card">
       <div className="assessment-card-header" onClick={() => setIsExpanded(!isExpanded)}>
         <div>
-          <p className="assessment-date">{formatDate(assessment.createdAt)}</p>
-          <h4 className="assessment-skills">{assessment.rawSkills}</h4>
+          <span className="assessment-date">{formatDate(assessment.createdAt)}</span>
+          <h4 className="assessment-skills">
+            {skillTags.map((skill, i) => (
+              <span key={i} className="skill-tag-preview">{skill.trim()}</span>
+            ))}
+            {assessment.rawSkills.split(',').length > 4 && <span className="skill-tag-preview">+{assessment.rawSkills.split(',').length - 4} more</span>}
+          </h4>
         </div>
         <button className="expand-btn">{isExpanded ? <icons.ChevronUp /> : <icons.ChevronDown />}</button>
       </div>
@@ -132,7 +156,9 @@ const ResumeCard = ({ resume, onDelete }) => {
   return (
     <div className="resume-card">
       <div className="resume-card-header">
-        <icons.FileText size={40} />
+        <div className="resume-icon-wrapper">
+          <icons.FileText size={32} />
+        </div>
         <div>
           <h3 className="resume-card-title">{resume.fullName}'s Resume</h3>
           <p className="resume-card-subtitle">Last updated: {new Date(resume.lastUpdated).toLocaleDateString()}</p>
@@ -143,7 +169,7 @@ const ResumeCard = ({ resume, onDelete }) => {
           <icons.Edit size={16} /> Edit
         </button>
         <button onClick={() => navigate('/resume-builder', { state: { resumeId: resume.id, isPreview: true } })} className="dashboard-btn">
-          <icons.Download size={16} /> View & Download
+          <icons.Download size={16} /> View
         </button>
         <button onClick={() => onDelete(resume.id)} className="dashboard-btn delete-resume-btn">
           <icons.Trash2 size={16} /> Delete
@@ -226,27 +252,29 @@ const Profile = () => {
     <div className="profile-container">
       <div className="profile-dashboard">
         <div className="dashboard-header">
-          <icons.User size={40} />
+          <div className="resume-icon-wrapper" style={{ borderRadius: '50%', padding: '1.5rem' }}>
+            <icons.User size={48} />
+          </div>
           <div>
             <h2 className="dashboard-name">
               {user.isAnonymous ? 'Guest Account' : user.email}
             </h2>
-            <p className="dashboard-subtitle">welcome to your personal dashboard</p>
+            <p className="dashboard-subtitle">welcome to your personal career dashboard</p>
           </div>
         </div>
       </div>
 
       <div className="section-header">
         <h3 className="section-heading">Your Resumes</h3>
-        <div className="usage-stats" style={{ marginLeft: 'auto', display: 'flex', gap: '1rem', alignItems: 'center' }}>
-          <span style={{ fontSize: '0.9rem', color: '#aaa' }}>Daily Limit: {resumesToday}/3</span>
+        <div className="usage-stats">
+          <UsageProgressBar current={resumesToday} limit={3} label="Daily Limit" />
           <button
             onClick={() => navigate('/resume-builder', { state: { isNew: true } })}
             className="dashboard-btn primary-action-btn"
             disabled={!canCreateResume}
             title={canCreateResume ? "create a new resume" : "you have reached the daily limit of 3 resumes"}
           >
-            <icons.Edit size={16} /> Create New Resume
+            <icons.Plus size={16} /> Create New
           </button>
         </div>
       </div>
@@ -258,16 +286,28 @@ const Profile = () => {
           ))}
         </div>
       ) : (
-        <p>you haven't created any resumes yet, get started by clicking the button above</p>
+        <div className="empty-state">
+          <icons.FileX size={48} className="empty-icon" />
+          <p>You haven't created any resumes yet.</p>
+          <button onClick={() => navigate('/resume-builder', { state: { isNew: true } })} className="dashboard-btn primary-action-btn" style={{ marginTop: '1rem' }}>
+            Create Your First Resume
+          </button>
+        </div>
       )}
 
       <div className="section-header">
-        <h3 className="section-heading">Your Recent Assessments</h3>
-        <span style={{ marginLeft: 'auto', fontSize: '0.9rem', color: '#aaa' }}>Daily Limit: {assessmentsToday}/3</span>
+        <h3 className="section-heading">Recent Assessments</h3>
+        <UsageProgressBar current={assessmentsToday} limit={3} label="Daily Limit" />
       </div>
 
       {!hasAssessments ? (
-        <p>no assessments found, complete one to get started</p>
+        <div className="empty-state">
+          <icons.BrainCircuit size={48} className="empty-icon" />
+          <p>No assessments found. Discover your career path today.</p>
+          <button onClick={() => navigate('/')} className="dashboard-btn primary-action-btn" style={{ marginTop: '1rem' }}>
+            Start Career Assessment
+          </button>
+        </div>
       ) : (
         <div className="assessments-list">
           {profileData.assessments.slice(0, 3).map((assessment, index) => (
