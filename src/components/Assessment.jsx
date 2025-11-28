@@ -8,7 +8,6 @@ import { processSkillsLocally, getRelevantCareers, skillsData } from '../data/sk
 import { getAiSkillAnalysis } from '../Services/geminiService';
 import * as icons from 'lucide-react';
 
-// a helper to dynamically render an icon by its name string
 const Icon = ({ name, ...props }) => {
   const LucideIcon = icons[name];
   if (!LucideIcon) {
@@ -17,7 +16,6 @@ const Icon = ({ name, ...props }) => {
   return <LucideIcon {...props} />;
 };
 
-// NEW: Loading Animation Component
 const LoadingAnimation = ({ message }) => (
   <div className="loading-overlay">
     <div className="loading-content">
@@ -280,23 +278,6 @@ const Assessment = () => {
       setError("please fill out all fields before analyzing.");
       return;
     }
-
-    if (user) {
-      try {
-        const profileRef = doc(db, 'profiles', user.uid);
-        const docSnap = await getDoc(profileRef);
-        if (docSnap.exists()) {
-          const data = docSnap.data();
-          if (data.assessments && data.assessments.length >= 3) {
-            setError("Free Limit Reached: You have used your 3 free career assessments. Upgrade to continue.");
-            return;
-          }
-        }
-      } catch (err) {
-        console.error("Error checking usage limit:", err);
-      }
-    }
-
     setLoading(true);
     setError('');
     setAnalysis(null);

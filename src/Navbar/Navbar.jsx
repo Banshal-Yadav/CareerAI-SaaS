@@ -7,15 +7,15 @@ import { Menu, X } from 'lucide-react';
 function Navbar() {
     const navigate = useNavigate();
     const { user, logout } = useAuth();
-    const [isMenuOpen, setIsMenuOpen] = useState(false); 
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
     const handleLogout = () => {
         logout();
-        setIsMenuOpen(false); 
+        setIsMenuOpen(false);
     };
 
     const handleNavClick = (path) => {
         navigate(path);
-        setIsMenuOpen(false); 
+        setIsMenuOpen(false);
     };
 
 
@@ -32,12 +32,13 @@ function Navbar() {
             <div className={`nav-buttons ${isMenuOpen ? 'active' : ''}`}>
                 <button onClick={() => handleNavClick("/")} id='analysis_btn'>Home</button>
                 <button onClick={() => handleNavClick("/AssessmentPg")} id='analysis_btn'>Analysis</button>
-                
+                <button onClick={() => handleNavClick("/pricing")} id='analysis_btn'>Pricing</button>
+
                 {user && (
                     user.isAnonymous ? (
                         <>
-                             <button onClick={() => handleNavClick("/profile")} id='analysis_btn'>Profile</button>
-                             <button onClick={() => handleNavClick('/login')} id='profile_btn'>Login / Sign Up</button>
+                            <button onClick={() => handleNavClick("/profile")} id='analysis_btn'>Profile</button>
+                            <button onClick={() => handleNavClick('/login')} id='profile_btn'>Login / Sign Up</button>
                         </>
                     ) : (
                         <>
