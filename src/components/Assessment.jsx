@@ -280,6 +280,23 @@ const Assessment = () => {
       setError("please fill out all fields before analyzing.");
       return;
     }
+
+    if (user) {
+      try {
+        const profileRef = doc(db, 'profiles', user.uid);
+        const docSnap = await getDoc(profileRef);
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          if (data.assessments && data.assessments.length >= 3) {
+            setError("Free Limit Reached: You have used your 3 free career assessments. Upgrade to continue.");
+            return;
+          }
+        }
+      } catch (err) {
+        console.error("Error checking usage limit:", err);
+      }
+    }
+
     setLoading(true);
     setError('');
     setAnalysis(null);

@@ -14,6 +14,7 @@ import AssessmentPg from './components/AssessmentPg.jsx';
 import Faq from "./Card/Faq.jsx";
 import Profile from './components/Profile.jsx';
 import ResumeBuilder from './components/Resume/ResumeBuilder.jsx';
+import Pricing from './components/Pricing.jsx';
 import { useEffect } from 'react';
 
 function App() {
@@ -78,6 +79,27 @@ function App() {
           <>
             <Navbar />
             <Auth />
+            <Footer />
+          </>
+        } />
+        <Route path="/pricing" element={
+          <>
+            <Navbar />
+            <Pricing />
+            <Footer />
+          </>
+        } />
+        <Route path="/privacy" element={
+          <>
+            <Navbar />
+            <div style={{ padding: '4rem', textAlign: 'center', color: '#fff' }}><h1>Privacy Policy</h1><p>Coming Soon</p></div>
+            <Footer />
+          </>
+        } />
+        <Route path="/terms" element={
+          <>
+            <Navbar />
+            <div style={{ padding: '4rem', textAlign: 'center', color: '#fff' }}><h1>Terms of Service</h1><p>Coming Soon</p></div>
             <Footer />
           </>
         } />
