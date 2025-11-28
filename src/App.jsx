@@ -34,6 +34,7 @@ function App() {
   // main app router
   return (
     <div className="grid-background">
+      <div className="glow-overlay"></div>
       <Routes>
         <Route
           path="/"
