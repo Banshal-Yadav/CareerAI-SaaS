@@ -62,10 +62,11 @@ const AssessmentCard = ({ assessment }) => {
     return date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
   };
 
-  const ContextualChipDisplay = ({ skill, context, type }) => (
-    <li className={`custom-list-item-${type}`}>
-      <strong>{skill}:</strong> {context}
-    </li>
+  const InsightChipCard = ({ skill, context, type }) => (
+    <div className={`insight-chip-card insight-type-${type}`}>
+      <strong>{skill}</strong>
+      <span>{context}</span>
+    </div>
   );
 
   // Parse raw skills for preview tags
@@ -91,24 +92,25 @@ const AssessmentCard = ({ assessment }) => {
             <h5 className="section-title"><icons.Zap size={18} /> Executive Summary</h5>
             <p>{assessment.aiSummary || 'No summary available'}</p>
           </div>
-          <div className="strengths-growth-grid-profile">
-            <div className="card-section">
-              <h5 className="section-title"><icons.Target size={18} /> Strengths</h5>
-              <ul className="custom-list">
-                {assessment.aiStrengths?.length > 0
-                  ? assessment.aiStrengths.map((s, i) => <ContextualChipDisplay key={i} {...s} type="strength" />)
-                  : <li>No strengths analysis available</li>}
-              </ul>
-            </div>
-            <div className="card-section">
-              <h5 className="section-title"><icons.TrendingUp size={18} /> Growth Areas</h5>
-              <ul className="custom-list">
-                {assessment.aiGrowthAreas?.length > 0
-                  ? assessment.aiGrowthAreas.map((area, i) => <ContextualChipDisplay key={i} {...area} type="growth" />)
-                  : <li>No growth area analysis available</li>}
-              </ul>
+
+          <div className="card-section">
+            <h5 className="section-title"><icons.Target size={18} /> Top Strengths</h5>
+            <div className="insights-grid-compact">
+              {assessment.aiStrengths?.length > 0
+                ? assessment.aiStrengths.map((s, i) => <InsightChipCard key={i} {...s} type="strength" />)
+                : <p>No strengths analysis available</p>}
             </div>
           </div>
+
+          <div className="card-section">
+            <h5 className="section-title"><icons.TrendingUp size={18} /> Growth Areas</h5>
+            <div className="insights-grid-compact">
+              {assessment.aiGrowthAreas?.length > 0
+                ? assessment.aiGrowthAreas.map((area, i) => <InsightChipCard key={i} {...area} type="growth" />)
+                : <p>No growth area analysis available</p>}
+            </div>
+          </div>
+
           <div className="card-section">
             <h5 className="section-title"><icons.Briefcase size={18} /> Career Recommendations</h5>
             <div className="careers-list">

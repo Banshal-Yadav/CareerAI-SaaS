@@ -3,7 +3,13 @@
   padding: 2rem 2.5rem;
   max-width: 1000px;
   margin: 4rem auto;
-  background: transparent; /* Let the main app background show through */
+  /* Fix: Darker background to hide grid lines */
+  background: rgba(13, 17, 23, 0.95); 
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   animation: fadeIn 0.6s ease-out;
 }
 
@@ -45,8 +51,10 @@
   font-size: 2.2rem;
   font-weight: 700;
   background: linear-gradient(90deg, #fff, #a5b4fc);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  color: transparent;
 }
 
 .dashboard-subtitle {
@@ -65,7 +73,13 @@
 }
 
 .resume-card {
-  composes: glass-card;
+  /* Glass card styles duplicated for compatibility */
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+
   border-radius: 16px;
   padding: 1.5rem;
   text-align: left;
@@ -225,7 +239,13 @@
 }
 
 .assessment-card {
-  composes: glass-card;
+  /* Glass card styles duplicated */
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+
   border-radius: 12px;
   transition: all 0.3s ease;
   overflow: hidden;
@@ -249,6 +269,7 @@
   color: var(--text-muted);
   margin-bottom: 0.3rem;
   display: block;
+  text-align: left;
 }
 
 .assessment-skills {
@@ -256,6 +277,7 @@
   font-weight: 600;
   color: #fff;
   margin: 0;
+  text-align: left;
 }
 
 .skill-tag-preview {
@@ -300,11 +322,66 @@
   .resumes-list { grid-template-columns: 1fr; }
 }
 
-/* Keep existing detailed view styles but update colors */
+/* Detailed View Styles - Compact Cards */
 .assessment-card-body {
   padding: 0 1.5rem 1.5rem;
   border-top: 1px solid rgba(255, 255, 255, 0.05);
   background: rgba(0, 0, 0, 0.2);
+  text-align: left; /* Ensure left alignment */
 }
-.card-section p, .custom-list li { color: var(--text-secondary); }
-.career-item-detailed { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05); }
+
+.card-section {
+  text-align: left;
+}
+
+.card-section p {
+  color: var(--text-secondary);
+  line-height: 1.6;
+  text-align: left;
+}
+
+/* New Compact Grid for Strengths/Growth */
+.insights-grid-compact {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.insight-chip-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  padding: 1rem;
+  transition: all 0.2s ease;
+}
+
+.insight-chip-card:hover {
+  background: rgba(255, 255, 255, 0.06);
+  transform: translateY(-2px);
+}
+
+.insight-chip-card strong {
+  display: block;
+  color: #fff;
+  margin-bottom: 0.3rem;
+  font-size: 0.95rem;
+}
+
+.insight-chip-card span {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  display: block;
+  line-height: 1.4;
+}
+
+.insight-type-strength { border-left: 3px solid var(--success); }
+.insight-type-growth { border-left: 3px solid var(--warning); }
+
+.career-item-detailed { 
+  background: rgba(255, 255, 255, 0.03); 
+  border: 1px solid rgba(255, 255, 255, 0.05); 
+  padding: 1.5rem;
+  border-radius: 8px;
+  border-left: 4px solid var(--accent-secondary);
+}
