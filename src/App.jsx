@@ -34,12 +34,12 @@ function App() {
   // main app router
   return (
     <div className="grid-background">
-      <div className="glow-overlay"></div>
       <Routes>
         <Route
           path="/"
           element={
             <>
+              <div className="glow-overlay"></div>
               <Navbar />
               <Pgtitle />
               <GetStartBtn />
