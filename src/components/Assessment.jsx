@@ -318,6 +318,37 @@ const Assessment = () => {
 
     try {
       const matchedSkills = processSkillsLocally(skills);
+      if (matchedSkills.length === 0) {
+        setError("couldn't identify any valid skills. please check for typos or try different terms.");
+        setLoading(false);
+        return;
+      }
+      const relevantCareers = getRelevantCareers(matchedSkills.map(s => s.id));
+      if (relevantCareers.length === 0) {
+        setError("we couldn't find any relevant career matches for the skills provided. please try adding more skills.");
+        setLoading(false);
+        return;
+      }
+
+      let token = null;
+      if (user) {
+        token = await user.getIdToken();
+      }
+
+      const analysisResult = await getAiSkillAnalysis({
+        persona,
+        matchedSkills,
+        relevantCareers,
+        interests,
+        experience: persona === 'jobSeeker' ? experience : null,
+        token,
+      });
+
+      if (analysisResult.error) {
+        setError(analysisResult.message || "the analysis failed. please try again.");
+        setLoading(false);
+        return;
+      }
 
       setAnalysis(analysisResult);
 
