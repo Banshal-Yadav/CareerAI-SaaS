@@ -1,10 +1,16 @@
-export const getAiSkillAnalysis = async ({ persona, matchedSkills, relevantCareers, interests, experience }) => {
+export const getAiSkillAnalysis = async ({ persona, matchedSkills, relevantCareers, interests, experience, token }) => {
   try {
+    const headers = {
+      'Content-Type': 'application/json',
+    };
+
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
     const response = await fetch('/api/analyze', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers,
       body: JSON.stringify({ persona, matchedSkills, relevantCareers, interests, experience }),
     });
     if (!response.ok) {
