@@ -11,10 +11,6 @@ import Auth from './pages/Auth.jsx';
 import Pricing from './pages/Pricing.jsx';
 import ResumeBuilder from './pages/Resume/ResumeBuilder.jsx';
 
-// Components (needed for layout wrappers if any, but here we just need Navbar/Footer for some routes if they are not inside the page component)
-// Actually, looking at the original App.jsx, Navbar and Footer were repeated in every Route.
-// I should probably keep that pattern or move them to a Layout component.
-// For now, I will keep the pattern but import them from new locations.
 import Navbar from './components/Navbar/Navbar.jsx';
 import Footer from './components/Footer/footer.jsx';
 
