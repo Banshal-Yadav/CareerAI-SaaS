@@ -1,12 +1,10 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import admin from 'firebase-admin';
 
-// switch to node.js runtime for firebase-admin support
 export const config = {
   maxDuration: 60,
 };
 
-// initialize firebase admin
 if (!admin.apps.length) {
   try {
     admin.initializeApp({
@@ -22,9 +20,8 @@ if (!admin.apps.length) {
 }
 
 export default async function handler(req, res) {
-  // handle cors
   res.setHeader('Access-Control-Allow-Credentials', true);
-  res.setHeader('Access-Control-Allow-Origin', '*'); // todo: lock this down to your specific domain in production
+  res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
   res.setHeader(
     'Access-Control-Allow-Headers',
@@ -41,27 +38,54 @@ export default async function handler(req, res) {
   }
 
   try {
-    // verify api key
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
       return res.status(500).json({ error: 'Server API Key missing' });
     }
 
-    // verify authentication
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       return res.status(401).json({ error: 'Unauthorized: Missing token' });
     }
 
     const idToken = authHeader.split('Bearer ')[1];
+    let uid;
     try {
-      await admin.auth().verifyIdToken(idToken);
+      const decodedToken = await admin.auth().verifyIdToken(idToken);
+      uid = decodedToken.uid;
     } catch (authError) {
       console.error('Token verification failed:', authError);
       return res.status(401).json({ error: 'Unauthorized: Invalid token' });
     }
 
-    // generate content
+    try {
+      const db = admin.firestore();
+      const profileRef = db.collection('profiles').doc(uid);
+      const docSnap = await profileRef.get();
+
+      if (docSnap.exists) {
+        const data = docSnap.data();
+        if (data.assessments && Array.isArray(data.assessments)) {
+          const now = new Date();
+          const twentyFourHoursAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+
+          const recentAssessments = data.assessments.filter(a => {
+            const createdAt = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(a.createdAt);
+            return createdAt > twentyFourHoursAgo;
+          });
+
+          if (recentAssessments.length >= 3) {
+            return res.status(429).json({
+              error: 'Daily limit reached. You can only generate 3 assessments per 24 hours.'
+            });
+          }
+        }
+      }
+    } catch (dbError) {
+      console.error('Error checking usage limit:', dbError);
+      return res.status(500).json({ error: 'Failed to verify usage limits' });
+    }
+
     const genAI = new GoogleGenerativeAI(apiKey);
     const model = genAI.getGenerativeModel({
       model: "gemini-2.5-flash",
@@ -85,7 +109,7 @@ export default async function handler(req, res) {
     const validIcons = "Code, Database, Server, Cloud, Briefcase, BookOpen, GraduationCap, Award, Trophy, Target, Zap, TrendingUp, Rocket, Cpu, Globe, Lock, Key, Users, Palette, PenTool, Figma, Layout, Package, Settings, Shield, Terminal, FileCode, GitBranch, Layers, Box, Cog, CheckCircle, Star, Heart, ThumbsUp, Activity, BarChart, PieChart, LineChart, Workflow, Network, Link, Upload, Download, Edit, Eye, Search, MessageCircle, Calendar, Clock, Map, Navigation, Compass, Building, Store, Film, Music, Camera, Video, Laptop, HardDrive, Wifi, Lightbulb, Sparkles";
 
     const prompt = `Act as a ${persona} career coach. Skills: ${JSON.stringify(matchedSkills)}. Interests: ${interests}. Experience: ${experience}. 
-
+    
 IMPORTANT: For ALL icon fields, you MUST use ONLY these exact lucide-react icon names: ${validIcons}
 
 SALARY FORMAT: All salaryRange fields MUST be in Indian format using ₹X-Y LPA (e.g., ₹5-7 LPA, ₹8-12 LPA, ₹15-20 LPA). Never use USD or other currencies.
