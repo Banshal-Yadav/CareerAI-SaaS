@@ -1,21 +1,22 @@
 import './App.css'
-import Navbar from './Navbar/Navbar.jsx';
-import Pgtitle from './PgTitle/pgTitle.jsx';
-import GetStartBtn from './GetStartedBtn/GetStartBtn.jsx';
-import Feature from './Card/Feature.jsx';
-import Footer from './Footer/footer.jsx';
-import StatsContainer from './Stats/StatsContainer.jsx';
-import ChipTabContainer from './Chip/ChipTabContainer.jsx';
-import SolutionSec from './Solution/SolutionSec.jsx';
-import Auth from './components/Auth.jsx';
 import { useAuth } from './hooks/useAuth.js';
 import { Routes, Route } from "react-router-dom";
-import AssessmentPg from './components/AssessmentPg.jsx';
-import Faq from "./Card/Faq.jsx";
-import Profile from './components/Profile.jsx';
-import ResumeBuilder from './components/Resume/ResumeBuilder.jsx';
-import Pricing from './components/Pricing.jsx';
 import { useEffect } from 'react';
+
+// Pages
+import Home from './pages/Home.jsx';
+import AssessmentPg from './pages/AssessmentPg.jsx';
+import Profile from './pages/Profile.jsx';
+import Auth from './pages/Auth.jsx';
+import Pricing from './pages/Pricing.jsx';
+import ResumeBuilder from './pages/Resume/ResumeBuilder.jsx';
+
+// Components (needed for layout wrappers if any, but here we just need Navbar/Footer for some routes if they are not inside the page component)
+// Actually, looking at the original App.jsx, Navbar and Footer were repeated in every Route.
+// I should probably keep that pattern or move them to a Layout component.
+// For now, I will keep the pattern but import them from new locations.
+import Navbar from './components/Navbar/Navbar.jsx';
+import Footer from './components/Footer/footer.jsx';
 
 function App() {
   const { user, loading, loginAsGuest } = useAuth();
@@ -38,21 +39,7 @@ function App() {
       <Routes>
         <Route
           path="/"
-          element={
-            <>
-              <div className="glow-overlay"></div>
-              <Navbar />
-              <Pgtitle />
-              <GetStartBtn />
-              <ChipTabContainer />
-              <StatsContainer />
-              <SolutionSec />
-              <Feature />
-              <Pricing id="pricing" />
-              <Faq />
-              <Footer />
-            </>
-          }
+          element={<Home />}
         />
         <Route path="/resume-builder" element={
           <>

@@ -1,5 +1,5 @@
 import React from 'react';
-import './Assessment.css';
+import '../components/Assessment.css';
 import * as icons from 'lucide-react';
 
 const Pricing = ({ id }) => {

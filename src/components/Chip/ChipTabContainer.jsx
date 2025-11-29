@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import "./ChipTabContainer.css";
 import Chiptab from "./Chiptab";
-import CareerInfoModal from "../Modal/CareerInfoModal.jsx"; 
-import { careersData, skillsData, findCareerByTitle } from "../data/skillsDatabase.js"; 
+import CareerInfoModal from "../Modal/CareerInfoModal.jsx";
+import { careersData, skillsData, findCareerByTitle } from "../../data/skillsDatabase.js";
 
 const chipToCareerTitleMap = {
     "Machine Learning": "Data Scientist",
@@ -60,7 +60,7 @@ const ChipTabContainer = () => {
         <div className='cardtab-container'>
             <h1 className='cardtab-container-title'>From Traditional to Emerging - Discover All Possibilities</h1>
             {chipRows.map((row, index) => (
-                <Chiptab 
+                <Chiptab
                     key={index}
                     chips={row}
                     onChipClick={handleChipClick}
@@ -68,14 +68,14 @@ const ChipTabContainer = () => {
             ))}
 
             {selectedCareer && (
-                <CareerInfoModal 
+                <CareerInfoModal
                     career={selectedCareer}
                     onClose={handleCloseModal}
                     careersData={careersData}
                 />
             )}
         </div>
-    ); 
+    );
 }
 
 export default ChipTabContainer;

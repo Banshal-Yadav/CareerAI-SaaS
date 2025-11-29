@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './CtaBanner.css';
-import bannerVisual from '../assets/cta-banner-visual.png';
+import bannerVisual from '../../assets/cta-banner-visual.png';
 
 const CtaBanner = () => {
     const navigate = useNavigate();

@@ -1,4 +1,4 @@
-import Assessment from './Assessment.jsx';
+import Assessment from '../components/Assessment.jsx';
 
 const AssessmentPg = () => {
     return (

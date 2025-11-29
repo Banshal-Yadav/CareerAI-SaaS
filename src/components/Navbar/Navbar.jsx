@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import './Navbar.css'
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from '../../hooks/useAuth';
 import { Menu, X } from 'lucide-react';
 
 function Navbar() {
