@@ -5,7 +5,7 @@ import { useAuth } from '../hooks/useAuth';
 import { db } from '../firebase/config';
 import './Assessment.css';
 import { processSkillsLocally, getRelevantCareers, skillsData } from '../data/skillsDatabase';
-import { getAiSkillAnalysis } from '../Services/geminiService';
+import { getAiSkillAnalysis } from './Services/geminiService';
 import * as icons from 'lucide-react';
 
 const Icon = ({ name, ...props }) => {
