@@ -14,10 +14,12 @@ const ComparisonTable = () => {
     return (
         <div style={{
             marginTop: '4rem',
-            background: 'rgba(255, 255, 255, 0.03)',
+            background: 'rgba(10, 10, 10, 0.8)',
+            backdropFilter: 'blur(12px)',
             borderRadius: '16px',
             padding: '2rem',
-            border: '1px solid rgba(255, 255, 255, 0.05)'
+            border: '1px solid rgba(255, 255, 255, 0.1)',
+            boxShadow: '0 4px 24px -1px rgba(0, 0, 0, 0.2)'
         }}>
             <h3 style={{ textAlign: 'center', fontSize: '1.8rem', marginBottom: '2rem', color: 'var(--text-primary)' }}>compare plans</h3>
             <div style={{ overflowX: 'auto' }}>
