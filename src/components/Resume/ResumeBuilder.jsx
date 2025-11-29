@@ -181,7 +181,8 @@ const ResumeBuilder = () => {
         });
 
         if (recentResumes.length >= 3) {
-          setFeedbackMessage("Daily Limit Reached: You can only create 3 resumes every 24 hours.");
+          setFeedbackMessage("Limit Reached: You can create 3 resumes in a 24-hour period. Your limit resets 24 hours after your first resume.");
+
           setTimeout(() => setFeedbackMessage(''), 5000);
           return;
         }

@@ -216,6 +216,7 @@ const AnalysisResults = ({ analysis, onRetry }) => {
 
 const Assessment = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [persona, setPersona] = useState(null);
   const [skills, setSkills] = useState('');
   const [interests, setInterests] = useState('');
@@ -224,6 +225,40 @@ const Assessment = () => {
   const [error, setError] = useState('');
   const [analysis, setAnalysis] = useState(null);
   const [loadingMessage, setLoadingMessage] = useState('analyzing...');
+  const [usageLimitReached, setUsageLimitReached] = useState(false);
+  const [remainingAttempts, setRemainingAttempts] = useState(3);
+
+  useEffect(() => {
+    const checkUsageLimit = async () => {
+      if (user) {
+        try {
+          const docRef = doc(db, 'profiles', user.uid);
+          const docSnap = await getDoc(docRef);
+          if (docSnap.exists()) {
+            const data = docSnap.data();
+            if (data.assessments) {
+              const now = new Date();
+              const twentyFourHoursAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+
+              const recentAssessments = data.assessments.filter(a => {
+                const created = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(a.createdAt);
+                return created > twentyFourHoursAgo;
+              });
+
+              setRemainingAttempts(Math.max(0, 3 - recentAssessments.length));
+
+              if (recentAssessments.length >= 3) {
+                setUsageLimitReached(true);
+              }
+            }
+          }
+        } catch (err) {
+          console.error("Error checking usage limit:", err);
+        }
+      }
+    };
+    checkUsageLimit();
+  }, [user]);
 
   const suggestedSkills = useMemo(() => {
     const allSkills = {
@@ -243,7 +278,6 @@ const Assessment = () => {
         return [];
     }
   }, [persona]);
-
 
   const handleSkillChipClick = (skillToAdd) => {
     const currentSkills = skills.split(',').map(s => s.trim()).filter(Boolean);
@@ -363,6 +397,22 @@ const Assessment = () => {
     return <AnalysisResults analysis={analysis} onRetry={resetAssessment} />;
   }
 
+  if (usageLimitReached) {
+    return (
+      <div className="assessment-container">
+        <div className="cta-card" style={{ marginTop: 0 }}>
+          <icons.Lock size={48} style={{ color: 'var(--accent-primary)', marginBottom: '1rem' }} />
+          <h2 className="assessment-title" style={{ fontSize: '2rem' }}>limit reached</h2>
+          <p className="assessment-subtitle">you have reached your limit of 3 assessments in the last 24 hours.</p>
+          <p style={{ color: 'var(--text-secondary)', marginBottom: '2rem' }}>
+            your limit will reset 24 hours after your first assessment. upgrade to premium for unlimited access.
+          </p>
+          <button className="cta-button" onClick={() => navigate('/pricing')}>upgrade now</button>
+        </div>
+      </div>
+    );
+  }
+
   if (!persona) {
     return (
       <div className="assessment-container">
@@ -382,10 +432,42 @@ const Assessment = () => {
       {loading && <LoadingAnimation message={loadingMessage} />}
       <h2 className="assessment-title">your career assessment</h2>
       <p className="assessment-subtitle">tell us about yourself to get a personalized career roadmap.</p>
+      {remainingAttempts < 3 && remainingAttempts > 0 && (
+        <p style={{ color: 'var(--accent-primary)', fontSize: '0.9rem', marginBottom: '1rem' }}>
+          {remainingAttempts} {remainingAttempts === 1 ? 'assessment' : 'assessments'} remaining in the next 24 hours
+        </p>
+      )}
       {error && <p className="error-message">{error}</p>}
       <form onSubmit={handleSubmit} className="assessment-form">
-        <div className="form-group"><label className="form-label">your skills</label><input type="text" className="form-input" placeholder="e.g., python, communication, graphic design" value={skills} onChange={(e) => setSkills(e.target.value)} /><div className="skill-chips-container">{suggestedSkills.map(skill => (<button type="button" key={skill} className="skill-chip" onClick={() => handleSkillChipClick(skill)}>{skill}</button>))}</div></div>
-        <div className="form-group"><label className="form-label">your interests & hobbies</label><input type="text" className="form-input" placeholder="e.g., building web apps, solving puzzles, creative writing" value={interests} onChange={(e) => setInterests(e.target.value)} /></div>
+        <div className="form-group">
+          <label className="form-label">
+            your skills
+            <span style={{ fontSize: '0.8rem', color: '#888', float: 'right' }}>{skills.length}/500</span>
+          </label>
+          <input
+            type="text"
+            className="form-input"
+            placeholder="e.g., python, communication, graphic design"
+            value={skills}
+            maxLength={500}
+            onChange={(e) => setSkills(e.target.value)}
+          />
+          <div className="skill-chips-container">{suggestedSkills.map(skill => (<button type="button" key={skill} className="skill-chip" onClick={() => handleSkillChipClick(skill)}>{skill}</button>))}</div>
+        </div>
+        <div className="form-group">
+          <label className="form-label">
+            your interests & hobbies
+            <span style={{ fontSize: '0.8rem', color: '#888', float: 'right' }}>{interests.length}/500</span>
+          </label>
+          <input
+            type="text"
+            className="form-input"
+            placeholder="e.g., building web apps, solving puzzles, creative writing"
+            value={interests}
+            maxLength={500}
+            onChange={(e) => setInterests(e.target.value)}
+          />
+        </div>
         {persona === 'jobSeeker' && (<div className="form-group"><label className="form-label">years of professional experience</label><select value={experience} onChange={(e) => setExperience(e.target.value)} className="form-select"><option value="0-1 years (beginner)">0 - 1 years (beginner)</option><option value="2-4 years (intermediate)">2 - 4 years (intermediate)</option><option value="5+ years (advanced)">5+ years (advanced)</option></select></div>)}
         <div className="form-actions">
           <button type="button" className="back-btn" onClick={() => setPersona(null)}>back</button>

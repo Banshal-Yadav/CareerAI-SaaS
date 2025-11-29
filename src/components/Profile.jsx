@@ -69,7 +69,6 @@ const AssessmentCard = ({ assessment }) => {
     </div>
   );
 
-  // Parse raw skills for preview tags
   const skillTags = assessment.rawSkills ? assessment.rawSkills.split(',').slice(0, 4) : [];
 
   return (
@@ -237,7 +236,6 @@ const Profile = () => {
   const hasAssessments = profileData?.assessments?.length > 0;
   const hasResumes = profileData?.resumes?.length > 0;
 
-  // Calculate daily usage
   const resumesToday = profileData?.resumes?.filter(r => {
     const created = r.createdAt ? new Date(r.createdAt) : new Date(r.lastUpdated);
     return created > new Date(Date.now() - 24 * 60 * 60 * 1000);

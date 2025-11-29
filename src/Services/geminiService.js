@@ -1,17 +1,19 @@
-// src/Services/geminiService.js
-export const getAiSkillAnalysis = async (data) => {
+export const getAiSkillAnalysis = async ({ persona, matchedSkills, relevantCareers, interests, experience }) => {
   try {
-    // Calls the Vercel Serverless Function (works locally and in prod)
     const response = await fetch('/api/analyze', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify({ persona, matchedSkills, relevantCareers, interests, experience }),
     });
-if (!response.ok) {
-  throw new Error('Network response was not ok');
-}
-const result = await response.json();
-return result;
-} catch (error) { console.error("Error calling analysis service:", error); return { error: true, message: "Unable to generate career roadmap. Please try again later." }; } };
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error("Error calling analysis service:", error);
+    return { error: true, message: "Unable to generate career roadmap. Please try again later." };
+  }
+};
