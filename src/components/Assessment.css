@@ -729,8 +729,8 @@
 
 /* cta card */
 .cta-card {
-    background: linear-gradient(135deg, hsla(245, 40%, 25%), hsla(270, 40%, 20%));
-    border: 1px solid var(--accent-primary);
+    background: linear-gradient(135deg, #1f1f1f, #2d2d2d);
+    border: 1px solid #404040;
     border-radius: 12px;
     padding: 2rem;
     margin-top: 2.5rem;
@@ -959,3 +959,9 @@
     grid-template-columns: 1fr;
   }
 }
+
+.evidence-text { text-align: left; }
+.evidence-text p { text-align: left; }
+.difficulty-beginner { border-left: 4px solid #10b981 !important; }
+.difficulty-intermediate { border-left: 4px solid #f59e0b !important; }
+.difficulty-advanced { border-left: 4px solid #ef4444 !important; }
