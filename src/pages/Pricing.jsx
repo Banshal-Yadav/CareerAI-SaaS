@@ -29,8 +29,8 @@ const Pricing = ({ id }) => {
                     display: 'flex',
                     flexDirection: 'column',
                     gap: '1.5rem',
-                    background: 'rgba(255, 255, 255, 0.03)',
-                    border: '1px solid rgba(255, 255, 255, 0.05)'
+                    background: 'rgba(255, 255, 255, 0.08)',
+                    border: '1px solid rgba(255, 255, 255, 0.1)'
                 }}>
                     <div className="strength-card-header">
                         <div style={{ background: 'rgba(255, 255, 255, 0.1)', padding: '0.5rem', borderRadius: '8px' }}>
@@ -74,7 +74,7 @@ const Pricing = ({ id }) => {
                     flexDirection: 'column',
                     gap: '1.5rem',
                     border: '1px solid var(--accent-primary)',
-                    background: 'rgba(124, 58, 237, 0.05)',
+                    background: 'rgba(124, 58, 237, 0.15)',
                     position: 'relative',
                     overflow: 'hidden'
                 }}>

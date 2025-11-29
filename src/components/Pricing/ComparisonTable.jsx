@@ -14,7 +14,7 @@ const ComparisonTable = () => {
     return (
         <div style={{
             marginTop: '4rem',
-            background: 'rgba(10, 10, 10, 0.8)',
+            background: 'rgba(0, 0, 0, 0.9)',
             backdropFilter: 'blur(12px)',
             borderRadius: '16px',
             padding: '2rem',
