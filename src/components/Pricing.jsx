@@ -2,13 +2,13 @@ import React from 'react';
 import './Assessment.css';
 import * as icons from 'lucide-react';
 
-const Pricing = () => {
+const Pricing = ({ id }) => {
     const handleProClick = () => {
         alert("Payment Gateway coming soon!");
     };
 
     return (
-        <div className="assessment-container">
+        <div className="assessment-container" id={id}>
             <h2 className="assessment-title">upgrade your career journey</h2>
             <p className="assessment-subtitle">choose the plan that fits your needs.</p>
 

@@ -1,12 +1,12 @@
 export const getBasePromptStructure = () => ({
   summary: "a brief, encouraging summary (2-4 sentences).",
-  strengths: [{ 
-    skill: "a key skill", 
+  strengths: [{
+    skill: "a key skill",
     context: "a short phrase on why it's a strength",
     icon: "a relevant lucide-react icon name (e.g., 'Database', 'Code', 'Paintbrush')",
   }],
-  growthAreas: [{ 
-    skill: "a skill to develop", 
+  growthAreas: [{
+    skill: "a skill to develop",
     context: "a short phrase on why it's important",
     icon: "a relevant lucide-react icon name (e.g., 'GitMerge', 'Users', 'ClipboardCheck')"
   }],
@@ -24,14 +24,14 @@ export const getBasePromptStructure = () => ({
       icon: "a relevant lucide-react icon name (e.g., 'Cloud', 'Server', 'PenTool')"
     }],
     jobOutlook: "a brief, one-sentence overview of the job market.",
-    salaryRange: "an estimated yearly salary range in inr for an entry-level position.",
-    suggestedCertifications: [{ 
-      name: "a relevant certification name.", 
+    salaryRange: "salary in ₹X-Y LPA format for entry-level in India (e.g., ₹5-7 LPA or ₹8-12 LPA).",
+    suggestedCertifications: [{
+      name: "a relevant certification name.",
       issuer: "the issuing organization.",
       icon: "a relevant lucide-react icon name (e.g., 'Award', 'ShieldCheck')"
     }],
-    suggestedCourses: [{ 
-      platform: "coursera/udemy", 
+    suggestedCourses: [{
+      platform: "coursera/udemy",
       courseName: "a specific, relevant course name.",
       icon: "a relevant lucide-react icon name (e.g., 'BookOpen', 'Youtube')"
     }],

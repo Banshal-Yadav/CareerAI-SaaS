@@ -199,7 +199,7 @@ const AnalysisResults = ({ analysis, onRetry }) => {
             <div className="project-brief-grid">{topCareer.suggestedProjects.map((proj, i) => <ProjectBriefCard key={i} {...proj} />)}</div>
           </div>
           <div className="cta-card">
-            <icons.Rocket size={32} />
+            <icons.Rocket size={56} />
             <h4>ready to get noticed?</h4>
             <p>use these insights to build a professional resume that stands out to recruiters</p>
             <button onClick={handleCreateResume} className="cta-button">build my resume now</button>

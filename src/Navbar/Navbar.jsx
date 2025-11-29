@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import './Navbar.css'
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { Menu, X } from 'lucide-react';
 
 function Navbar() {
     const navigate = useNavigate();
+    const location = useLocation();
     const { user, logout } = useAuth();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const handleLogout = () => {
@@ -14,7 +15,24 @@ function Navbar() {
     };
 
     const handleNavClick = (path) => {
-        navigate(path);
+        if (path === 'pricing') {
+            if (location.pathname === '/') {
+                const pricingSection = document.getElementById('pricing');
+                if (pricingSection) {
+                    pricingSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            } else {
+                navigate('/');
+                setTimeout(() => {
+                    const pricingSection = document.getElementById('pricing');
+                    if (pricingSection) {
+                        pricingSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                }, 100);
+            }
+        } else {
+            navigate(path);
+        }
         setIsMenuOpen(false);
     };
 
@@ -32,7 +50,7 @@ function Navbar() {
             <div className={`nav-buttons ${isMenuOpen ? 'active' : ''}`}>
                 <button onClick={() => handleNavClick("/")} id='analysis_btn'>Home</button>
                 <button onClick={() => handleNavClick("/AssessmentPg")} id='analysis_btn'>Analysis</button>
-                <button onClick={() => handleNavClick("/pricing")} id='analysis_btn'>Pricing</button>
+                <button onClick={() => handleNavClick('pricing')} id='analysis_btn'>Pricing</button>
 
                 {user && (
                     user.isAnonymous ? (

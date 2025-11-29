@@ -48,7 +48,7 @@ function App() {
               <StatsContainer />
               <SolutionSec />
               <Feature />
-              <Pricing />
+              <Pricing id="pricing" />
               <Faq />
               <Footer />
             </>
