@@ -31,6 +31,8 @@ A modern, AI-powered application that helps users discover their ideal career pa
 
 ### Quick Start
 
+> **Important:** Do NOT rename the project folder or use spaces in the folder name. This can cause build issues.
+
 1.  **Install dependencies:**
     ```bash
     npm install
@@ -99,6 +101,8 @@ A modern, AI-powered application that helps users discover their ideal career pa
     ```
     The app will open at `http://localhost:3000`
 
+    > **Windows Users:** If you encounter errors with Vercel CLI, try running commands in **Git Bash** instead of PowerShell.
+
 ## Customization
 
 ### AI Persona & Prompts
@@ -127,6 +131,7 @@ This project is optimized for **Vercel** deployment with serverless functions.
     - Go to Vercel Dashboard → Settings → Environment Variables
     - Copy each variable from `.env.local` and add them **one by one**
     - Do NOT upload the file itself
+    - **Click "Redeploy"** after adding all variables to apply changes
     
     Add ALL these variables (11 total):
     ```
@@ -180,6 +185,13 @@ careerGuide/
 ├── vercel.json           # Vercel deployment config
 └── package.json          # Project dependencies
 ```
+
+## Common Fixes
+
+*   **PRIVATE_KEY parse error:** Your private key is missing `\n` characters. Do not remove them when copying.
+*   **Firebase auth error:** Ensure **Google** and **Email/Password** providers are enabled in Firebase Console.
+*   **App shows blank page:** Check if `VITE_FIREBASE_PROJECT_ID` and other frontend variables are correct.
+*   **AI not generating:** Ensure `GEMINI_API_KEY` is added to Vercel Environment Variables (Backend).
 
 ## License
 
