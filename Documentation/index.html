@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareerAI - Documentation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            /* Professional Blue Theme */
+            --primary: #2563eb;
+            /* Royal Blue */
+            --primary-light: #3b82f6;
+            /* Lighter Blue */
+            --primary-dark: #1d4ed8;
+            /* Darker Blue */
+            --text: #1f2937;
+            --text-light: #6b7280;
+            --bg: #f9fafb;
+            --sidebar-bg: #ffffff;
+            --border: #e5e7eb;
+            --code-bg: #1e293b;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --info: #3b82f6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text);
+            background: var(--bg);
+            line-height: 1.6;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: var(--sidebar-bg);
+            border-right: 1px solid var(--border);
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            padding: 2rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-light);
+            font-size: 0.95rem;
+            padding: 0.75rem 1rem;
+            border-radius: 6px;
+            transition: all 0.2s;
+            display: block;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            background: #f3f4f6;
+            color: var(--primary);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 3rem 4rem;
+            max-width: 1000px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            color: var(--text);
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            color: var(--text-light);
+            margin-bottom: 3rem;
+            font-weight: 300;
+        }
+
+        h2 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-top: 4rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border);
+            color: var(--text);
+            scroll-margin-top: 2rem;
+        }
+
+        h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
+        h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            color: #374151;
+        }
+
+        ul,
+        ol {
+            margin-left: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: #374151;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* Code Blocks */
+        pre {
+            background: var(--code-bg);
+            color: #e2e8f0;
+            padding: 1.5rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        code {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        p code,
+        li code {
+            background: #f3f4f6;
+            color: var(--primary-dark);
+        }
+
+        .alert-warning {
+            background: #fffbeb;
+            border-color: var(--warning);
+            color: #92400e;
+        }
+
+        .alert-success {
+            background: #ecfdf5;
+            border-color: var(--success);
+            color: #065f46;
+        }
+
+        /* Cards */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            border-color: var(--primary-light);
+        }
+
+        .card strong {
+            display: block;
+            color: var(--primary);
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Steps */
+        .step {
+            position: relative;
+            padding-left: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .step::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #e5e7eb;
+        }
+
+        .step-number {
+            position: absolute;
+            left: -14px;
+            top: 0;
+            width: 30px;
+            height: 30px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+            border: 4px solid white;
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 5rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+                padding: 1rem;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 2rem 1.5rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="sidebar">
+        <div class="logo">
+            CareerAI
+        </div>
+        <ul class="nav-links">
+            <li><a href="#intro">Introduction</a></li>
+            <li><a href="#prerequisites">Prerequisites</a></li>
+            <li><a href="#quick-start">Quick Start</a></li>
+            <li><a href="#configuration">Configuration</a></li>
+            <li><a href="#running">Running Locally</a></li>
+            <li><a href="#deployment">Deployment</a></li>
+            <li><a href="#customization">Customization</a></li>
+            <li><a href="#structure">Project Structure</a></li>
+            <li><a href="#security">Security</a></li>
+            <li><a href="#support">Support</a></li>
+        </ul>
+    </nav>
+
+    <main class="main-content">
+        <section id="intro">
+            <h1>Installation & Setup Guide</h1>
+            <p class="subtitle">Complete documentation for setting up, configuring, and deploying your CareerAI
+                application.</p>
+
+            <div class="alert alert-success">
+                <strong>Thank you for purchasing CareerAI!</strong>
+                <div>This premium guide will help you get your AI Career Consultant application up and running in
+                    minutes.</div>
+            </div>
+        </section>
+
+        <section id="prerequisites">
+            <h2>Prerequisites</h2>
+            <p>Before you begin, ensure you have the following installed on your machine:</p>
+
+            <div class="grid">
+                <div class="card">
+                    <strong>Node.js</strong>
+                    <p>Version 18 or higher required.</p>
+                    <a href="https://nodejs.org/" target="_blank">Download Node.js →</a>
+                </div>
+                <div class="card">
+                    <strong>Git</strong>
+                    <p>Latest version for version control.</p>
+                    <a href="https://git-scm.com/" target="_blank">Download Git →</a>
+                </div>
+                <div class="card">
+                    <strong>Code Editor</strong>
+                    <p>VS Code is highly recommended.</p>
+                    <a href="https://code.visualstudio.com/" target="_blank">Download VS Code →</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="quick-start">
+            <h2>Quick Start</h2>
+
+            <div class="step">
+                <div class="step-number">1</div>
+                <h3>Unzip the Project</h3>
+                <p>Extract the downloaded zip file to your desired folder.</p>
+            </div>
+
+            <div class="step">
+                <div class="step-number">2</div>
+                <h3>Install Dependencies</h3>
+                <p>Open your terminal in the project folder and run:</p>
+                <pre><code>npm install</code></pre>
+            </div>
+
+            <div class="step">
+                <div class="step-number">3</div>
+                <h3>Install Vercel CLI</h3>
+                <p>Required for local development of serverless functions:</p>
+                <pre><code>npm install -g vercel</code></pre>
+            </div>
+        </section>
+
+        <section id="configuration">
+            <h2>Configuration</h2>
+            <div class="alert alert-info">
+                <strong>Important:</strong> You must set up Firebase and Google Gemini AI before running the
+                application.
+            </div>
+
+            <h3>Step 1: Firebase Setup</h3>
+            <ol>
+                <li>Go to the <a href="https://console.firebase.google.com/" target="_blank">Firebase Console</a> and
+                    create a new project.</li>
+                <li><strong>Enable Authentication:</strong> Go to "Build" → "Authentication" and enable
+                    <strong>Google</strong> and <strong>Email/Password</strong> providers.
+                </li>
+                <li><strong>Enable Firestore Database:</strong> Create a database in <strong>Production Mode</strong>.
+                </li>
+                <li><strong>Set Security Rules:</strong> Go to the "Rules" tab and paste:</li>
+            </ol>
+            <pre><code>rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /profiles/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+  }
+}</code></pre>
+            <div class="alert alert-warning">
+                <strong>Security Note:</strong> These rules are critical. They ensure users can only access their own
+                data.
+            </div>
+            <ol start="5">
+                <li><strong>Get Config:</strong> Go to Project Settings → General → Your apps → Web
+                    (<code>&lt;/&gt;</code>) → Register app → Copy config.</li>
+            </ol>
+
+            <h3>Step 2: Google Gemini AI Setup</h3>
+            <ol>
+                <li>Visit <a href="https://aistudio.google.com/" target="_blank">Google AI Studio</a>.</li>
+                <li>Click "Get API Key" → "Create API Key".</li>
+                <li>Copy the key for the next step.</li>
+            </ol>
+
+            <h3>Step 3: Firebase Admin SDK (Server-Side)</h3>
+            <ol>
+                <li>In Firebase Console → Project Settings → <strong>Service Accounts</strong>.</li>
+                <li>Click "<strong>Generate New Private Key</strong>" → Download JSON.</li>
+                <li>You need: <code>project_id</code>, <code>client_email</code>, and <code>private_key</code> from this
+                    file.</li>
+            </ol>
+
+            <h3>Step 4: Environment Variables</h3>
+            <p>Create a new file named <code>.env.local</code> (do not commit this file) and fill in your keys:</p>
+            <pre><code># Frontend - Firebase Web SDK
+VITE_FIREBASE_API_KEY=your_api_key
+VITE_FIREBASE_AUTH_DOMAIN=your_project_id.firebaseapp.com
+VITE_FIREBASE_PROJECT_ID=your_project_id
+VITE_FIREBASE_STORAGE_BUCKET=your_project_id.firebasestorage.app
+VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
+VITE_FIREBASE_APP_ID=your_app_id
+VITE_FIREBASE_MEASUREMENT_ID=G-XXXXXXXXXX
+
+# Backend - Gemini AI
+GEMINI_API_KEY=your_gemini_key
+
+# Backend - Firebase Admin SDK
+FIREBASE_PROJECT_ID=your_project_id
+FIREBASE_CLIENT_EMAIL=firebase-adminsdk-xxxxx@your-project.iam.gserviceaccount.com
+FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nYour_Key\n-----END PRIVATE KEY-----\n"</code></pre>
+
+            <div class="alert alert-warning">
+                <strong>Important:</strong> The <code>FIREBASE_PRIVATE_KEY</code> must include the quotes and
+                <code>\n</code> characters. If you get a JSON parse error, your private key is missing line breaks. Do
+                NOT remove the <code>\n</code> characters.
+            </div>
+            <div class="alert alert-warning">
+                <strong>Warning:</strong> Never upload <code>.env.local</code> or private keys to GitHub.
+            </div>
+        </section>
+
+        <section id="running">
+            <h2>Running Locally</h2>
+            <p>Start the development server using Vercel CLI:</p>
+            <pre><code>vercel dev</code></pre>
+            <p>The application will open at <code>http://localhost:3000</code>.</p>
+        </section>
+
+        <section id="deployment">
+            <h2>Deployment (Vercel)</h2>
+            <ol>
+                <li>Push code to GitHub/GitLab.</li>
+                <li>Import project into <a href="https://vercel.com" target="_blank">Vercel</a>.</li>
+                <li>
+                    <strong>Configure Environment Variables:</strong>
+                    <ul>
+                        <li>Go to Vercel Dashboard → Settings → Environment Variables</li>
+                        <li>Copy each variable from <code>.env.local</code> and add them <strong>one by one</strong>
+                        </li>
+                        <div class="alert alert-info">
+                            <strong>Note:</strong> Vercel automatically detects <code>vercel.json</code> for proper
+                            routing.
+                        </div>
+        </section>
+
+        <section id="customization">
+            <h2>Customization</h2>
+            <h3>AI Personality</h3>
+            <p>Edit <code>src/config/aiPrompts.js</code> to change how the AI behaves.</p>
+
+            <h3>Theming</h3>
+            <p>Edit <code>src/index.css</code> to change the color palette:</p>
+            <ul>
+                <li><code>--primary-bg</code>: Main background</li>
+                <li><code>--accent-primary</code>: Main accent color</li>
+                <li><code>--btn-primary</code>: Button color</li>
+            </ul>
+        </section>
+
+        <section id="structure">
+            <h2>Project Structure</h2>
+            <pre><code>careerGuide/
+├── api/                  # Serverless Functions (Backend)
+│   └── analyze.js        # Gemini AI Integration
+├── src/
+│   ├── components/       # UI Components
+│   ├── config/           # AI Configuration
+│   ├── data/             # Static Data
+│   ├── firebase/         # Firebase Config
+│   ├── pages/            # Application Pages
+│   └── Services/         # API Services
+├── Documentation/        # This Guide
+└── vercel.json           # Deployment Config</code></pre>
+        </section>
+
+        <section id="security">
+            <h2>Security Features</h2>
+            <div class="grid">
+                <div class="card">
+                    <strong>Firestore Rules</strong>
+                    <p>Strict data isolation ensures users only see their own data.</p>
+                </div>
+                <div class="card">
+                    <strong>Serverless Backend</strong>
+                    <p>API keys are hidden in Vercel Functions, never exposed to clients.</p>
+                </div>
+                <div class="card">
+                    <strong>Environment Variables</strong>
+                    <p>Sensitive config is managed via secure environment variables.</p>
+                </div>
+            </div>
+
+            <div class="alert alert-info">
+                <strong>Important:</strong> Do NOT commit your Firebase service account JSON or any <code>.env</code>
+                files to GitHub.
+                Always store sensitive keys ONLY in:
+                <ul style="margin-top: 0.5rem; margin-bottom: 0;">
+                    <li><code>.env.local</code> (local machine only)</li>
+                    <li>Vercel Environment Variables (production)</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="support">
+            <h2>Support</h2>
+            <p>Need help? Contact us via CodeCanyon with your purchase code.</p>
+
+            <div class="footer">
+                <p><strong>CareerAI</strong> &copy; 2025. All Rights Reserved.</p>
+                <p>Developed by Banshal Kumar Yadav</p>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Simple active link highlighting
+        const sections = document.querySelectorAll('section');
+        const navLinks = document.querySelectorAll('.nav-links a');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= (sectionTop - sectionHeight / 3)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').includes(current)) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

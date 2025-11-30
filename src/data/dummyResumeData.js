@@ -80,7 +80,7 @@ export const dummyResumes = [
     skills: 'Financial Modeling, Microsoft Excel, Equity Research, Data Analysis, Python (Pandas, NumPy), PowerPoint, Teamwork, Communication',
     lastUpdated: new Date().toISOString(),
   },
-   // profile 3: an arts/humanities student
+  // profile 3: an arts/humanities student
   {
     id: 'dummy_3',
     fullName: 'Ananya Iyer',
@@ -90,7 +90,7 @@ export const dummyResumes = [
     github: 'github.com/ananyaiyer',
     summary: 'A creative and passionate B.A. English Literature student from Christ University with a flair for writing and digital content creation. Experienced in SEO writing, social media management, and content strategy through freelance projects. Aims to build a career in digital marketing or corporate communications.',
     experience: [
-       {
+      {
         jobTitle: 'Content Writing Intern',
         company: 'YourStory Media',
         startDate: 'Jan 2024',
