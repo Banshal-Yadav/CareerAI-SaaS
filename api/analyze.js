@@ -89,21 +89,25 @@ export default async function handler(req, res) {
       const now = new Date();
       const twentyFourHoursAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
 
-      let profileData = docSnap.exists ? docSnap.data() : { assessments: [], bookmarks: [], resumes: [], isPro: false };
+      let profileData = docSnap.exists ? docSnap.data() : { assessments: [], bookmarks: [], resumes: [], isPro: false, dailyCreations: [] };
       const isPro = profileData.isPro === true;
 
-      if (!isPro && profileData.assessments && Array.isArray(profileData.assessments)) {
-        const recentAssessments = profileData.assessments.filter(a => {
-          const createdAt = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(a.createdAt);
+      if (!isPro) {
+        const dailyCreations = profileData.dailyCreations || [];
+        const recentCreations = dailyCreations.filter(timestamp => {
+          const createdAt = timestamp?.toDate ? timestamp.toDate() : new Date(timestamp);
           return createdAt > twentyFourHoursAgo;
         });
 
-        if (recentAssessments.length >= FREE_TIER_LIMITS.dailyAssessments) {
+        if (recentCreations.length >= FREE_TIER_LIMITS.dailyAssessments) {
           return res.status(429).json({
             error: 'Daily limit reached. You can only generate 3 assessments per 24 hours.',
             limitType: 'daily'
           });
         }
+      }
+
+      if (!isPro && profileData.assessments && Array.isArray(profileData.assessments)) {
 
         if (profileData.assessments.length >= FREE_TIER_LIMITS.maxAssessments) {
           const bookmarkedIds = (profileData.bookmarks || []).map(b => b.assessmentId);
@@ -185,6 +189,15 @@ Return JSON matching this structure: ${baseStructure}`;
 
     try {
       const parsedResponse = JSON.parse(responseText);
+
+      if (!isPro) {
+        const db = admin.firestore();
+        const profileRef = db.collection('profiles').doc(uid);
+        await profileRef.set({
+          dailyCreations: admin.firestore.FieldValue.arrayUnion(admin.firestore.Timestamp.now())
+        }, { merge: true });
+      }
+
       return res.status(200).json(parsedResponse);
     } catch (parseError) {
       console.error('Failed to parse AI response:', parseError, 'Raw:', responseText.substring(0, 200));
