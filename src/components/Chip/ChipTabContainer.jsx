@@ -32,6 +32,7 @@ const getSkillName = (skillId) => {
 
 const ChipTabContainer = () => {
     const [selectedCareer, setSelectedCareer] = useState(null);
+    const [activeChip, setActiveChip] = useState(null);
 
     const chipRows = [
         ["Machine Learning", "Java Developer", "Researcher", "Cloud", "Bigdata", "AI Engineer"],
@@ -43,14 +44,16 @@ const ChipTabContainer = () => {
         const targetTitle = chipToCareerTitleMap[chipText];
         if (!targetTitle) return;
 
-        if (selectedCareer?.title === targetTitle) {
+        if (activeChip === chipText) {
             setSelectedCareer(null);
+            setActiveChip(null);
             return;
         }
 
         const foundCareer = findCareerByTitle(targetTitle);
         if (foundCareer) {
             setSelectedCareer(foundCareer);
+            setActiveChip(chipText);
         }
     };
 
@@ -64,7 +67,7 @@ const ChipTabContainer = () => {
                             {[...row, ...row, ...row].map((chipText, chipIndex) => (
                                 <button
                                     key={chipIndex}
-                                    className={`marquee-chip ${selectedCareer?.title === chipToCareerTitleMap[chipText] ? 'active' : ''}`}
+                                    className={`marquee-chip ${activeChip === chipText ? 'active' : ''}`}
                                     onClick={() => handleChipClick(chipText)}
                                 >
                                     {chipText}
