@@ -1,140 +1,108 @@
 import React from 'react';
-import '../components/Assessment.css';
-import { Sparkles, Zap, Check } from 'lucide-react';
+import './Pricing.css';
+import { Sparkles, Zap, Check, X } from 'lucide-react';
 
 const Pricing = ({ id }) => {
     const handleProClick = () => {
         alert("Payment Gateway coming soon!");
     };
 
+    const features = [
+        { name: 'Assessments per day', free: '3', pro: 'Unlimited' },
+        { name: 'Assessments stored', free: '10', pro: 'Unlimited' },
+        { name: 'Bookmarked assessments', free: '3', pro: 'Unlimited' },
+        { name: 'Resumes stored', free: '3', pro: 'Unlimited' },
+        { name: 'PDF export', free: true, pro: true },
+        { name: 'AI career analysis', free: 'Basic', pro: 'Advanced' },
+        { name: 'Priority support', free: false, pro: true },
+    ];
+
     return (
-        <div className="assessment-container" id={id} style={{
-            paddingTop: '3rem',
-            paddingBottom: '3rem'
-        }}>
-            <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
-                <h2 className="assessment-title" style={{ fontSize: '2.2rem', marginBottom: '0.5rem' }}>
-                    simple, transparent pricing
-                </h2>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '1rem' }}>
-                    start free, upgrade when you need more
-                </p>
-            </div>
-
-            <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-                gap: '1.5rem',
-                maxWidth: '700px',
-                margin: '0 auto'
-            }}>
-                <div style={{
-                    padding: '1.5rem',
-                    borderRadius: '12px',
-                    background: '#1a1a1a',
-                    border: '1px solid #2a2a2a'
-                }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
-                        <Sparkles size={20} style={{ color: '#888' }} />
-                        <span style={{ fontSize: '1.1rem', fontWeight: '600', color: '#fff' }}>starter</span>
-                        <span style={{
-                            marginLeft: 'auto',
-                            fontSize: '0.75rem',
-                            padding: '0.2rem 0.5rem',
-                            background: '#2a2a2a',
-                            borderRadius: '4px',
-                            color: '#888'
-                        }}>FREE</span>
-                    </div>
-
-                    <div style={{ marginBottom: '1rem' }}>
-                        <span style={{ fontSize: '2rem', fontWeight: '700', color: '#fff' }}>₹0</span>
-                        <span style={{ color: '#888', fontSize: '0.9rem' }}>/month</span>
-                    </div>
-
-                    <ul style={{ listStyle: 'none', padding: 0, margin: 0, marginBottom: '1.5rem' }}>
-                        {['3 assessments/day', 'basic skill analysis', '1 resume template'].map((item, i) => (
-                            <li key={i} style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '0.5rem',
-                                color: '#888',
-                                fontSize: '0.9rem',
-                                marginBottom: '0.5rem'
-                            }}>
-                                <Check size={14} /> {item}
-                            </li>
-                        ))}
-                    </ul>
-
-                    <button disabled style={{
-                        width: '100%',
-                        padding: '0.7rem',
-                        borderRadius: '8px',
-                        border: '1px solid #333',
-                        background: 'transparent',
-                        color: '#666',
-                        cursor: 'not-allowed',
-                        fontSize: '0.9rem'
-                    }}>current plan</button>
+        <div className="pricing-section" id={id}>
+            <div className="pricing-container">
+                <div className="pricing-header">
+                    <h2 className="pricing-title">simple, transparent pricing</h2>
+                    <p className="pricing-subtitle">start free, upgrade when you need more</p>
                 </div>
 
-                <div style={{
-                    padding: '1.5rem',
-                    borderRadius: '12px',
-                    background: '#1a1a1a',
-                    border: '1px solid #444',
-                    position: 'relative'
-                }}>
-                    <div style={{
-                        position: 'absolute',
-                        top: '-8px',
-                        right: '12px',
-                        background: '#fff',
-                        padding: '0.2rem 0.6rem',
-                        borderRadius: '4px',
-                        fontSize: '0.7rem',
-                        fontWeight: '600',
-                        color: '#000'
-                    }}>POPULAR</div>
-
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
-                        <Zap size={20} style={{ color: '#fff' }} />
-                        <span style={{ fontSize: '1.1rem', fontWeight: '600', color: '#fff' }}>pro</span>
+                <div className="pricing-cards">
+                    <div className="pricing-card">
+                        <div className="card-badge free-badge">FREE</div>
+                        <div className="card-header">
+                            <Sparkles size={24} className="card-icon" />
+                            <h3>Starter</h3>
+                        </div>
+                        <div className="card-price">
+                            <span className="price">₹0</span>
+                            <span className="period">/month</span>
+                        </div>
+                        <p className="card-description">Perfect for exploring career options</p>
+                        <ul className="feature-list">
+                            <li><Check size={16} /> 3 assessments per day</li>
+                            <li><Check size={16} /> 10 assessments stored</li>
+                            <li><Check size={16} /> 3 bookmarks</li>
+                            <li><Check size={16} /> 3 resumes</li>
+                            <li><Check size={16} /> Basic AI analysis</li>
+                        </ul>
+                        <button className="card-btn disabled" disabled>Current Plan</button>
                     </div>
 
-                    <div style={{ marginBottom: '1rem' }}>
-                        <span style={{ fontSize: '2rem', fontWeight: '700', color: '#fff' }}>₹499</span>
-                        <span style={{ color: '#888', fontSize: '0.9rem' }}>/month</span>
+                    <div className="pricing-card featured">
+                        <div className="glow-effect"></div>
+                        <div className="card-badge pro-badge">POPULAR</div>
+                        <div className="card-header">
+                            <Zap size={24} className="card-icon" />
+                            <h3>Pro</h3>
+                        </div>
+                        <div className="card-price">
+                            <span className="price">₹499</span>
+                            <span className="period">/month</span>
+                        </div>
+                        <p className="card-description">For serious career builders</p>
+                        <ul className="feature-list">
+                            <li><Check size={16} /> Unlimited assessments</li>
+                            <li><Check size={16} /> Unlimited storage</li>
+                            <li><Check size={16} /> Unlimited bookmarks</li>
+                            <li><Check size={16} /> Unlimited resumes</li>
+                            <li><Check size={16} /> Advanced AI analysis</li>
+                            <li><Check size={16} /> Priority support</li>
+                        </ul>
+                        <button className="card-btn primary" onClick={handleProClick}>Upgrade to Pro</button>
                     </div>
+                </div>
 
-                    <ul style={{ listStyle: 'none', padding: 0, margin: 0, marginBottom: '1.5rem' }}>
-                        {['unlimited assessments', 'advanced ai analysis', 'all resume templates', 'pdf export & sharing', 'priority support'].map((item, i) => (
-                            <li key={i} style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '0.5rem',
-                                color: '#ccc',
-                                fontSize: '0.9rem',
-                                marginBottom: '0.5rem'
-                            }}>
-                                <Check size={14} style={{ color: '#fff' }} /> {item}
-                            </li>
-                        ))}
-                    </ul>
-
-                    <button onClick={handleProClick} style={{
-                        width: '100%',
-                        padding: '0.7rem',
-                        borderRadius: '8px',
-                        border: 'none',
-                        background: '#fff',
-                        color: '#000',
-                        cursor: 'pointer',
-                        fontSize: '0.9rem',
-                        fontWeight: '600',
-                        transition: 'opacity 0.2s'
-                    }}>upgrade to pro</button>
+                <div className="comparison-table">
+                    <h3 className="table-title">Compare Plans</h3>
+                    <div className="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Feature</th>
+                                    <th>Starter</th>
+                                    <th>Pro</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {features.map((feature, i) => (
+                                    <tr key={i}>
+                                        <td>{feature.name}</td>
+                                        <td>
+                                            {typeof feature.free === 'boolean'
+                                                ? (feature.free ? <Check size={16} className="check" /> : <X size={16} className="cross" />)
+                                                : feature.free
+                                            }
+                                        </td>
+                                        <td className="pro-cell">
+                                            {typeof feature.pro === 'boolean'
+                                                ? (feature.pro ? <Check size={16} className="check" /> : <X size={16} className="cross" />)
+                                                : feature.pro
+                                            }
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>

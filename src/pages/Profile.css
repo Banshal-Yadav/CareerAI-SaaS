@@ -638,6 +638,80 @@
   background: #111;
 }
 
+.storage-banner {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+  font-size: 0.85rem;
+}
+
+.storage-banner.warning {
+  background: rgba(234, 179, 8, 0.1);
+  border: 1px solid rgba(234, 179, 8, 0.2);
+  color: #eab308;
+}
+
+.storage-banner.full {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+}
+
+.storage-banner span { flex: 1; }
+
+.upgrade-link {
+  background: none;
+  border: none;
+  color: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 0.85rem;
+  padding: 0;
+}
+
+.upgrade-link:hover { opacity: 0.8; }
+
+.bookmark-btn {
+  background: none;
+  border: none;
+  color: #444;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.bookmark-btn:hover {
+  background: rgba(234, 179, 8, 0.1);
+  color: #eab308;
+}
+
+.bookmark-btn.active {
+  color: #eab308;
+}
+
+.bookmark-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.bookmark-indicator {
+  color: #eab308;
+  margin-right: 0.4rem;
+  vertical-align: middle;
+}
+
+.assessment-card.bookmarked {
+  border-color: rgba(234, 179, 8, 0.3);
+}
+
+.assessment-card.bookmarked .assessment-header {
+  background: rgba(234, 179, 8, 0.03);
+}
+
 @media (max-width: 768px) {
   .profile-container { padding: 1rem; }
   .profile-hero { padding: 1.75rem; }
@@ -649,4 +723,5 @@
   .assessment-grid { grid-template-columns: 1fr; }
   .assessment-header { flex-wrap: wrap; }
   .assessment-meta { width: 100%; flex-direction: row; justify-content: space-between; }
+  .storage-banner { flex-wrap: wrap; }
 }

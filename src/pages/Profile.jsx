@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../hooks/useAuth';
-import { doc, getDoc, updateDoc, arrayRemove } from 'firebase/firestore';
+import { doc, getDoc, updateDoc, arrayRemove, arrayUnion } from 'firebase/firestore';
 import { db } from '../firebase/config';
 import './Profile.css';
-import { User, FileText, Edit, Download, Trash2, Plus, ChevronDown, ChevronUp, Zap, Target, TrendingUp, Briefcase, Award, BookOpen, FolderKanban, FileX, BrainCircuit, Calendar, BarChart3, Sparkles, ArrowRight, Clock } from 'lucide-react';
+import { User, FileText, Edit, Download, Trash2, Plus, ChevronDown, ChevronUp, Zap, Target, TrendingUp, Briefcase, Award, BookOpen, FolderKanban, FileX, BrainCircuit, Calendar, BarChart3, Sparkles, ArrowRight, Bookmark, AlertTriangle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const StatCard = ({ icon: Icon, label, value, accent }) => (
@@ -56,7 +56,28 @@ const ResumeCard = ({ resume, onDelete, onEdit, onView }) => (
   </div>
 );
 
-const AssessmentCard = ({ assessment, isExpanded, onToggle, onDelete }) => {
+const FREE_LIMITS = { assessments: 10, bookmarks: 3, resumes: 3 };
+
+const StorageBanner = ({ count, limit, type }) => {
+  if (count < limit - 2) return null;
+  const isFull = count >= limit;
+  return (
+    <div className={`storage-banner ${isFull ? 'full' : 'warning'}`}>
+      <AlertTriangle size={16} />
+      <span>
+        {isFull
+          ? `${type} limit reached (${count}/${limit}). New ${type.toLowerCase()} will replace oldest.`
+          : `Approaching ${type.toLowerCase()} limit (${count}/${limit})`
+        }
+      </span>
+      <button className="upgrade-link" onClick={() => document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' })}>
+        Upgrade to Pro
+      </button>
+    </div>
+  );
+};
+
+const AssessmentCard = ({ assessment, isExpanded, onToggle, onDelete, isBookmarked, onToggleBookmark, bookmarkCount, bookmarkLimit }) => {
   const formatDate = (timestamp) => {
     if (!timestamp) return "Unknown";
     const date = timestamp.seconds ? new Date(timestamp.seconds * 1000) : new Date(timestamp);
@@ -65,19 +86,31 @@ const AssessmentCard = ({ assessment, isExpanded, onToggle, onDelete }) => {
 
   const topCareer = assessment.aiCareerAnalysis?.[0];
   const skillCount = assessment.rawSkills?.split(',').length || 0;
+  const canBookmark = isBookmarked || bookmarkCount < bookmarkLimit;
 
   return (
-    <div className={`assessment-card ${isExpanded ? 'expanded' : ''}`}>
+    <div className={`assessment-card ${isExpanded ? 'expanded' : ''} ${isBookmarked ? 'bookmarked' : ''}`}>
       <div className="assessment-header" onClick={onToggle}>
         <div className="assessment-meta">
           <span className="assessment-date"><Calendar size={14} /> {formatDate(assessment.createdAt)}</span>
           <span className="assessment-persona">{assessment.persona}</span>
         </div>
         <div className="assessment-preview">
-          <h4 className="assessment-title-text">{topCareer?.title || 'Career Assessment'}</h4>
+          <h4 className="assessment-title-text">
+            {isBookmarked && <Bookmark size={14} className="bookmark-indicator" />}
+            {topCareer?.title || 'Career Assessment'}
+          </h4>
           <p className="assessment-summary-preview">{skillCount} skills • {assessment.aiCareerAnalysis?.length || 0} career matches</p>
         </div>
         <div className="assessment-header-actions">
+          <button
+            className={`bookmark-btn ${isBookmarked ? 'active' : ''}`}
+            onClick={(e) => { e.stopPropagation(); onToggleBookmark(); }}
+            title={isBookmarked ? 'Remove bookmark' : (canBookmark ? 'Bookmark this assessment' : `Bookmark limit reached (${bookmarkLimit})`)}
+            disabled={!canBookmark && !isBookmarked}
+          >
+            <Bookmark size={16} />
+          </button>
           <button
             className="delete-assessment-btn"
             onClick={(e) => { e.stopPropagation(); onDelete(); }}
@@ -232,9 +265,10 @@ const Profile = () => {
             data.assessments.sort((a, b) => b.createdAt.seconds - a.createdAt.seconds);
           }
           if (!data.resumes) data.resumes = [];
+          if (!data.bookmarks) data.bookmarks = [];
           setProfileData(data);
         } else {
-          setProfileData({ assessments: [], resumes: [] });
+          setProfileData({ assessments: [], resumes: [], bookmarks: [] });
         }
         setLoading(false);
       };
@@ -259,13 +293,46 @@ const Profile = () => {
     const profileRef = doc(db, 'profiles', user.uid);
     try {
       await updateDoc(profileRef, { assessments: arrayRemove(assessmentToDelete) });
+      const bookmarkToRemove = profileData.bookmarks?.find(b => b.assessmentId === assessmentToDelete.assessmentId);
+      if (bookmarkToRemove) {
+        await updateDoc(profileRef, { bookmarks: arrayRemove(bookmarkToRemove) });
+      }
       setProfileData(prev => ({
         ...prev,
-        assessments: prev.assessments.filter(a => a.assessmentId !== assessmentToDelete.assessmentId)
+        assessments: prev.assessments.filter(a => a.assessmentId !== assessmentToDelete.assessmentId),
+        bookmarks: (prev.bookmarks || []).filter(b => b.assessmentId !== assessmentToDelete.assessmentId)
       }));
       setExpandedAssessment(null);
     } catch (error) {
       console.error("Error deleting assessment:", error);
+    }
+  };
+
+  const handleToggleBookmark = async (assessment) => {
+    const profileRef = doc(db, 'profiles', user.uid);
+    const existingBookmark = profileData.bookmarks?.find(b => b.assessmentId === assessment.assessmentId);
+
+    try {
+      if (existingBookmark) {
+        await updateDoc(profileRef, { bookmarks: arrayRemove(existingBookmark) });
+        setProfileData(prev => ({
+          ...prev,
+          bookmarks: prev.bookmarks.filter(b => b.assessmentId !== assessment.assessmentId)
+        }));
+      } else {
+        if ((profileData.bookmarks?.length || 0) >= FREE_LIMITS.bookmarks && !profileData.isPro) {
+          alert('Bookmark limit reached (3). Upgrade to Pro for unlimited bookmarks!');
+          return;
+        }
+        const bookmark = { assessmentId: assessment.assessmentId, createdAt: new Date() };
+        await updateDoc(profileRef, { bookmarks: arrayUnion(bookmark) });
+        setProfileData(prev => ({
+          ...prev,
+          bookmarks: [...(prev.bookmarks || []), bookmark]
+        }));
+      }
+    } catch (error) {
+      console.error("Error toggling bookmark:", error);
     }
   };
 
@@ -296,6 +363,10 @@ const Profile = () => {
   const displayedAssessments = showAllAssessments
     ? profileData?.assessments
     : profileData?.assessments?.slice(0, 3);
+
+  const bookmarkCount = profileData?.bookmarks?.length || 0;
+  const isPro = profileData?.isPro === true;
+  const isBookmarked = (assessmentId) => profileData?.bookmarks?.some(b => b.assessmentId === assessmentId);
 
   const getGreeting = () => {
     const hour = new Date().getHours();
@@ -385,6 +456,8 @@ const Profile = () => {
           </div>
         </div>
 
+        {!isPro && <StorageBanner count={totalAssessments} limit={FREE_LIMITS.assessments} type="Assessment" />}
+
         {profileData?.assessments?.length > 0 ? (
           <>
             <div className="assessments-list">
@@ -395,6 +468,10 @@ const Profile = () => {
                   isExpanded={expandedAssessment === index}
                   onToggle={() => setExpandedAssessment(expandedAssessment === index ? null : index)}
                   onDelete={() => handleDeleteAssessment(assessment)}
+                  isBookmarked={isBookmarked(assessment.assessmentId)}
+                  onToggleBookmark={() => handleToggleBookmark(assessment)}
+                  bookmarkCount={bookmarkCount}
+                  bookmarkLimit={isPro ? Infinity : FREE_LIMITS.bookmarks}
                 />
               ))}
             </div>

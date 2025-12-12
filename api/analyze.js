@@ -75,6 +75,12 @@ export default async function handler(req, res) {
       return res.status(401).json({ error: 'Unauthorized: Invalid token' });
     }
 
+    const FREE_TIER_LIMITS = {
+      maxAssessments: 10,
+      maxBookmarks: 3,
+      dailyAssessments: 3
+    };
+
     try {
       const db = admin.firestore();
       const profileRef = db.collection('profiles').doc(uid);
@@ -83,19 +89,44 @@ export default async function handler(req, res) {
       const now = new Date();
       const twentyFourHoursAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
 
-      if (docSnap.exists) {
-        const data = docSnap.data();
-        if (data.assessments && Array.isArray(data.assessments)) {
-          const recentAssessments = data.assessments.filter(a => {
-            const createdAt = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(a.createdAt);
-            return createdAt > twentyFourHoursAgo;
-          });
+      let profileData = docSnap.exists ? docSnap.data() : { assessments: [], bookmarks: [], resumes: [], isPro: false };
+      const isPro = profileData.isPro === true;
 
-          if (recentAssessments.length >= 3) {
+      if (!isPro && profileData.assessments && Array.isArray(profileData.assessments)) {
+        const recentAssessments = profileData.assessments.filter(a => {
+          const createdAt = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(a.createdAt);
+          return createdAt > twentyFourHoursAgo;
+        });
+
+        if (recentAssessments.length >= FREE_TIER_LIMITS.dailyAssessments) {
+          return res.status(429).json({
+            error: 'Daily limit reached. You can only generate 3 assessments per 24 hours.',
+            limitType: 'daily'
+          });
+        }
+
+        if (profileData.assessments.length >= FREE_TIER_LIMITS.maxAssessments) {
+          const bookmarkedIds = (profileData.bookmarks || []).map(b => b.assessmentId);
+          const nonBookmarked = profileData.assessments.filter(a => !bookmarkedIds.includes(a.assessmentId));
+
+          if (nonBookmarked.length === 0) {
             return res.status(429).json({
-              error: 'Daily limit reached. You can only generate 3 assessments per 24 hours.'
+              error: 'Storage limit reached. All your assessments are bookmarked. Delete some assessments or upgrade to Pro for unlimited storage.',
+              limitType: 'storage'
             });
           }
+
+          nonBookmarked.sort((a, b) => {
+            const aTime = a.createdAt?.seconds || 0;
+            const bTime = b.createdAt?.seconds || 0;
+            return aTime - bTime;
+          });
+          const oldestToDelete = nonBookmarked[0];
+
+          const updatedAssessments = profileData.assessments.filter(
+            a => a.assessmentId !== oldestToDelete.assessmentId
+          );
+          await profileRef.update({ assessments: updatedAssessments });
         }
       }
     } catch (dbError) {
