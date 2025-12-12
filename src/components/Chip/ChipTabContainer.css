@@ -12,7 +12,87 @@
     text-align: center;
 }
 
-/* Marquee Wrapper with edge fades */
+/* showcase card above chips */
+.career-showcase {
+    background: #141414;
+    border: 1px solid #2a2a2a;
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem;
+    margin: 0 auto 1.5rem;
+    max-width: 550px;
+    text-align: left;
+    animation: showcaseFadeIn 0.3s ease-out;
+}
+
+@keyframes showcaseFadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.showcase-header {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 0.6rem;
+}
+
+.showcase-header svg {
+    color: #fff;
+}
+
+.showcase-header h3 {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: #fff;
+    margin: 0;
+}
+
+.showcase-desc {
+    font-size: 0.9rem;
+    color: #999;
+    line-height: 1.5;
+    margin: 0 0 0.9rem 0;
+}
+
+.showcase-stats {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 0.9rem;
+}
+
+.showcase-stat {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: #bbb;
+    font-size: 0.85rem;
+}
+
+.showcase-stat svg {
+    color: #777;
+}
+
+.showcase-skills {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.showcase-skills svg {
+    color: #555;
+}
+
+.showcase-skill-chip {
+    background: #1a1a1a;
+    color: #999;
+    padding: 0.3rem 0.6rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    border: 1px solid #2a2a2a;
+}
+
+/* marquee wrapper with edge fades */
 .marquee-wrapper {
     position: relative;
     width: 100%;
@@ -20,7 +100,6 @@
     padding: 1rem 0;
 }
 
-/* Gradient fades on edges - using solid black */
 .marquee-wrapper::before,
 .marquee-wrapper::after {
     content: '';
@@ -42,7 +121,7 @@
     background: linear-gradient(to left, #000 0%, transparent 100%);
 }
 
-/* Individual marquee track */
+/* marquee track */
 .marquee-track {
     display: flex;
     width: 100%;
@@ -61,7 +140,6 @@
     animation-direction: reverse;
 }
 
-/* Pause on hover for readability */
 .marquee-track:hover .marquee-content {
     animation-play-state: paused;
 }
@@ -75,25 +153,30 @@
     }
 }
 
-/* Chip style */
+/* chip style */
 .marquee-chip {
     flex-shrink: 0;
     padding: 0.6rem 1.2rem;
     border-radius: 20px;
     background: #0e0e0e;
     border: 1px solid rgba(255, 255, 255, 0.2);
-    color: var(--text-secondary, #a0a0a0);
+    color: #a0a0a0;
     font-size: 0.9rem;
     font-family: inherit;
     cursor: pointer;
-    transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+    transition: border-color 0.2s ease, color 0.2s ease;
     white-space: nowrap;
 }
 
 .marquee-chip:hover {
-    border-color: var(--accent-primary, #fbbf24);
-    color: var(--accent-primary, #fbbf24);
-    background: rgba(251, 191, 36, 0.1);
+    border-color: #fff;
+    color: #fff;
+}
+
+.marquee-chip.active {
+    border-color: #fff;
+    color: #fff;
+    background: #0a0a0a;
 }
 
 @media (max-width: 768px) {
@@ -111,106 +194,9 @@
         padding: 0.5rem 1rem;
         font-size: 0.8rem;
     }
-}
-
-/* active chip state */
-.marquee-chip.active {
-    border-color: #fff;
-    color: #fff;
-    background: #0a0a0a;
-}
-
-/* tooltip card */
-.career-tooltip {
-    background: #1a1a1a;
-    border: 1px solid #333;
-    border-radius: 12px;
-    padding: 1.25rem;
-    margin: 1rem auto 2rem;
-    max-width: 500px;
-    position: relative;
-    animation: tooltipFadeIn 0.15s ease-out;
-}
-
-@keyframes tooltipFadeIn {
-    from { opacity: 0; transform: translateY(-8px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.tooltip-close {
-    position: absolute;
-    top: 0.75rem;
-    right: 0.75rem;
-    background: transparent;
-    border: none;
-    color: #666;
-    cursor: pointer;
-    padding: 0;
-}
-
-.tooltip-close:hover {
-    color: #fff;
-}
-
-.tooltip-header {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 0.75rem;
-}
-
-.tooltip-header svg {
-    color: var(--accent-primary, #fbbf24);
-}
-
-.tooltip-header h3 {
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: #fff;
-    margin: 0;
-}
-
-.tooltip-desc {
-    font-size: 0.9rem;
-    color: #aaa;
-    line-height: 1.5;
-    margin: 0 0 1rem 0;
-}
-
-.tooltip-stats {
-    display: flex;
-    gap: 1.5rem;
-    margin-bottom: 1rem;
-}
-
-.tooltip-stat {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    color: #ccc;
-    font-size: 0.85rem;
-}
-
-.tooltip-stat svg {
-    color: #888;
-}
-
-.tooltip-skills {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-}
-
-.tooltip-skills svg {
-    color: #666;
-}
-
-.tooltip-skill-chip {
-    background: #252525;
-    color: #bbb;
-    padding: 0.3rem 0.6rem;
-    border-radius: 12px;
-    font-size: 0.75rem;
-    border: 1px solid #333;
+    
+    .career-showcase {
+        margin: 0 1rem 1rem;
+        padding: 1rem;
+    }
 }
