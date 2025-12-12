@@ -199,26 +199,40 @@ const ResumeBuilder = () => {
       }
 
       if (isNewResume) {
-        const currentResumes = docSnap.exists() ? (docSnap.data().resumes || []) : [];
-        const now = new Date();
-        const twentyFourHoursAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
-        const recentResumes = currentResumes.filter(r => {
-          const created = r.createdAt ? new Date(r.createdAt) : new Date(r.lastUpdated);
-          return created > twentyFourHoursAgo;
-        });
+        const docData = docSnap.exists() ? docSnap.data() : {};
+        const dailyResumeCreations = docData.dailyResumeCreations || [];
+        const isPro = docData.isPro === true;
 
-        if (recentResumes.length >= 3) {
-          setFeedbackMessage("Limit Reached: You can create 3 resumes in a 24-hour period. Your limit resets 24 hours after your first resume.");
+        if (!isPro) {
+          const now = new Date();
+          const twentyFourHoursAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
 
-          setTimeout(() => setFeedbackMessage(''), 5000);
-          return;
+          const recentCreations = dailyResumeCreations.filter(timestamp => {
+            const created = timestamp?.toDate ? timestamp.toDate() : new Date(timestamp);
+            return created > twentyFourHoursAgo;
+          });
+
+          if (recentCreations.length >= 3) {
+            setFeedbackMessage("Limit Reached: You can create 3 resumes in a 24-hour period.");
+            setTimeout(() => setFeedbackMessage(''), 5000);
+            return;
+          }
         }
 
         newResumeData.id = `resume_${new Date().getTime()}`;
         newResumeData.createdAt = new Date().toISOString();
-        await updateDoc(profileRef, {
-          resumes: arrayUnion(newResumeData)
-        });
+
+        // Save resume AND log the creation event
+        if (!isPro) {
+          await updateDoc(profileRef, {
+            resumes: arrayUnion(newResumeData),
+            dailyResumeCreations: arrayUnion(new Date())
+          });
+        } else {
+          await updateDoc(profileRef, {
+            resumes: arrayUnion(newResumeData)
+          });
+        }
       } else if (resumeIdToEdit) {
         const currentResumes = docSnap.data()?.resumes || [];
         const updatedResumes = currentResumes.map(r =>

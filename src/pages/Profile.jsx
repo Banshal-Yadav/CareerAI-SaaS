@@ -334,10 +334,15 @@ const Profile = () => {
   const latestAssessment = profileData?.assessments?.[0];
   const topCareer = latestAssessment?.aiCareerAnalysis?.[0];
 
-  const resumesToday = profileData?.resumes?.filter(r => {
-    const created = r.createdAt ? new Date(r.createdAt) : new Date(r.lastUpdated);
-    return created > new Date(Date.now() - 24 * 60 * 60 * 1000);
-  }).length || 0;
+  const resumesToday = (profileData?.dailyResumeCreations)
+    ? profileData.dailyResumeCreations.filter(ts => {
+      const date = ts.toDate ? ts.toDate() : new Date(ts);
+      return date > new Date(Date.now() - 24 * 60 * 60 * 1000);
+    }).length
+    : (profileData?.resumes?.filter(r => {
+      const created = r.createdAt ? new Date(r.createdAt) : new Date(r.lastUpdated);
+      return created > new Date(Date.now() - 24 * 60 * 60 * 1000);
+    }).length || 0);
 
   const assessmentsToday = (profileData?.dailyCreations)
     ? profileData.dailyCreations.filter(ts => {
