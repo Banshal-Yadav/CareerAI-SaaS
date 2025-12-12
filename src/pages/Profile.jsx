@@ -339,10 +339,15 @@ const Profile = () => {
     return created > new Date(Date.now() - 24 * 60 * 60 * 1000);
   }).length || 0;
 
-  const assessmentsToday = profileData?.assessments?.filter(a => {
-    const created = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(a.createdAt);
-    return created > new Date(Date.now() - 24 * 60 * 60 * 1000);
-  }).length || 0;
+  const assessmentsToday = (profileData?.dailyCreations)
+    ? profileData.dailyCreations.filter(ts => {
+      const date = ts.toDate ? ts.toDate() : new Date(ts);
+      return date > new Date(Date.now() - 24 * 60 * 60 * 1000);
+    }).length
+    : (profileData?.assessments?.filter(a => {
+      const created = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(a.createdAt);
+      return created > new Date(Date.now() - 24 * 60 * 60 * 1000);
+    }).length || 0);
 
   const bookmarkCount = profileData?.bookmarks?.length || 0;
   const isPro = profileData?.isPro === true;
