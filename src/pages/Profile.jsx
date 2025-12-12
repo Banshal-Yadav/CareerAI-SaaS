@@ -3,58 +3,8 @@ import { useAuth } from '../hooks/useAuth';
 import { doc, getDoc, updateDoc, arrayRemove, arrayUnion } from 'firebase/firestore';
 import { db } from '../firebase/config';
 import './Profile.css';
-import { User, FileText, Edit, Download, Trash2, Plus, ChevronDown, ChevronUp, Zap, Target, TrendingUp, Briefcase, Award, BookOpen, FolderKanban, FileX, BrainCircuit, Calendar, BarChart3, Sparkles, ArrowRight, Bookmark, AlertTriangle } from 'lucide-react';
+import { User, FileText, Edit, Download, Trash2, Plus, ChevronDown, ChevronUp, Zap, Target, TrendingUp, Briefcase, Award, BookOpen, FolderKanban, FileX, BrainCircuit, Calendar, Sparkles, ArrowRight, Bookmark, AlertTriangle, ArrowUpRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-
-const StatCard = ({ icon: Icon, label, value, accent }) => (
-  <div className={`stat-card ${accent ? 'stat-accent' : ''}`}>
-    <div className="stat-icon">
-      <Icon size={20} />
-    </div>
-    <div className="stat-content">
-      <span className="stat-value">{value}</span>
-      <span className="stat-label">{label}</span>
-    </div>
-  </div>
-);
-
-const UsageBar = ({ current, limit, label }) => {
-  const percentage = Math.min((current / limit) * 100, 100);
-  return (
-    <div className="usage-bar-wrapper">
-      <div className="usage-bar-header">
-        <span className="usage-bar-label">{label}</span>
-        <span className="usage-bar-count">{current}/{limit}</span>
-      </div>
-      <div className="usage-bar-track">
-        <div
-          className="usage-bar-fill"
-          style={{ width: `${percentage}%` }}
-          data-status={current >= limit ? 'full' : current >= limit - 1 ? 'warning' : 'ok'}
-        />
-      </div>
-    </div>
-  );
-};
-
-const ResumeCard = ({ resume, onDelete, onEdit, onView }) => (
-  <div className="resume-card">
-    <div className="resume-card-header">
-      <div className="resume-icon-wrapper">
-        <FileText size={24} />
-      </div>
-      <div className="resume-info">
-        <h4 className="resume-name">{resume.fullName || 'Untitled Resume'}</h4>
-        <span className="resume-date">Updated {new Date(resume.lastUpdated).toLocaleDateString()}</span>
-      </div>
-    </div>
-    <div className="resume-actions">
-      <button onClick={() => onEdit(resume.id)} className="action-btn"><Edit size={14} /> Edit</button>
-      <button onClick={() => onView(resume.id)} className="action-btn"><Download size={14} /> View</button>
-      <button onClick={() => onDelete(resume.id)} className="action-btn action-btn-danger"><Trash2 size={14} /></button>
-    </div>
-  </div>
-);
 
 const FREE_LIMITS = { assessments: 10, bookmarks: 3, resumes: 3 };
 
@@ -76,6 +26,78 @@ const StorageBanner = ({ count, limit, type }) => {
     </div>
   );
 };
+
+const QuickActionCard = ({ icon: Icon, title, subtitle, onClick, accent }) => (
+  <button className={`quick-action-card ${accent ? 'accent' : ''}`} onClick={onClick}>
+    <div className="quick-action-icon"><Icon size={20} /></div>
+    <div className="quick-action-text">
+      <span className="quick-action-title">{title}</span>
+      <span className="quick-action-subtitle">{subtitle}</span>
+    </div>
+    <ArrowUpRight size={16} className="quick-action-arrow" />
+  </button>
+);
+
+const TopCareerCard = ({ career, onViewMore }) => {
+  if (!career) return null;
+  return (
+    <div className="top-career-card">
+      <div className="career-card-header">
+        <Briefcase size={20} />
+        <span>Your Top Career Match</span>
+      </div>
+      <h3 className="career-card-title">{career.title}</h3>
+      <p className="career-card-salary">{career.salaryRange}</p>
+      <p className="career-card-reasoning">{career.reasoning?.slice(0, 150)}...</p>
+      {career.skillsToBuild?.length > 0 && (
+        <div className="career-card-skills">
+          <span className="skills-label">Skills to build:</span>
+          <div className="skills-tags">
+            {career.skillsToBuild.slice(0, 3).map((s, i) => (
+              <span key={i} className="skill-tag-mini">{s.skill}</span>
+            ))}
+          </div>
+        </div>
+      )}
+      <button className="career-view-btn" onClick={onViewMore}>
+        View Full Analysis <ArrowRight size={14} />
+      </button>
+    </div>
+  );
+};
+
+const UsageMeter = ({ label, current, limit }) => {
+  const percentage = Math.min((current / limit) * 100, 100);
+  const status = current >= limit ? 'full' : current >= limit - 1 ? 'warning' : 'ok';
+  return (
+    <div className="usage-meter">
+      <div className="usage-meter-header">
+        <span>{label}</span>
+        <span className={`usage-count ${status}`}>{current}/{limit}</span>
+      </div>
+      <div className="usage-meter-bar">
+        <div className="usage-meter-fill" style={{ width: `${percentage}%` }} data-status={status} />
+      </div>
+    </div>
+  );
+};
+
+const ResumeCard = ({ resume, onDelete, onEdit, onView }) => (
+  <div className="resume-card">
+    <div className="resume-card-header">
+      <div className="resume-icon-wrapper"><FileText size={24} /></div>
+      <div className="resume-info">
+        <h4 className="resume-name">{resume.fullName || 'Untitled Resume'}</h4>
+        <span className="resume-date">Updated {new Date(resume.lastUpdated).toLocaleDateString()}</span>
+      </div>
+    </div>
+    <div className="resume-actions">
+      <button onClick={() => onEdit(resume.id)} className="action-btn"><Edit size={14} /> Edit</button>
+      <button onClick={() => onView(resume.id)} className="action-btn"><Download size={14} /> View</button>
+      <button onClick={() => onDelete(resume.id)} className="action-btn action-btn-danger"><Trash2 size={14} /></button>
+    </div>
+  </div>
+);
 
 const AssessmentCard = ({ assessment, isExpanded, onToggle, onDelete, isBookmarked, onToggleBookmark, bookmarkCount, bookmarkLimit }) => {
   const formatDate = (timestamp) => {
@@ -111,11 +133,7 @@ const AssessmentCard = ({ assessment, isExpanded, onToggle, onDelete, isBookmark
           >
             <Bookmark size={16} />
           </button>
-          <button
-            className="delete-assessment-btn"
-            onClick={(e) => { e.stopPropagation(); onDelete(); }}
-            title="Delete assessment"
-          >
+          <button className="delete-assessment-btn" onClick={(e) => { e.stopPropagation(); onDelete(); }} title="Delete assessment">
             <Trash2 size={16} />
           </button>
           <button className="expand-toggle">
@@ -349,6 +367,8 @@ const Profile = () => {
 
   const totalAssessments = profileData?.assessments?.length || 0;
   const totalResumes = profileData?.resumes?.length || 0;
+  const latestAssessment = profileData?.assessments?.[0];
+  const topCareer = latestAssessment?.aiCareerAnalysis?.[0];
 
   const resumesToday = profileData?.resumes?.filter(r => {
     const created = r.createdAt ? new Date(r.createdAt) : new Date(r.lastUpdated);
@@ -360,13 +380,19 @@ const Profile = () => {
     return created > new Date(Date.now() - 24 * 60 * 60 * 1000);
   }).length || 0;
 
-  const displayedAssessments = showAllAssessments
-    ? profileData?.assessments
-    : profileData?.assessments?.slice(0, 3);
-
   const bookmarkCount = profileData?.bookmarks?.length || 0;
   const isPro = profileData?.isPro === true;
   const isBookmarked = (assessmentId) => profileData?.bookmarks?.some(b => b.assessmentId === assessmentId);
+
+  const sortedAssessments = [...(profileData?.assessments || [])].sort((a, b) => {
+    const aBookmarked = isBookmarked(a.assessmentId);
+    const bBookmarked = isBookmarked(b.assessmentId);
+    if (aBookmarked && !bBookmarked) return -1;
+    if (!aBookmarked && bBookmarked) return 1;
+    return (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0);
+  });
+
+  const displayedAssessments = showAllAssessments ? sortedAssessments : sortedAssessments.slice(0, 3);
 
   const getGreeting = () => {
     const hour = new Date().getHours();
@@ -377,44 +403,65 @@ const Profile = () => {
 
   return (
     <div className="profile-container">
-      <div className="profile-hero">
-        <div className="hero-welcome">
+      <div className="dashboard-hero">
+        <div className="hero-left">
           <span className="greeting">{getGreeting()}</span>
           <h1 className="hero-title">
             {user.isAnonymous ? 'Welcome, Guest' : user.displayName || user.email?.split('@')[0] || 'Welcome back'}
           </h1>
-          <p className="hero-subtitle">
-            {user.isAnonymous
-              ? 'Sign up to save your career progress permanently'
-              : 'Here\'s your career journey at a glance'}
-          </p>
+
+          <div className="quick-actions">
+            <QuickActionCard
+              icon={BrainCircuit}
+              title="New Assessment"
+              subtitle={`${3 - assessmentsToday} left today`}
+              onClick={() => navigate('/AssessmentPg')}
+              accent
+            />
+            <QuickActionCard
+              icon={FileText}
+              title="Create Resume"
+              subtitle={`${totalResumes} created`}
+              onClick={() => navigate('/resume-builder', { state: { isNew: true } })}
+            />
+          </div>
+
+          <div className="usage-section">
+            <UsageMeter label="Assessments today" current={assessmentsToday} limit={3} />
+            <UsageMeter label="Stored assessments" current={totalAssessments} limit={isPro ? '∞' : FREE_LIMITS.assessments} />
+            <UsageMeter label="Bookmarks" current={bookmarkCount} limit={isPro ? '∞' : FREE_LIMITS.bookmarks} />
+          </div>
         </div>
 
-        <div className="stats-row">
-          <StatCard icon={BarChart3} label="Total Assessments" value={totalAssessments} />
-          <StatCard icon={FileText} label="Resumes Created" value={totalResumes} />
-          <StatCard
-            icon={Briefcase}
-            label="Top Career Match"
-            value={profileData?.assessments?.[0]?.aiCareerAnalysis?.[0]?.title || '—'}
-            accent
-          />
+        <div className="hero-right">
+          {topCareer ? (
+            <TopCareerCard
+              career={topCareer}
+              onViewMore={() => setExpandedAssessment(0)}
+            />
+          ) : (
+            <div className="no-career-card">
+              <BrainCircuit size={32} />
+              <h3>No assessments yet</h3>
+              <p>Take your first career assessment to discover your ideal path</p>
+              <button className="start-btn" onClick={() => navigate('/AssessmentPg')}>
+                Start Assessment
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
       <section className="dashboard-section">
         <div className="section-header">
           <h2 className="section-title">Your Resumes</h2>
-          <div className="section-actions">
-            <UsageBar current={resumesToday} limit={3} label="Today" />
-            <button
-              onClick={() => navigate('/resume-builder', { state: { isNew: true } })}
-              className="primary-btn"
-              disabled={resumesToday >= 3}
-            >
-              <Plus size={16} /> New Resume
-            </button>
-          </div>
+          <button
+            onClick={() => navigate('/resume-builder', { state: { isNew: true } })}
+            className="primary-btn"
+            disabled={resumesToday >= 3}
+          >
+            <Plus size={16} /> New Resume
+          </button>
         </div>
 
         {profileData?.resumes?.length > 0 ? (
@@ -443,17 +490,14 @@ const Profile = () => {
       <section className="dashboard-section">
         <div className="section-header">
           <h2 className="section-title">
-            Recent Assessments
+            Your Assessments
             {totalAssessments > 3 && !showAllAssessments && (
               <span className="assessment-count">showing 3 of {totalAssessments}</span>
             )}
           </h2>
-          <div className="section-actions">
-            <UsageBar current={assessmentsToday} limit={3} label="Today" />
-            <button onClick={() => navigate('/AssessmentPg')} className="secondary-btn">
-              <Plus size={16} /> New Assessment
-            </button>
-          </div>
+          <button onClick={() => navigate('/AssessmentPg')} className="secondary-btn">
+            <Plus size={16} /> New Assessment
+          </button>
         </div>
 
         {!isPro && <StorageBanner count={totalAssessments} limit={FREE_LIMITS.assessments} type="Assessment" />}
@@ -476,10 +520,7 @@ const Profile = () => {
               ))}
             </div>
             {totalAssessments > 3 && (
-              <button
-                className="view-all-btn"
-                onClick={() => setShowAllAssessments(!showAllAssessments)}
-              >
+              <button className="view-all-btn" onClick={() => setShowAllAssessments(!showAllAssessments)}>
                 {showAllAssessments ? 'Show Less' : `View All ${totalAssessments} Assessments`}
                 <ArrowRight size={16} />
               </button>
