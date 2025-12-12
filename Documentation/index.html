@@ -351,7 +351,8 @@
                 <h3>Unzip the Project</h3>
                 <p>Extract the downloaded zip file to your desired folder.</p>
                 <div class="alert alert-warning" style="margin-top: 1rem;">
-                    <strong>Important:</strong> Do NOT rename the project folder or use spaces in the folder name. This can cause build issues.
+                    <strong>Important:</strong> Do NOT rename the project folder or use spaces in the folder name. This
+                    can cause build issues.
                 </div>
             </div>
 
@@ -392,7 +393,11 @@
 service cloud.firestore {
   match /databases/{database}/documents {
     match /profiles/{userId} {
-      allow read, write: if request.auth != null && request.auth.uid == userId;
+      allow read: if request.auth != null && request.auth.uid == userId;
+      allow create: if request.auth != null && request.auth.uid == userId;
+      allow update: if request.auth != null && request.auth.uid == userId 
+                    && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['isPro', 'dailyCreations']);
+      allow delete: if request.auth != null && request.auth.uid == userId;
     }
   }
 }</code></pre>
@@ -454,9 +459,10 @@ FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nYour_Key\n-----END PRIVATE KE
             <p>Start the development server using Vercel CLI:</p>
             <pre><code>vercel dev</code></pre>
             <p>The application will open at <code>http://localhost:3000</code>.</p>
-            
+
             <div class="alert alert-info">
-                <strong>Windows Users:</strong> If you encounter errors with Vercel CLI, try running commands in <strong>Git Bash</strong> instead of PowerShell.
+                <strong>Windows Users:</strong> If you encounter errors with Vercel CLI, try running commands in
+                <strong>Git Bash</strong> instead of PowerShell.
             </div>
         </section>
 
@@ -471,7 +477,8 @@ FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nYour_Key\n-----END PRIVATE KE
                         <li>Go to Vercel Dashboard → Settings → Environment Variables</li>
                         <li>Copy each variable from <code>.env.local</code> and add them <strong>one by one</strong>
                         </li>
-                        <li>After adding all environment variables, click <strong>"Redeploy"</strong> to apply changes.</li>
+                        <li>After adding all environment variables, click <strong>"Redeploy"</strong> to apply changes.
+                        </li>
                     </ul>
                     <div class="alert alert-info">
                         <strong>Note:</strong> Vercel automatically detects <code>vercel.json</code> for proper
@@ -548,7 +555,8 @@ FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nYour_Key\n-----END PRIVATE KE
                 </div>
                 <div class="card">
                     <strong>Firebase auth error</strong>
-                    <p>Ensure <strong>Google</strong> and <strong>Email/Password</strong> providers are enabled in Firebase Console.</p>
+                    <p>Ensure <strong>Google</strong> and <strong>Email/Password</strong> providers are enabled in
+                        Firebase Console.</p>
                 </div>
                 <div class="card">
                     <strong>App shows blank page</strong>
