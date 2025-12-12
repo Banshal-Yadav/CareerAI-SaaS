@@ -1,14 +1,9 @@
 .navbar {
     background-color: var(--primary-bg);
     padding: 1rem 1.5rem;
-    border-style:solid;
-    border-color: rgb(37, 37, 37);
-    border-left-width: 0;
-    border-right-width: 0;
-    border-top-width: 0;
-    border-bottom-width: 0.5px;
+    border-bottom: 0.5px solid rgb(37, 37, 37);
     display: flex;
-    justify-content:space-between;
+    justify-content: space-between;
     align-items: center;
     position: relative;
     overflow-x: hidden;
@@ -24,45 +19,70 @@
 
 .nav-buttons {
     display: flex;
-    gap: 1rem;
+    gap: 0.5rem;
     align-items: center;
 }
 
-#profile_btn, #analysis_btn {
-    padding: 0.6rem 1.5rem;
-    min-width: 80px;
-    background-color: white;
-    color: black;
-    font-weight: bold;
-    border-radius:  10px;
-    border: 1px solid gray;
-    cursor: pointer;
-    font-size: 1rem;
-    white-space: nowrap; 
-}
-
-#analysis_btn {
-    background-color: var(--primary-bg);
-    color: white;
-}
-
-#logout_btn {
-    padding: 0.6rem 1.5rem;
+.nav-btn {
+    padding: 0.6rem 1.2rem;
     background-color: transparent;
     color: var(--text-secondary);
-    font-weight: bold;
-    border-radius:  10px;
-    border: 1px solid var(--border-color);
+    font-weight: 500;
+    border-radius: 8px;
+    border: none;
     cursor: pointer;
-    font-size: 1rem;
+    font-size: 0.95rem;
     transition: all 0.2s ease;
 }
 
-#logout_btn:hover {
-    background-color: var(--secondary-bg);
+.nav-btn:hover {
     color: var(--text-primary);
+    background-color: rgba(255, 255, 255, 0.05);
 }
 
+.nav-btn.nav-active {
+    color: var(--text-primary);
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.nav-btn-primary {
+    padding: 0.6rem 1.2rem;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    color: white;
+    font-weight: 600;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+}
+
+.nav-btn-primary:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+
+.nav-btn-primary.nav-active {
+    box-shadow: 0 0 12px rgba(99, 102, 241, 0.4);
+}
+
+.nav-btn-logout {
+    padding: 0.6rem 1.2rem;
+    background-color: transparent;
+    color: var(--text-secondary);
+    font-weight: 500;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+}
+
+.nav-btn-logout:hover {
+    background-color: rgba(239, 68, 68, 0.1);
+    border-color: rgba(239, 68, 68, 0.3);
+    color: #ef4444;
+}
 
 .menu-icon {
     display: none;
@@ -71,8 +91,6 @@
     color: var(--text-primary);
 }
 
-
-/* mobile responsive styles */
 @media (max-width: 768px) {
     .menu-icon {
         display: block;
@@ -89,7 +107,7 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        gap: 2rem;
+        gap: 1.5rem;
         transform: translateX(100%);
         transition: transform 0.3s ease-in-out;
         z-index: 100;
@@ -101,10 +119,9 @@
         transform: translateX(0);
     }
 
-    #profile_btn, #analysis_btn, #logout_btn {
+    .nav-btn, .nav-btn-primary, .nav-btn-logout {
         width: 80%;
         text-align: center;
         padding: 0.9rem;
-        font-size: 0.95rem;
     }
 }

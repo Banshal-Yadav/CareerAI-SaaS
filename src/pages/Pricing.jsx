@@ -1,7 +1,6 @@
 import React from 'react';
 import '../components/Assessment.css';
-import * as icons from 'lucide-react';
-import ComparisonTable from '../components/Pricing/ComparisonTable';
+import { Sparkles, Zap, Check } from 'lucide-react';
 
 const Pricing = ({ id }) => {
     const handleProClick = () => {
@@ -10,132 +9,135 @@ const Pricing = ({ id }) => {
 
     return (
         <div className="assessment-container" id={id} style={{
-            background: 'radial-gradient(circle at 50% 0%, rgba(124, 58, 237, 0.1) 0%, rgba(0, 0, 0, 0) 50%)',
-            paddingTop: '4rem'
+            background: 'radial-gradient(circle at 50% 0%, rgba(124, 58, 237, 0.08) 0%, rgba(0, 0, 0, 0) 50%)',
+            paddingTop: '3rem',
+            paddingBottom: '3rem'
         }}>
-            <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
-                <h2 className="assessment-title" style={{ fontSize: '3rem', marginBottom: '1rem' }}>upgrade your career journey</h2>
-                <p className="assessment-subtitle" style={{ fontSize: '1.2rem', maxWidth: '600px', margin: '0 auto', color: 'var(--text-secondary)' }}>
-                    unlock the full potential of AI-powered career guidance. choose the plan that fits your ambition.
+            <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
+                <h2 className="assessment-title" style={{ fontSize: '2.2rem', marginBottom: '0.5rem' }}>
+                    simple, transparent pricing
+                </h2>
+                <p style={{ color: 'var(--text-secondary)', fontSize: '1rem' }}>
+                    start free, upgrade when you need more
                 </p>
             </div>
 
-            <div style={{ display: 'flex', gap: '2rem', marginTop: '2rem', flexWrap: 'wrap', justifyContent: 'center', maxWidth: '1000px', margin: '0 auto' }}>
+            <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+                gap: '1.5rem',
+                maxWidth: '700px',
+                margin: '0 auto'
+            }}>
                 {/* Starter Plan */}
-                <div className="strength-card" style={{
-                    flex: 1,
-                    minWidth: '300px',
-                    padding: '2.5rem',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '1.5rem',
-                    background: 'rgba(255, 255, 255, 0.08)',
-                    border: '1px solid rgba(255, 255, 255, 0.1)'
+                <div style={{
+                    padding: '1.5rem',
+                    borderRadius: '12px',
+                    background: 'rgba(255, 255, 255, 0.03)',
+                    border: '1px solid rgba(255, 255, 255, 0.08)'
                 }}>
-                    <div className="strength-card-header">
-                        <div style={{ background: 'rgba(255, 255, 255, 0.1)', padding: '0.5rem', borderRadius: '8px' }}>
-                            <icons.Sparkles size={24} className="strength-icon" />
-                        </div>
-                        <span className="strength-skill" style={{ fontSize: '1.5rem' }}>starter</span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
+                        <Sparkles size={20} style={{ color: 'var(--text-secondary)' }} />
+                        <span style={{ fontSize: '1.1rem', fontWeight: '600', color: 'var(--text-primary)' }}>starter</span>
+                        <span style={{
+                            marginLeft: 'auto',
+                            fontSize: '0.75rem',
+                            padding: '0.2rem 0.5rem',
+                            background: 'rgba(255,255,255,0.1)',
+                            borderRadius: '4px',
+                            color: 'var(--text-secondary)'
+                        }}>FREE</span>
                     </div>
-                    <div>
-                        <h3 style={{ fontSize: '3rem', margin: '0', color: 'var(--text-primary)', display: 'flex', alignItems: 'baseline' }}>
-                            $0<span style={{ fontSize: '1.2rem', color: 'var(--text-secondary)', marginLeft: '0.5rem' }}>/mo</span>
-                        </h3>
-                        <p style={{ color: 'var(--text-secondary)', margin: '0.5rem 0 0 0' }}>perfect for getting started</p>
+
+                    <div style={{ marginBottom: '1rem' }}>
+                        <span style={{ fontSize: '2rem', fontWeight: '700', color: 'var(--text-primary)' }}>₹0</span>
+                        <span style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>/month</span>
                     </div>
-                    <div style={{ height: '1px', background: 'rgba(255, 255, 255, 0.1)', margin: '1rem 0' }} />
-                    <ul style={{ listStyle: 'none', padding: 0, margin: 0, flex: 1, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                        <li style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', color: 'var(--text-secondary)' }}>
-                            <icons.Check size={18} color="var(--text-primary)" /> 3 career assessments / day
-                        </li>
-                        <li style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', color: 'var(--text-secondary)' }}>
-                            <icons.Check size={18} color="var(--text-primary)" /> basic skill analysis
-                        </li>
-                        <li style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', color: 'var(--text-secondary)' }}>
-                            <icons.Check size={18} color="var(--text-primary)" /> 1 resume template
-                        </li>
+
+                    <ul style={{ listStyle: 'none', padding: 0, margin: 0, marginBottom: '1.5rem' }}>
+                        {['3 assessments/day', 'basic skill analysis', '1 resume template'].map((item, i) => (
+                            <li key={i} style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '0.5rem',
+                                color: 'var(--text-secondary)',
+                                fontSize: '0.9rem',
+                                marginBottom: '0.5rem'
+                            }}>
+                                <Check size={14} /> {item}
+                            </li>
+                        ))}
                     </ul>
-                    <button className="submit-btn" disabled style={{
-                        opacity: 0.5,
-                        cursor: 'not-allowed',
+
+                    <button disabled style={{
                         width: '100%',
+                        padding: '0.7rem',
+                        borderRadius: '8px',
+                        border: '1px solid rgba(255,255,255,0.1)',
                         background: 'transparent',
-                        border: '1px solid rgba(255, 255, 255, 0.2)'
+                        color: 'var(--text-secondary)',
+                        cursor: 'not-allowed',
+                        fontSize: '0.9rem'
                     }}>current plan</button>
                 </div>
 
                 {/* Pro Plan */}
-                <div className="strength-card" style={{
-                    flex: 1,
-                    minWidth: '300px',
-                    padding: '2.5rem',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '1.5rem',
-                    border: '1px solid var(--accent-primary)',
-                    background: 'rgba(124, 58, 237, 0.15)',
-                    position: 'relative',
-                    overflow: 'hidden'
+                <div style={{
+                    padding: '1.5rem',
+                    borderRadius: '12px',
+                    background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(139, 92, 246, 0.1))',
+                    border: '1px solid rgba(139, 92, 246, 0.3)',
+                    position: 'relative'
                 }}>
                     <div style={{
                         position: 'absolute',
-                        top: '1rem',
-                        right: '1rem',
-                        background: 'var(--accent-primary)',
-                        color: 'white',
-                        padding: '0.25rem 0.75rem',
-                        borderRadius: '20px',
-                        fontSize: '0.8rem',
-                        fontWeight: '600'
-                    }}>
-                        MOST POPULAR
+                        top: '-8px',
+                        right: '12px',
+                        background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+                        padding: '0.2rem 0.6rem',
+                        borderRadius: '4px',
+                        fontSize: '0.7rem',
+                        fontWeight: '600',
+                        color: 'white'
+                    }}>POPULAR</div>
+
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
+                        <Zap size={20} style={{ color: '#8b5cf6' }} />
+                        <span style={{ fontSize: '1.1rem', fontWeight: '600', color: 'var(--text-primary)' }}>pro</span>
                     </div>
-                    <div className="strength-card-header">
-                        <div style={{ background: 'rgba(124, 58, 237, 0.2)', padding: '0.5rem', borderRadius: '8px' }}>
-                            <icons.Zap size={24} className="strength-icon" style={{ color: 'var(--accent-primary)' }} />
-                        </div>
-                        <span className="strength-skill" style={{ fontSize: '1.5rem', color: 'var(--accent-primary)' }}>pro</span>
+
+                    <div style={{ marginBottom: '1rem' }}>
+                        <span style={{ fontSize: '2rem', fontWeight: '700', color: 'var(--text-primary)' }}>₹499</span>
+                        <span style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>/month</span>
                     </div>
-                    <div>
-                        <h3 style={{ fontSize: '3rem', margin: '0', color: 'var(--text-primary)', display: 'flex', alignItems: 'baseline' }}>
-                            $19<span style={{ fontSize: '1.2rem', color: 'var(--text-secondary)', marginLeft: '0.5rem' }}>/mo</span>
-                        </h3>
-                        <p style={{ color: 'var(--text-secondary)', margin: '0.5rem 0 0 0' }}>for serious career builders</p>
-                    </div>
-                    <div style={{ height: '1px', background: 'rgba(255, 255, 255, 0.1)', margin: '1rem 0' }} />
-                    <ul style={{ listStyle: 'none', padding: 0, margin: 0, flex: 1, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                        <li style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', color: 'var(--text-primary)' }}>
-                            <icons.Check size={18} color="var(--accent-primary)" /> unlimited assessments
-                        </li>
-                        <li style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', color: 'var(--text-primary)' }}>
-                            <icons.Check size={18} color="var(--accent-primary)" /> advanced ai analysis
-                        </li>
-                        <li style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', color: 'var(--text-primary)' }}>
-                            <icons.Check size={18} color="var(--accent-primary)" /> all resume templates
-                        </li>
-                        <li style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', color: 'var(--text-primary)' }}>
-                            <icons.Check size={18} color="var(--accent-primary)" /> pdf export & sharing
-                        </li>
-                        <li style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', color: 'var(--text-primary)' }}>
-                            <icons.Check size={18} color="var(--accent-primary)" /> priority support
-                        </li>
+
+                    <ul style={{ listStyle: 'none', padding: 0, margin: 0, marginBottom: '1.5rem' }}>
+                        {['unlimited assessments', 'advanced ai analysis', 'all resume templates', 'pdf export & sharing', 'priority support'].map((item, i) => (
+                            <li key={i} style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '0.5rem',
+                                color: 'var(--text-primary)',
+                                fontSize: '0.9rem',
+                                marginBottom: '0.5rem'
+                            }}>
+                                <Check size={14} style={{ color: '#8b5cf6' }} /> {item}
+                            </li>
+                        ))}
                     </ul>
-                    <button className="submit-btn" onClick={handleProClick} style={{ width: '100%', boxShadow: '0 0 20px rgba(124, 58, 237, 0.3)' }}>upgrade to pro</button>
-                </div>
-            </div>
 
-            <ComparisonTable />
-
-            {/* Social Proof */}
-            <div style={{ marginTop: '6rem', textAlign: 'center' }}>
-                <p style={{ color: 'var(--text-secondary)', marginBottom: '2rem', fontSize: '0.9rem', letterSpacing: '1px', textTransform: 'uppercase' }}>trusted by career builders from</p>
-                <div style={{ display: 'flex', gap: '3rem', justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap', opacity: 0.5 }}>
-                    <icons.Building2 size={32} />
-                    <icons.Globe size={32} />
-                    <icons.Cpu size={32} />
-                    <icons.Code2 size={32} />
-                    <icons.Rocket size={32} />
+                    <button onClick={handleProClick} style={{
+                        width: '100%',
+                        padding: '0.7rem',
+                        borderRadius: '8px',
+                        border: 'none',
+                        background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+                        color: 'white',
+                        cursor: 'pointer',
+                        fontSize: '0.9rem',
+                        fontWeight: '600',
+                        transition: 'opacity 0.2s'
+                    }}>upgrade to pro</button>
                 </div>
             </div>
         </div>

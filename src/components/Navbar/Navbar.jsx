@@ -9,9 +9,15 @@ function Navbar() {
     const location = useLocation();
     const { user, logout } = useAuth();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+
     const handleLogout = () => {
         logout();
         setIsMenuOpen(false);
+    };
+
+    const isActive = (path) => {
+        if (path === '/') return location.pathname === '/';
+        return location.pathname.toLowerCase() === path.toLowerCase();
     };
 
     const handleNavClick = (path) => {
@@ -36,32 +42,44 @@ function Navbar() {
         setIsMenuOpen(false);
     };
 
-
     return (
         <nav className='navbar'>
             <Link to="/" id='logo' onClick={() => setIsMenuOpen(false)}>SkillSync</Link>
 
-            {/* hamburger menu icon */}
             <div className="menu-icon" onClick={() => setIsMenuOpen(!isMenuOpen)}>
                 {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
             </div>
 
-            {/* navigation links - class changes based on menu state */}
             <div className={`nav-buttons ${isMenuOpen ? 'active' : ''}`}>
-                <button onClick={() => handleNavClick("/")} id='analysis_btn'>Home</button>
-                <button onClick={() => handleNavClick("/AssessmentPg")} id='analysis_btn'>Analysis</button>
-                <button onClick={() => handleNavClick('pricing')} id='analysis_btn'>Pricing</button>
+                <button
+                    onClick={() => handleNavClick("/")}
+                    className={`nav-btn ${isActive('/') ? 'nav-active' : ''}`}
+                >Home</button>
+                <button
+                    onClick={() => handleNavClick("/AssessmentPg")}
+                    className={`nav-btn ${isActive('/AssessmentPg') ? 'nav-active' : ''}`}
+                >Analysis</button>
+                <button
+                    onClick={() => handleNavClick('pricing')}
+                    className="nav-btn"
+                >Pricing</button>
 
                 {user && (
                     user.isAnonymous ? (
                         <>
-                            <button onClick={() => handleNavClick("/profile")} id='analysis_btn'>Profile</button>
-                            <button onClick={() => handleNavClick('/login')} id='profile_btn'>Login / Sign Up</button>
+                            <button
+                                onClick={() => handleNavClick("/profile")}
+                                className={`nav-btn ${isActive('/profile') ? 'nav-active' : ''}`}
+                            >Profile</button>
+                            <button onClick={() => handleNavClick('/login')} className="nav-btn-primary">Login / Sign Up</button>
                         </>
                     ) : (
                         <>
-                            <button onClick={() => handleNavClick("/profile")} id='profile_btn'>Profile</button>
-                            <button onClick={handleLogout} id='logout_btn'>Logout</button>
+                            <button
+                                onClick={() => handleNavClick("/profile")}
+                                className={`nav-btn-primary ${isActive('/profile') ? 'nav-active' : ''}`}
+                            >Profile</button>
+                            <button onClick={handleLogout} className="nav-btn-logout">Logout</button>
                         </>
                     )
                 )}
