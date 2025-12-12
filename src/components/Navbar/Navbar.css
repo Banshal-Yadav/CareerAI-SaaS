@@ -47,8 +47,8 @@
 
 .nav-btn-primary {
     padding: 0.6rem 1.2rem;
-    background: linear-gradient(135deg, #6366f1, #8b5cf6);
-    color: white;
+    background: #fff;
+    color: #000;
     font-weight: 600;
     border-radius: 8px;
     border: none;
@@ -59,11 +59,10 @@
 
 .nav-btn-primary:hover {
     opacity: 0.9;
-    transform: translateY(-1px);
 }
 
 .nav-btn-primary.nav-active {
-    box-shadow: 0 0 12px rgba(99, 102, 241, 0.4);
+    box-shadow: 0 0 12px rgba(255, 255, 255, 0.2);
 }
 
 .nav-btn-logout {
