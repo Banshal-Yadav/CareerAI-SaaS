@@ -19,12 +19,12 @@
 }
 
 .pricing-headline {
-  font-size: clamp(3rem, 10vw, 6rem);
+  font-size: clamp(2.5rem, 8vw, 4rem);
   font-weight: 800;
   color: #fff;
-  line-height: 1;
+  line-height: 1.1;
   margin: 0;
-  letter-spacing: -2px;
+  letter-spacing: -1px;
 }
 
 .pricing-headline .highlight {
@@ -74,14 +74,14 @@
 .plan-number {
   font-size: 5rem;
   font-weight: 900;
-  color: #1a1a1a;
+  color: #333;
   line-height: 1;
   margin-bottom: 0.5rem;
   letter-spacing: -3px;
 }
 
 .plan-card.pro .plan-number {
-  color: #222;
+  color: #444;
 }
 
 .plan-name {
