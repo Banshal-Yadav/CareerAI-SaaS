@@ -80,7 +80,7 @@
     flex-shrink: 0;
     padding: 0.6rem 1.2rem;
     border-radius: 20px;
-    background: transparent;
+    background: #0e0e0e;
     border: 1px solid rgba(255, 255, 255, 0.2);
     color: var(--text-secondary, #a0a0a0);
     font-size: 0.9rem;
@@ -111,4 +111,106 @@
         padding: 0.5rem 1rem;
         font-size: 0.8rem;
     }
+}
+
+/* active chip state */
+.marquee-chip.active {
+    border-color: var(--accent-primary, #fbbf24);
+    color: var(--accent-primary, #fbbf24);
+    background: rgba(251, 191, 36, 0.15);
+}
+
+/* tooltip card */
+.career-tooltip {
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 12px;
+    padding: 1.25rem;
+    margin: 1.5rem auto 0;
+    max-width: 500px;
+    position: relative;
+    animation: tooltipFadeIn 0.15s ease-out;
+}
+
+@keyframes tooltipFadeIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.tooltip-close {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    background: transparent;
+    border: none;
+    color: #666;
+    cursor: pointer;
+    padding: 0;
+}
+
+.tooltip-close:hover {
+    color: #fff;
+}
+
+.tooltip-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.tooltip-header svg {
+    color: var(--accent-primary, #fbbf24);
+}
+
+.tooltip-header h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #fff;
+    margin: 0;
+}
+
+.tooltip-desc {
+    font-size: 0.9rem;
+    color: #aaa;
+    line-height: 1.5;
+    margin: 0 0 1rem 0;
+}
+
+.tooltip-stats {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.tooltip-stat {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: #ccc;
+    font-size: 0.85rem;
+}
+
+.tooltip-stat svg {
+    color: #888;
+}
+
+.tooltip-skills {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.tooltip-skills svg {
+    color: #666;
+}
+
+.tooltip-skill-chip {
+    background: #252525;
+    color: #bbb;
+    padding: 0.3rem 0.6rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    border: 1px solid #333;
 }

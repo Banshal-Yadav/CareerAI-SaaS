@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import "./ChipTabContainer.css";
-import Chiptab from "./Chiptab";
-import CareerInfoModal from "../Modal/CareerInfoModal.jsx";
 import { careersData, skillsData, findCareerByTitle } from "../../data/skillsDatabase.js";
+import { Briefcase, IndianRupee, BarChartHorizontal, X, Wrench } from 'lucide-react';
 
 const chipToCareerTitleMap = {
     "Machine Learning": "Data Scientist",
@@ -25,6 +24,11 @@ const chipToCareerTitleMap = {
     "Team Lead": "Project Manager"
 };
 
+const getSkillName = (skillId) => {
+    const allSkills = [...skillsData.technical, ...skillsData.soft, ...skillsData.industry];
+    const foundSkill = allSkills.find(s => s.id === skillId);
+    return foundSkill ? foundSkill.name : skillId;
+};
 
 const ChipTabContainer = () => {
     const [selectedCareer, setSelectedCareer] = useState(null);
@@ -37,23 +41,17 @@ const ChipTabContainer = () => {
 
     const handleChipClick = (chipText) => {
         const targetTitle = chipToCareerTitleMap[chipText];
-        if (!targetTitle) {
-            console.warn(`No mapping found for chip: "${chipText}"`);
+        if (!targetTitle) return;
+
+        if (selectedCareer?.title === targetTitle) {
+            setSelectedCareer(null);
             return;
         }
 
         const foundCareer = findCareerByTitle(targetTitle);
-
         if (foundCareer) {
-            foundCareer.skillsData = skillsData;
             setSelectedCareer(foundCareer);
-        } else {
-            console.warn(`Career "${targetTitle}" not found in database.`);
         }
-    };
-
-    const handleCloseModal = () => {
-        setSelectedCareer(null);
     };
 
     return (
@@ -63,11 +61,10 @@ const ChipTabContainer = () => {
                 {chipRows.map((row, rowIndex) => (
                     <div key={rowIndex} className={`marquee-track ${rowIndex % 2 === 1 ? 'reverse' : ''}`}>
                         <div className="marquee-content">
-                            {/* Triple chips for seamless loop */}
                             {[...row, ...row, ...row].map((chipText, chipIndex) => (
                                 <button
                                     key={chipIndex}
-                                    className="marquee-chip"
+                                    className={`marquee-chip ${selectedCareer?.title === chipToCareerTitleMap[chipText] ? 'active' : ''}`}
                                     onClick={() => handleChipClick(chipText)}
                                 >
                                     {chipText}
@@ -79,11 +76,32 @@ const ChipTabContainer = () => {
             </div>
 
             {selectedCareer && (
-                <CareerInfoModal
-                    career={selectedCareer}
-                    onClose={handleCloseModal}
-                    careersData={careersData}
-                />
+                <div className="career-tooltip">
+                    <button className="tooltip-close" onClick={() => setSelectedCareer(null)}>
+                        <X size={18} />
+                    </button>
+                    <div className="tooltip-header">
+                        <Briefcase size={20} />
+                        <h3>{selectedCareer.title}</h3>
+                    </div>
+                    <p className="tooltip-desc">{selectedCareer.description}</p>
+                    <div className="tooltip-stats">
+                        <div className="tooltip-stat">
+                            <IndianRupee size={16} />
+                            <span>{selectedCareer.averageSalary}</span>
+                        </div>
+                        <div className="tooltip-stat">
+                            <BarChartHorizontal size={16} />
+                            <span>{selectedCareer.growthProspect}</span>
+                        </div>
+                    </div>
+                    <div className="tooltip-skills">
+                        <Wrench size={14} />
+                        {selectedCareer.skillRequirements?.slice(0, 4).map(req => (
+                            <span key={req.skillId} className="tooltip-skill-chip">{getSkillName(req.skillId)}</span>
+                        ))}
+                    </div>
+                </div>
             )}
         </div>
     );
