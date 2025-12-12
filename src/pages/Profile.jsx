@@ -3,18 +3,17 @@ import { useAuth } from '../hooks/useAuth';
 import { doc, getDoc, updateDoc, arrayRemove } from 'firebase/firestore';
 import { db } from '../firebase/config';
 import './Profile.css';
-import { User, FileText, Edit, Download, Trash2, Plus, ChevronDown, ChevronUp, Zap, Target, TrendingUp, Briefcase, Award, BookOpen, FolderKanban, FileX, BrainCircuit, Calendar, BarChart3 } from 'lucide-react';
+import { User, FileText, Edit, Download, Trash2, Plus, ChevronDown, ChevronUp, Zap, Target, TrendingUp, Briefcase, Award, BookOpen, FolderKanban, FileX, BrainCircuit, Calendar, BarChart3, Sparkles, ArrowRight, Clock } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
-const StatCard = ({ icon: Icon, label, value, subtext }) => (
-  <div className="stat-card">
+const StatCard = ({ icon: Icon, label, value, accent }) => (
+  <div className={`stat-card ${accent ? 'stat-accent' : ''}`}>
     <div className="stat-icon">
       <Icon size={20} />
     </div>
     <div className="stat-content">
       <span className="stat-value">{value}</span>
       <span className="stat-label">{label}</span>
-      {subtext && <span className="stat-subtext">{subtext}</span>}
     </div>
   </div>
 );
@@ -57,7 +56,7 @@ const ResumeCard = ({ resume, onDelete, onEdit, onView }) => (
   </div>
 );
 
-const AssessmentCard = ({ assessment, isExpanded, onToggle }) => {
+const AssessmentCard = ({ assessment, isExpanded, onToggle, onDelete }) => {
   const formatDate = (timestamp) => {
     if (!timestamp) return "Unknown";
     const date = timestamp.seconds ? new Date(timestamp.seconds * 1000) : new Date(timestamp);
@@ -76,34 +75,54 @@ const AssessmentCard = ({ assessment, isExpanded, onToggle }) => {
         </div>
         <div className="assessment-preview">
           <h4 className="assessment-title-text">{topCareer?.title || 'Career Assessment'}</h4>
-          <p className="assessment-summary-preview">{skillCount} skills analyzed</p>
+          <p className="assessment-summary-preview">{skillCount} skills • {assessment.aiCareerAnalysis?.length || 0} career matches</p>
         </div>
-        <button className="expand-toggle">
-          {isExpanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
-        </button>
+        <div className="assessment-header-actions">
+          <button
+            className="delete-assessment-btn"
+            onClick={(e) => { e.stopPropagation(); onDelete(); }}
+            title="Delete assessment"
+          >
+            <Trash2 size={16} />
+          </button>
+          <button className="expand-toggle">
+            {isExpanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+          </button>
+        </div>
       </div>
 
       {isExpanded && (
         <div className="assessment-body">
           <div className="assessment-section">
             <h5><Zap size={16} /> Summary</h5>
-            <p>{assessment.aiSummary || 'No summary available'}</p>
+            <p className="summary-text">{assessment.aiSummary || 'No summary available'}</p>
+          </div>
+
+          <div className="assessment-section">
+            <h5><Target size={16} /> Your Analyzed Skills</h5>
+            <p className="skills-raw">{assessment.rawSkills || 'No skills recorded'}</p>
           </div>
 
           <div className="assessment-grid">
             <div className="assessment-section">
-              <h5><Target size={16} /> Strengths</h5>
-              <div className="insight-tags">
-                {assessment.aiStrengths?.slice(0, 4).map((s, i) => (
-                  <span key={i} className="insight-tag strength">{s.skill}</span>
+              <h5><TrendingUp size={16} /> Strengths</h5>
+              <div className="insight-list">
+                {assessment.aiStrengths?.map((s, i) => (
+                  <div key={i} className="insight-item strength">
+                    <strong>{s.skill}</strong>
+                    <span>{s.context}</span>
+                  </div>
                 )) || <span className="no-data">None recorded</span>}
               </div>
             </div>
             <div className="assessment-section">
-              <h5><TrendingUp size={16} /> Growth Areas</h5>
-              <div className="insight-tags">
-                {assessment.aiGrowthAreas?.slice(0, 4).map((g, i) => (
-                  <span key={i} className="insight-tag growth">{g.skill}</span>
+              <h5><Sparkles size={16} /> Growth Areas</h5>
+              <div className="insight-list">
+                {assessment.aiGrowthAreas?.map((g, i) => (
+                  <div key={i} className="insight-item growth">
+                    <strong>{g.skill}</strong>
+                    <span>{g.context}</span>
+                  </div>
                 )) || <span className="no-data">None recorded</span>}
               </div>
             </div>
@@ -111,19 +130,75 @@ const AssessmentCard = ({ assessment, isExpanded, onToggle }) => {
 
           {assessment.aiCareerAnalysis?.length > 0 && (
             <div className="assessment-section">
-              <h5><Briefcase size={16} /> Career Matches</h5>
-              <div className="career-matches">
-                {assessment.aiCareerAnalysis.slice(0, 3).map((career, i) => (
-                  <div key={i} className="career-match-card">
-                    <div className="career-match-header">
-                      <span className="career-title">{career.title}</span>
-                      <span className="career-salary">{career.salaryRange}</span>
+              <h5><Briefcase size={16} /> All Career Matches</h5>
+              <div className="career-matches-full">
+                {assessment.aiCareerAnalysis.map((career, i) => (
+                  <div key={i} className="career-full-card">
+                    <div className="career-full-header">
+                      <span className="career-number">#{i + 1}</span>
+                      <div className="career-title-row">
+                        <h4>{career.title}</h4>
+                        <span className="career-salary">{career.salaryRange}</span>
+                      </div>
                     </div>
                     <p className="career-reasoning">{career.reasoning}</p>
+
+                    {career.keyAlignments?.length > 0 && (
+                      <div className="career-detail-section">
+                        <span className="detail-label">Key Alignments:</span>
+                        <div className="detail-tags">
+                          {career.keyAlignments.map((a, j) => (
+                            <span key={j} className="detail-tag">{a.userTrait} → {a.jobRequirement}</span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {career.skillsToBuild?.length > 0 && (
+                      <div className="career-detail-section">
+                        <span className="detail-label">Skills to Build:</span>
+                        <div className="detail-tags">
+                          {career.skillsToBuild.map((s, j) => (
+                            <span key={j} className="detail-tag skill-tag">{s.skill}</span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
                     {career.suggestedCertifications?.length > 0 && (
-                      <div className="career-extras">
-                        <Award size={12} />
-                        <span>{career.suggestedCertifications.slice(0, 2).map(c => c.name).join(', ')}</span>
+                      <div className="career-detail-section">
+                        <span className="detail-label"><Award size={12} /> Certifications:</span>
+                        <div className="detail-tags">
+                          {career.suggestedCertifications.map((c, j) => (
+                            <span key={j} className="detail-tag cert-tag">{c.name} ({c.issuer})</span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {career.suggestedCourses?.length > 0 && (
+                      <div className="career-detail-section">
+                        <span className="detail-label"><BookOpen size={12} /> Courses:</span>
+                        <div className="detail-tags">
+                          {career.suggestedCourses.map((c, j) => (
+                            <span key={j} className="detail-tag course-tag">{c.courseName} - {c.platform}</span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {career.suggestedProjects?.length > 0 && (
+                      <div className="career-detail-section">
+                        <span className="detail-label"><FolderKanban size={12} /> Projects:</span>
+                        <div className="projects-list">
+                          {career.suggestedProjects.map((p, j) => (
+                            <div key={j} className={`project-item ${p.difficulty?.toLowerCase()}`}>
+                              <strong>{p.title}</strong>
+                              <span className="project-difficulty">{p.difficulty}</span>
+                              <p>{p.objective}</p>
+                            </div>
+                          ))}
+                        </div>
                       </div>
                     )}
                   </div>
@@ -143,6 +218,7 @@ const Profile = () => {
   const [profileData, setProfileData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [expandedAssessment, setExpandedAssessment] = useState(null);
+  const [showAllAssessments, setShowAllAssessments] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -178,6 +254,21 @@ const Profile = () => {
     }
   };
 
+  const handleDeleteAssessment = async (assessmentToDelete) => {
+    if (!window.confirm("Delete this assessment? This cannot be undone.")) return;
+    const profileRef = doc(db, 'profiles', user.uid);
+    try {
+      await updateDoc(profileRef, { assessments: arrayRemove(assessmentToDelete) });
+      setProfileData(prev => ({
+        ...prev,
+        assessments: prev.assessments.filter(a => a.assessmentId !== assessmentToDelete.assessmentId)
+      }));
+      setExpandedAssessment(null);
+    } catch (error) {
+      console.error("Error deleting assessment:", error);
+    }
+  };
+
   if (loading) {
     return (
       <div className="profile-container">
@@ -202,32 +293,47 @@ const Profile = () => {
     return created > new Date(Date.now() - 24 * 60 * 60 * 1000);
   }).length || 0;
 
+  const displayedAssessments = showAllAssessments
+    ? profileData?.assessments
+    : profileData?.assessments?.slice(0, 3);
+
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return "Good morning";
+    if (hour < 18) return "Good afternoon";
+    return "Good evening";
+  };
+
   return (
     <div className="profile-container">
       <div className="profile-hero">
-        <div className="hero-content">
-          <div className="hero-avatar">
-            <User size={32} />
-          </div>
-          <div className="hero-text">
-            <h1 className="hero-title">
-              <span className="title-accent"></span>
-              {user.isAnonymous ? 'Guest Dashboard' : 'Your Dashboard'}
-            </h1>
-            <p className="hero-subtitle">{user.isAnonymous ? 'Sign up to save your progress' : user.email}</p>
-          </div>
+        <div className="hero-welcome">
+          <span className="greeting">{getGreeting()}</span>
+          <h1 className="hero-title">
+            {user.isAnonymous ? 'Welcome, Guest' : user.displayName || user.email?.split('@')[0] || 'Welcome back'}
+          </h1>
+          <p className="hero-subtitle">
+            {user.isAnonymous
+              ? 'Sign up to save your career progress permanently'
+              : 'Here\'s your career journey at a glance'}
+          </p>
         </div>
 
         <div className="stats-row">
-          <StatCard icon={BarChart3} label="Assessments" value={totalAssessments} />
-          <StatCard icon={FileText} label="Resumes" value={totalResumes} />
-          <StatCard icon={Briefcase} label="Top Match" value={profileData?.assessments?.[0]?.aiCareerAnalysis?.[0]?.title?.split(' ')[0] || '—'} />
+          <StatCard icon={BarChart3} label="Total Assessments" value={totalAssessments} />
+          <StatCard icon={FileText} label="Resumes Created" value={totalResumes} />
+          <StatCard
+            icon={Briefcase}
+            label="Top Career Match"
+            value={profileData?.assessments?.[0]?.aiCareerAnalysis?.[0]?.title || '—'}
+            accent
+          />
         </div>
       </div>
 
       <section className="dashboard-section">
         <div className="section-header">
-          <h2 className="section-title">Resumes</h2>
+          <h2 className="section-title">Your Resumes</h2>
           <div className="section-actions">
             <UsageBar current={resumesToday} limit={3} label="Today" />
             <button
@@ -255,9 +361,9 @@ const Profile = () => {
         ) : (
           <div className="empty-state">
             <FileX size={40} />
-            <p>No resumes yet</p>
+            <p>No resumes yet. Create your first one!</p>
             <button onClick={() => navigate('/resume-builder', { state: { isNew: true } })} className="primary-btn">
-              Create Your First Resume
+              Create Resume
             </button>
           </div>
         )}
@@ -265,27 +371,49 @@ const Profile = () => {
 
       <section className="dashboard-section">
         <div className="section-header">
-          <h2 className="section-title">Assessments</h2>
-          <UsageBar current={assessmentsToday} limit={3} label="Today" />
+          <h2 className="section-title">
+            Recent Assessments
+            {totalAssessments > 3 && !showAllAssessments && (
+              <span className="assessment-count">showing 3 of {totalAssessments}</span>
+            )}
+          </h2>
+          <div className="section-actions">
+            <UsageBar current={assessmentsToday} limit={3} label="Today" />
+            <button onClick={() => navigate('/AssessmentPg')} className="secondary-btn">
+              <Plus size={16} /> New Assessment
+            </button>
+          </div>
         </div>
 
         {profileData?.assessments?.length > 0 ? (
-          <div className="assessments-list">
-            {profileData.assessments.map((assessment, index) => (
-              <AssessmentCard
-                key={assessment.assessmentId || index}
-                assessment={assessment}
-                isExpanded={expandedAssessment === index}
-                onToggle={() => setExpandedAssessment(expandedAssessment === index ? null : index)}
-              />
-            ))}
-          </div>
+          <>
+            <div className="assessments-list">
+              {displayedAssessments.map((assessment, index) => (
+                <AssessmentCard
+                  key={assessment.assessmentId || index}
+                  assessment={assessment}
+                  isExpanded={expandedAssessment === index}
+                  onToggle={() => setExpandedAssessment(expandedAssessment === index ? null : index)}
+                  onDelete={() => handleDeleteAssessment(assessment)}
+                />
+              ))}
+            </div>
+            {totalAssessments > 3 && (
+              <button
+                className="view-all-btn"
+                onClick={() => setShowAllAssessments(!showAllAssessments)}
+              >
+                {showAllAssessments ? 'Show Less' : `View All ${totalAssessments} Assessments`}
+                <ArrowRight size={16} />
+              </button>
+            )}
+          </>
         ) : (
           <div className="empty-state">
             <BrainCircuit size={40} />
-            <p>No assessments yet</p>
+            <p>No assessments yet. Discover your ideal career path!</p>
             <button onClick={() => navigate('/AssessmentPg')} className="primary-btn">
-              Start Career Assessment
+              Start Assessment
             </button>
           </div>
         )}
