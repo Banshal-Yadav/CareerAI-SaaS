@@ -81,6 +81,8 @@ export default async function handler(req, res) {
       dailyAssessments: 3
     };
 
+    let isPro = false;
+
     try {
       const db = admin.firestore();
       const profileRef = db.collection('profiles').doc(uid);
@@ -90,7 +92,7 @@ export default async function handler(req, res) {
       const twentyFourHoursAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
 
       let profileData = docSnap.exists ? docSnap.data() : { assessments: [], bookmarks: [], resumes: [], isPro: false, dailyCreations: [] };
-      const isPro = profileData.isPro === true;
+      isPro = profileData.isPro === true;
 
       if (!isPro) {
         const dailyCreations = profileData.dailyCreations || [];
