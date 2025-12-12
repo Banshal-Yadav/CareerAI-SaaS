@@ -389,14 +389,14 @@ const Profile = () => {
               <QuickActionCard
                 icon={BrainCircuit}
                 title="New Assessment"
-                subtitle={`${3 - assessmentsToday} left today`}
+                subtitle={isPro ? "Unlimited access" : `${Math.max(0, 3 - assessmentsToday)} left today`}
                 onClick={() => navigate('/AssessmentPg')}
                 accent
               />
               <QuickActionCard
                 icon={FileText}
                 title="Create Resume"
-                subtitle={`${totalResumes} created`}
+                subtitle={isPro ? "Unlimited access" : `${Math.max(0, 3 - resumesToday)} left today`}
                 onClick={() => navigate('/resume-builder', { state: { isNew: true } })}
               />
             </div>
