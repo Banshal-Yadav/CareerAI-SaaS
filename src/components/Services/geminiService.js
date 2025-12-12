@@ -13,13 +13,16 @@ export const getAiSkillAnalysis = async ({ persona, matchedSkills, relevantCaree
       headers,
       body: JSON.stringify({ persona, matchedSkills, relevantCareers, interests, experience }),
     });
+
     if (!response.ok) {
-      throw new Error('Network response was not ok');
+      const errData = await response.json().catch(() => ({}));
+      throw new Error(errData.error || 'The analysis service is currently unavailable.');
     }
+
     const result = await response.json();
     return result;
   } catch (error) {
     console.error("Error calling analysis service:", error);
-    return { error: true, message: "Unable to generate career roadmap. Please try again later." };
+    return { error: true, message: error.message || "Unable to generate career roadmap. Please try again later." };
   }
 };
