@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
 import "./ChipTabContainer.css";
-import { careersData, skillsData, findCareerByTitle } from "../../data/skillsDatabase.js";
-import { Briefcase, IndianRupee, BarChartHorizontal, Wrench } from 'lucide-react';
+import { skillsData, findCareerByTitle } from "../../data/skillsDatabase.js";
+import { Briefcase, IndianRupee, BarChartHorizontal, X, Wrench } from 'lucide-react';
 
 const chipToCareerTitleMap = {
     "Machine Learning": "Data Scientist",
@@ -31,11 +31,8 @@ const getSkillName = (skillId) => {
 };
 
 const ChipTabContainer = () => {
-    const [currentCareer, setCurrentCareer] = useState(null);
+    const [selectedCareer, setSelectedCareer] = useState(null);
     const [activeChip, setActiveChip] = useState(null);
-    const [isPaused, setIsPaused] = useState(false);
-    const [isLocked, setIsLocked] = useState(false);
-    const careerIndexRef = useRef(0);
 
     const chipRows = [
         ["Machine Learning", "Java Developer", "Researcher", "Cloud", "Bigdata", "AI Engineer"],
@@ -43,40 +40,20 @@ const ChipTabContainer = () => {
         ["Product Manager", "Business Analyst", "Financial Advisor", "Operations", "Strategy", "Team Lead"]
     ];
 
-    const uniqueCareerTitles = [...new Set(Object.values(chipToCareerTitleMap))];
-
-    useEffect(() => {
-        const firstCareer = findCareerByTitle(uniqueCareerTitles[0]);
-        if (firstCareer) setCurrentCareer(firstCareer);
-    }, []);
-
-    useEffect(() => {
-        if (isPaused || isLocked) return;
-
-        const interval = setInterval(() => {
-            careerIndexRef.current = (careerIndexRef.current + 1) % uniqueCareerTitles.length;
-            const nextCareer = findCareerByTitle(uniqueCareerTitles[careerIndexRef.current]);
-            if (nextCareer) setCurrentCareer(nextCareer);
-        }, 4000);
-
-        return () => clearInterval(interval);
-    }, [isPaused, isLocked, uniqueCareerTitles]);
-
     const handleChipClick = (chipText) => {
         const targetTitle = chipToCareerTitleMap[chipText];
         if (!targetTitle) return;
 
         if (activeChip === chipText) {
-            setIsLocked(false);
+            setSelectedCareer(null);
             setActiveChip(null);
             return;
         }
 
         const foundCareer = findCareerByTitle(targetTitle);
         if (foundCareer) {
-            setCurrentCareer(foundCareer);
+            setSelectedCareer(foundCareer);
             setActiveChip(chipText);
-            setIsLocked(true);
         }
     };
 
@@ -84,31 +61,30 @@ const ChipTabContainer = () => {
         <div className='cardtab-container'>
             <h1 className='cardtab-container-title'>From Traditional to Emerging - Discover All Possibilities</h1>
 
-            {currentCareer && (
-                <div
-                    className="career-showcase"
-                    onMouseEnter={() => setIsPaused(true)}
-                    onMouseLeave={() => setIsPaused(false)}
-                >
-                    <div className="showcase-header">
+            {selectedCareer && (
+                <div className="career-card">
+                    <button className="card-close" onClick={() => { setSelectedCareer(null); setActiveChip(null); }}>
+                        <X size={18} />
+                    </button>
+                    <div className="card-header">
                         <Briefcase size={20} />
-                        <h3>{currentCareer.title}</h3>
+                        <h3>{selectedCareer.title}</h3>
                     </div>
-                    <p className="showcase-desc">{currentCareer.description}</p>
-                    <div className="showcase-stats">
-                        <div className="showcase-stat">
+                    <p className="card-desc">{selectedCareer.description}</p>
+                    <div className="card-stats">
+                        <div className="card-stat">
                             <IndianRupee size={16} />
-                            <span>{currentCareer.averageSalary}</span>
+                            <span>{selectedCareer.averageSalary}</span>
                         </div>
-                        <div className="showcase-stat">
+                        <div className="card-stat">
                             <BarChartHorizontal size={16} />
-                            <span>{currentCareer.growthProspect}</span>
+                            <span>{selectedCareer.growthProspect}</span>
                         </div>
                     </div>
-                    <div className="showcase-skills">
+                    <div className="card-skills">
                         <Wrench size={14} />
-                        {currentCareer.skillRequirements?.slice(0, 4).map(req => (
-                            <span key={req.skillId} className="showcase-skill-chip">{getSkillName(req.skillId)}</span>
+                        {selectedCareer.skillRequirements?.slice(0, 4).map(req => (
+                            <span key={req.skillId} className="card-skill-chip">{getSkillName(req.skillId)}</span>
                         ))}
                     </div>
                 </div>

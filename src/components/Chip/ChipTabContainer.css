@@ -12,8 +12,8 @@
     text-align: center;
 }
 
-/* showcase card above chips */
-.career-showcase {
+/* career info card */
+.career-card {
     background: #141414;
     border: 1px solid #2a2a2a;
     border-radius: 12px;
@@ -21,46 +21,56 @@
     margin: 0 auto 1.5rem;
     max-width: 550px;
     text-align: left;
-    animation: showcaseFadeIn 0.3s ease-out;
+    position: relative;
 }
 
-@keyframes showcaseFadeIn {
-    from { opacity: 0; transform: translateY(-5px); }
-    to { opacity: 1; transform: translateY(0); }
+.card-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: transparent;
+    border: none;
+    color: #666;
+    cursor: pointer;
+    padding: 0;
 }
 
-.showcase-header {
+.card-close:hover {
+    color: #fff;
+}
+
+.card-header {
     display: flex;
     align-items: center;
     gap: 0.6rem;
     margin-bottom: 0.6rem;
 }
 
-.showcase-header svg {
+.card-header svg {
     color: #fff;
 }
 
-.showcase-header h3 {
+.card-header h3 {
     font-size: 1.15rem;
     font-weight: 600;
     color: #fff;
     margin: 0;
 }
 
-.showcase-desc {
+.card-desc {
     font-size: 0.9rem;
     color: #999;
     line-height: 1.5;
     margin: 0 0 0.9rem 0;
 }
 
-.showcase-stats {
+.card-stats {
     display: flex;
     gap: 1.5rem;
     margin-bottom: 0.9rem;
 }
 
-.showcase-stat {
+.card-stat {
     display: flex;
     align-items: center;
     gap: 0.4rem;
@@ -68,22 +78,22 @@
     font-size: 0.85rem;
 }
 
-.showcase-stat svg {
+.card-stat svg {
     color: #777;
 }
 
-.showcase-skills {
+.card-skills {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
     gap: 0.5rem;
 }
 
-.showcase-skills svg {
+.card-skills svg {
     color: #555;
 }
 
-.showcase-skill-chip {
+.card-skill-chip {
     background: #1a1a1a;
     color: #999;
     padding: 0.3rem 0.6rem;
@@ -92,7 +102,7 @@
     border: 1px solid #2a2a2a;
 }
 
-/* marquee wrapper with edge fades */
+/* marquee wrapper */
 .marquee-wrapper {
     position: relative;
     width: 100%;
@@ -121,7 +131,6 @@
     background: linear-gradient(to left, #000 0%, transparent 100%);
 }
 
-/* marquee track */
 .marquee-track {
     display: flex;
     width: 100%;
@@ -145,12 +154,8 @@
 }
 
 @keyframes marquee-scroll {
-    0% {
-        transform: translateX(0);
-    }
-    100% {
-        transform: translateX(-33.33%);
-    }
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-33.33%); }
 }
 
 /* chip style */
@@ -195,7 +200,7 @@
         font-size: 0.8rem;
     }
     
-    .career-showcase {
+    .career-card {
         margin: 0 1rem 1rem;
         padding: 1rem;
     }
