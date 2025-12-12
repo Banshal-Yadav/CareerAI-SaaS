@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import { doc, getDoc, updateDoc, arrayRemove, arrayUnion } from 'firebase/firestore';
 import { db } from '../firebase/config';
 import './Profile.css';
-import { User, FileText, Edit, Download, Trash2, Plus, ChevronDown, ChevronUp, Zap, Target, TrendingUp, Briefcase, Award, BookOpen, FolderKanban, FileX, BrainCircuit, Calendar, Sparkles, ArrowRight, Bookmark, AlertTriangle, ArrowUpRight } from 'lucide-react';
+import { User, FileText, Edit, Download, Trash2, Plus, X, Zap, Target, TrendingUp, Briefcase, Award, BookOpen, FolderKanban, FileX, BrainCircuit, Calendar, Sparkles, ArrowRight, Bookmark, AlertTriangle, ArrowUpRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const FREE_LIMITS = { assessments: 10, bookmarks: 3, resumes: 3 };
@@ -38,37 +38,9 @@ const QuickActionCard = ({ icon: Icon, title, subtitle, onClick, accent }) => (
   </button>
 );
 
-const TopCareerCard = ({ career, onViewMore }) => {
-  if (!career) return null;
-  return (
-    <div className="top-career-card">
-      <div className="career-card-header">
-        <Briefcase size={20} />
-        <span>Your Top Career Match</span>
-      </div>
-      <h3 className="career-card-title">{career.title}</h3>
-      <p className="career-card-salary">{career.salaryRange}</p>
-      <p className="career-card-reasoning">{career.reasoning?.slice(0, 150)}...</p>
-      {career.skillsToBuild?.length > 0 && (
-        <div className="career-card-skills">
-          <span className="skills-label">Skills to build:</span>
-          <div className="skills-tags">
-            {career.skillsToBuild.slice(0, 3).map((s, i) => (
-              <span key={i} className="skill-tag-mini">{s.skill}</span>
-            ))}
-          </div>
-        </div>
-      )}
-      <button className="career-view-btn" onClick={onViewMore}>
-        View Full Analysis <ArrowRight size={14} />
-      </button>
-    </div>
-  );
-};
-
 const UsageMeter = ({ label, current, limit }) => {
-  const percentage = Math.min((current / limit) * 100, 100);
-  const status = current >= limit ? 'full' : current >= limit - 1 ? 'warning' : 'ok';
+  const percentage = typeof limit === 'number' ? Math.min((current / limit) * 100, 100) : 100;
+  const status = typeof limit === 'number' ? (current >= limit ? 'full' : current >= limit - 1 ? 'warning' : 'ok') : 'ok';
   return (
     <div className="usage-meter">
       <div className="usage-meter-header">
@@ -99,7 +71,7 @@ const ResumeCard = ({ resume, onDelete, onEdit, onView }) => (
   </div>
 );
 
-const AssessmentCard = ({ assessment, isExpanded, onToggle, onDelete, isBookmarked, onToggleBookmark, bookmarkCount, bookmarkLimit }) => {
+const AssessmentPreviewCard = ({ assessment, isBookmarked, onToggleBookmark, onOpen, onDelete, bookmarkCount, bookmarkLimit }) => {
   const formatDate = (timestamp) => {
     if (!timestamp) return "Unknown";
     const date = timestamp.seconds ? new Date(timestamp.seconds * 1000) : new Date(timestamp);
@@ -107,158 +79,149 @@ const AssessmentCard = ({ assessment, isExpanded, onToggle, onDelete, isBookmark
   };
 
   const topCareer = assessment.aiCareerAnalysis?.[0];
-  const skillCount = assessment.rawSkills?.split(',').length || 0;
   const canBookmark = isBookmarked || bookmarkCount < bookmarkLimit;
 
   return (
-    <div className={`assessment-card ${isExpanded ? 'expanded' : ''} ${isBookmarked ? 'bookmarked' : ''}`}>
-      <div className="assessment-header" onClick={onToggle}>
-        <div className="assessment-meta">
-          <span className="assessment-date"><Calendar size={14} /> {formatDate(assessment.createdAt)}</span>
-          <span className="assessment-persona">{assessment.persona}</span>
-        </div>
-        <div className="assessment-preview">
-          <h4 className="assessment-title-text">
-            {isBookmarked && <Bookmark size={14} className="bookmark-indicator" />}
-            {topCareer?.title || 'Career Assessment'}
-          </h4>
-          <p className="assessment-summary-preview">{skillCount} skills • {assessment.aiCareerAnalysis?.length || 0} career matches</p>
-        </div>
-        <div className="assessment-header-actions">
+    <div className={`assessment-preview-card ${isBookmarked ? 'bookmarked' : ''}`}>
+      <div className="preview-card-header">
+        <span className="preview-date"><Calendar size={12} /> {formatDate(assessment.createdAt)}</span>
+        <div className="preview-actions">
           <button
-            className={`bookmark-btn ${isBookmarked ? 'active' : ''}`}
+            className={`preview-action-btn ${isBookmarked ? 'active' : ''}`}
             onClick={(e) => { e.stopPropagation(); onToggleBookmark(); }}
-            title={isBookmarked ? 'Remove bookmark' : (canBookmark ? 'Bookmark this assessment' : `Bookmark limit reached (${bookmarkLimit})`)}
             disabled={!canBookmark && !isBookmarked}
+            title={isBookmarked ? 'Remove bookmark' : 'Bookmark'}
           >
-            <Bookmark size={16} />
+            <Bookmark size={14} />
           </button>
-          <button className="delete-assessment-btn" onClick={(e) => { e.stopPropagation(); onDelete(); }} title="Delete assessment">
-            <Trash2 size={16} />
-          </button>
-          <button className="expand-toggle">
-            {isExpanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+          <button
+            className="preview-action-btn danger"
+            onClick={(e) => { e.stopPropagation(); onDelete(); }}
+            title="Delete"
+          >
+            <Trash2 size={14} />
           </button>
         </div>
       </div>
+      <h3 className="preview-card-title">{topCareer?.title || 'Career Assessment'}</h3>
+      <p className="preview-card-salary">{topCareer?.salaryRange || '—'}</p>
+      <p className="preview-card-summary">{assessment.aiSummary?.slice(0, 100)}...</p>
+      <button className="preview-view-btn" onClick={onOpen}>
+        View Details <ArrowRight size={14} />
+      </button>
+    </div>
+  );
+};
 
-      {isExpanded && (
-        <div className="assessment-body">
-          <div className="assessment-section">
-            <h5><Zap size={16} /> Summary</h5>
-            <p className="summary-text">{assessment.aiSummary || 'No summary available'}</p>
-          </div>
+const AssessmentModal = ({ assessment, onClose }) => {
+  if (!assessment) return null;
 
-          <div className="assessment-section">
-            <h5><Target size={16} /> Your Analyzed Skills</h5>
-            <p className="skills-raw">{assessment.rawSkills || 'No skills recorded'}</p>
-          </div>
+  const formatDate = (timestamp) => {
+    if (!timestamp) return "Unknown";
+    const date = timestamp.seconds ? new Date(timestamp.seconds * 1000) : new Date(timestamp);
+    return date.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+  };
 
-          <div className="assessment-grid">
-            <div className="assessment-section">
-              <h5><TrendingUp size={16} /> Strengths</h5>
-              <div className="insight-list">
-                {assessment.aiStrengths?.map((s, i) => (
-                  <div key={i} className="insight-item strength">
-                    <strong>{s.skill}</strong>
-                    <span>{s.context}</span>
-                  </div>
-                )) || <span className="no-data">None recorded</span>}
-              </div>
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        <button className="modal-close" onClick={onClose}><X size={24} /></button>
+
+        <div className="modal-header">
+          <span className="modal-date">{formatDate(assessment.createdAt)} • {assessment.persona}</span>
+          <h2 className="modal-title">{assessment.aiCareerAnalysis?.[0]?.title || 'Career Assessment'}</h2>
+        </div>
+
+        <div className="modal-section">
+          <h4><Zap size={16} /> Summary</h4>
+          <p>{assessment.aiSummary || 'No summary available'}</p>
+        </div>
+
+        <div className="modal-section">
+          <h4><Target size={16} /> Skills Analyzed</h4>
+          <div className="modal-skills">{assessment.rawSkills || 'No skills recorded'}</div>
+        </div>
+
+        <div className="modal-grid">
+          <div className="modal-section">
+            <h4><TrendingUp size={16} /> Strengths</h4>
+            <div className="modal-items">
+              {assessment.aiStrengths?.map((s, i) => (
+                <div key={i} className="modal-item strength">
+                  <strong>{s.skill}</strong>
+                  <span>{s.context}</span>
+                </div>
+              )) || <span className="no-data">None recorded</span>}
             </div>
-            <div className="assessment-section">
-              <h5><Sparkles size={16} /> Growth Areas</h5>
-              <div className="insight-list">
-                {assessment.aiGrowthAreas?.map((g, i) => (
-                  <div key={i} className="insight-item growth">
-                    <strong>{g.skill}</strong>
-                    <span>{g.context}</span>
-                  </div>
-                )) || <span className="no-data">None recorded</span>}
-              </div>
+          </div>
+          <div className="modal-section">
+            <h4><Sparkles size={16} /> Growth Areas</h4>
+            <div className="modal-items">
+              {assessment.aiGrowthAreas?.map((g, i) => (
+                <div key={i} className="modal-item growth">
+                  <strong>{g.skill}</strong>
+                  <span>{g.context}</span>
+                </div>
+              )) || <span className="no-data">None recorded</span>}
             </div>
           </div>
+        </div>
 
-          {assessment.aiCareerAnalysis?.length > 0 && (
-            <div className="assessment-section">
-              <h5><Briefcase size={16} /> All Career Matches</h5>
-              <div className="career-matches-full">
-                {assessment.aiCareerAnalysis.map((career, i) => (
-                  <div key={i} className="career-full-card">
-                    <div className="career-full-header">
-                      <span className="career-number">#{i + 1}</span>
-                      <div className="career-title-row">
-                        <h4>{career.title}</h4>
-                        <span className="career-salary">{career.salaryRange}</span>
+        {assessment.aiCareerAnalysis?.length > 0 && (
+          <div className="modal-section">
+            <h4><Briefcase size={16} /> Career Matches</h4>
+            <div className="modal-careers">
+              {assessment.aiCareerAnalysis.map((career, i) => (
+                <div key={i} className="modal-career">
+                  <div className="career-header-row">
+                    <span className="career-rank">#{i + 1}</span>
+                    <h5>{career.title}</h5>
+                    <span className="career-pay">{career.salaryRange}</span>
+                  </div>
+                  <p className="career-desc">{career.reasoning}</p>
+
+                  {career.skillsToBuild?.length > 0 && (
+                    <div className="career-subsection">
+                      <span className="subsection-label">Skills to Build:</span>
+                      <div className="tag-list">
+                        {career.skillsToBuild.map((s, j) => (
+                          <span key={j} className="tag skill">{s.skill}</span>
+                        ))}
                       </div>
                     </div>
-                    <p className="career-reasoning">{career.reasoning}</p>
+                  )}
 
-                    {career.keyAlignments?.length > 0 && (
-                      <div className="career-detail-section">
-                        <span className="detail-label">Key Alignments:</span>
-                        <div className="detail-tags">
-                          {career.keyAlignments.map((a, j) => (
-                            <span key={j} className="detail-tag">{a.userTrait} → {a.jobRequirement}</span>
-                          ))}
-                        </div>
+                  {career.suggestedCertifications?.length > 0 && (
+                    <div className="career-subsection">
+                      <span className="subsection-label"><Award size={12} /> Certifications:</span>
+                      <div className="tag-list">
+                        {career.suggestedCertifications.map((c, j) => (
+                          <span key={j} className="tag cert">{c.name}</span>
+                        ))}
                       </div>
-                    )}
+                    </div>
+                  )}
 
-                    {career.skillsToBuild?.length > 0 && (
-                      <div className="career-detail-section">
-                        <span className="detail-label">Skills to Build:</span>
-                        <div className="detail-tags">
-                          {career.skillsToBuild.map((s, j) => (
-                            <span key={j} className="detail-tag skill-tag">{s.skill}</span>
-                          ))}
-                        </div>
+                  {career.suggestedProjects?.length > 0 && (
+                    <div className="career-subsection">
+                      <span className="subsection-label"><FolderKanban size={12} /> Projects:</span>
+                      <div className="projects-modal">
+                        {career.suggestedProjects.map((p, j) => (
+                          <div key={j} className={`project-modal ${p.difficulty?.toLowerCase()}`}>
+                            <strong>{p.title}</strong>
+                            <span className="difficulty">{p.difficulty}</span>
+                            <p>{p.objective}</p>
+                          </div>
+                        ))}
                       </div>
-                    )}
-
-                    {career.suggestedCertifications?.length > 0 && (
-                      <div className="career-detail-section">
-                        <span className="detail-label"><Award size={12} /> Certifications:</span>
-                        <div className="detail-tags">
-                          {career.suggestedCertifications.map((c, j) => (
-                            <span key={j} className="detail-tag cert-tag">{c.name} ({c.issuer})</span>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {career.suggestedCourses?.length > 0 && (
-                      <div className="career-detail-section">
-                        <span className="detail-label"><BookOpen size={12} /> Courses:</span>
-                        <div className="detail-tags">
-                          {career.suggestedCourses.map((c, j) => (
-                            <span key={j} className="detail-tag course-tag">{c.courseName} - {c.platform}</span>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {career.suggestedProjects?.length > 0 && (
-                      <div className="career-detail-section">
-                        <span className="detail-label"><FolderKanban size={12} /> Projects:</span>
-                        <div className="projects-list">
-                          {career.suggestedProjects.map((p, j) => (
-                            <div key={j} className={`project-item ${p.difficulty?.toLowerCase()}`}>
-                              <strong>{p.title}</strong>
-                              <span className="project-difficulty">{p.difficulty}</span>
-                              <p>{p.objective}</p>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
+                    </div>
+                  )}
+                </div>
+              ))}
             </div>
-          )}
-        </div>
-      )}
+          </div>
+        )}
+      </div>
     </div>
   );
 };
@@ -268,7 +231,7 @@ const Profile = () => {
   const navigate = useNavigate();
   const [profileData, setProfileData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [expandedAssessment, setExpandedAssessment] = useState(null);
+  const [selectedAssessment, setSelectedAssessment] = useState(null);
   const [showAllAssessments, setShowAllAssessments] = useState(false);
 
   useEffect(() => {
@@ -307,7 +270,7 @@ const Profile = () => {
   };
 
   const handleDeleteAssessment = async (assessmentToDelete) => {
-    if (!window.confirm("Delete this assessment? This cannot be undone.")) return;
+    if (!window.confirm("Delete this assessment?")) return;
     const profileRef = doc(db, 'profiles', user.uid);
     try {
       await updateDoc(profileRef, { assessments: arrayRemove(assessmentToDelete) });
@@ -320,7 +283,6 @@ const Profile = () => {
         assessments: prev.assessments.filter(a => a.assessmentId !== assessmentToDelete.assessmentId),
         bookmarks: (prev.bookmarks || []).filter(b => b.assessmentId !== assessmentToDelete.assessmentId)
       }));
-      setExpandedAssessment(null);
     } catch (error) {
       console.error("Error deleting assessment:", error);
     }
@@ -356,10 +318,12 @@ const Profile = () => {
 
   if (loading) {
     return (
-      <div className="profile-container">
-        <div className="loading-state">
-          <div className="loading-spinner"></div>
-          <p>Loading your dashboard...</p>
+      <div className="profile-page">
+        <div className="profile-container">
+          <div className="loading-state">
+            <div className="loading-spinner"></div>
+            <p>Loading your dashboard...</p>
+          </div>
         </div>
       </div>
     );
@@ -392,7 +356,7 @@ const Profile = () => {
     return (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0);
   });
 
-  const displayedAssessments = showAllAssessments ? sortedAssessments : sortedAssessments.slice(0, 3);
+  const displayedAssessments = showAllAssessments ? sortedAssessments : sortedAssessments.slice(0, 6);
 
   const getGreeting = () => {
     const hour = new Date().getHours();
@@ -402,140 +366,166 @@ const Profile = () => {
   };
 
   return (
-    <div className="profile-container">
-      <div className="dashboard-hero">
-        <div className="hero-left">
-          <span className="greeting">{getGreeting()}</span>
-          <h1 className="hero-title">
-            {user.isAnonymous ? 'Welcome, Guest' : user.displayName || user.email?.split('@')[0] || 'Welcome back'}
-          </h1>
+    <div className="profile-page">
+      <div className="profile-container">
+        <div className="dashboard-hero">
+          <div className="hero-left">
+            <span className="greeting">{getGreeting()}</span>
+            <h1 className="hero-title">
+              {user.isAnonymous ? 'Welcome, Guest' : user.displayName || user.email?.split('@')[0] || 'Welcome back'}
+            </h1>
 
-          <div className="quick-actions">
-            <QuickActionCard
-              icon={BrainCircuit}
-              title="New Assessment"
-              subtitle={`${3 - assessmentsToday} left today`}
-              onClick={() => navigate('/AssessmentPg')}
-              accent
-            />
-            <QuickActionCard
-              icon={FileText}
-              title="Create Resume"
-              subtitle={`${totalResumes} created`}
-              onClick={() => navigate('/resume-builder', { state: { isNew: true } })}
-            />
+            <div className="quick-actions">
+              <QuickActionCard
+                icon={BrainCircuit}
+                title="New Assessment"
+                subtitle={`${3 - assessmentsToday} left today`}
+                onClick={() => navigate('/AssessmentPg')}
+                accent
+              />
+              <QuickActionCard
+                icon={FileText}
+                title="Create Resume"
+                subtitle={`${totalResumes} created`}
+                onClick={() => navigate('/resume-builder', { state: { isNew: true } })}
+              />
+            </div>
+
+            <div className="usage-section">
+              <UsageMeter label="Assessments today" current={assessmentsToday} limit={3} />
+              <UsageMeter label="Stored assessments" current={totalAssessments} limit={isPro ? '∞' : FREE_LIMITS.assessments} />
+              <UsageMeter label="Bookmarks" current={bookmarkCount} limit={isPro ? '∞' : FREE_LIMITS.bookmarks} />
+            </div>
           </div>
 
-          <div className="usage-section">
-            <UsageMeter label="Assessments today" current={assessmentsToday} limit={3} />
-            <UsageMeter label="Stored assessments" current={totalAssessments} limit={isPro ? '∞' : FREE_LIMITS.assessments} />
-            <UsageMeter label="Bookmarks" current={bookmarkCount} limit={isPro ? '∞' : FREE_LIMITS.bookmarks} />
+          <div className="hero-right">
+            {topCareer ? (
+              <div className="top-career-card">
+                <div className="career-card-header">
+                  <Briefcase size={20} />
+                  <span>Your Top Career Match</span>
+                </div>
+                <h3 className="career-card-title">{topCareer.title}</h3>
+                <p className="career-card-salary">{topCareer.salaryRange}</p>
+                <p className="career-card-reasoning">{topCareer.reasoning?.slice(0, 150)}...</p>
+                {topCareer.skillsToBuild?.length > 0 && (
+                  <div className="career-card-skills">
+                    <span className="skills-label">Skills to build:</span>
+                    <div className="skills-tags">
+                      {topCareer.skillsToBuild.slice(0, 3).map((s, i) => (
+                        <span key={i} className="skill-tag-mini">{s.skill}</span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                <button className="career-view-btn" onClick={() => setSelectedAssessment(latestAssessment)}>
+                  View Full Analysis <ArrowRight size={14} />
+                </button>
+              </div>
+            ) : (
+              <div className="no-career-card">
+                <BrainCircuit size={32} />
+                <h3>No assessments yet</h3>
+                <p>Take your first career assessment to discover your ideal path</p>
+                <button className="start-btn" onClick={() => navigate('/AssessmentPg')}>
+                  Start Assessment
+                </button>
+              </div>
+            )}
           </div>
         </div>
 
-        <div className="hero-right">
-          {topCareer ? (
-            <TopCareerCard
-              career={topCareer}
-              onViewMore={() => setExpandedAssessment(0)}
-            />
+        <section className="dashboard-section">
+          <div className="section-header">
+            <h2 className="section-title">Your Resumes</h2>
+            <button
+              onClick={() => navigate('/resume-builder', { state: { isNew: true } })}
+              className="primary-btn"
+              disabled={resumesToday >= 3}
+            >
+              <Plus size={16} /> New Resume
+            </button>
+          </div>
+
+          {profileData?.resumes?.length > 0 ? (
+            <div className="resumes-grid">
+              {profileData.resumes.map(resume => (
+                <ResumeCard
+                  key={resume.id}
+                  resume={resume}
+                  onDelete={handleDeleteResume}
+                  onEdit={(id) => navigate('/resume-builder', { state: { resumeId: id } })}
+                  onView={(id) => navigate('/resume-builder', { state: { resumeId: id, isPreview: true } })}
+                />
+              ))}
+            </div>
           ) : (
-            <div className="no-career-card">
-              <BrainCircuit size={32} />
-              <h3>No assessments yet</h3>
-              <p>Take your first career assessment to discover your ideal path</p>
-              <button className="start-btn" onClick={() => navigate('/AssessmentPg')}>
+            <div className="empty-state">
+              <FileX size={40} />
+              <p>No resumes yet. Create your first one!</p>
+              <button onClick={() => navigate('/resume-builder', { state: { isNew: true } })} className="primary-btn">
+                Create Resume
+              </button>
+            </div>
+          )}
+        </section>
+
+        <section className="dashboard-section">
+          <div className="section-header">
+            <h2 className="section-title">
+              Your Assessments
+              {totalAssessments > 6 && !showAllAssessments && (
+                <span className="assessment-count">showing 6 of {totalAssessments}</span>
+              )}
+            </h2>
+            <button onClick={() => navigate('/AssessmentPg')} className="secondary-btn">
+              <Plus size={16} /> New Assessment
+            </button>
+          </div>
+
+          {!isPro && <StorageBanner count={totalAssessments} limit={FREE_LIMITS.assessments} type="Assessment" />}
+
+          {profileData?.assessments?.length > 0 ? (
+            <>
+              <div className="assessments-grid">
+                {displayedAssessments.map((assessment, index) => (
+                  <AssessmentPreviewCard
+                    key={assessment.assessmentId || index}
+                    assessment={assessment}
+                    isBookmarked={isBookmarked(assessment.assessmentId)}
+                    onToggleBookmark={() => handleToggleBookmark(assessment)}
+                    onOpen={() => setSelectedAssessment(assessment)}
+                    onDelete={() => handleDeleteAssessment(assessment)}
+                    bookmarkCount={bookmarkCount}
+                    bookmarkLimit={isPro ? Infinity : FREE_LIMITS.bookmarks}
+                  />
+                ))}
+              </div>
+              {totalAssessments > 6 && (
+                <button className="view-all-btn" onClick={() => setShowAllAssessments(!showAllAssessments)}>
+                  {showAllAssessments ? 'Show Less' : `View All ${totalAssessments} Assessments`}
+                  <ArrowRight size={16} />
+                </button>
+              )}
+            </>
+          ) : (
+            <div className="empty-state">
+              <BrainCircuit size={40} />
+              <p>No assessments yet. Discover your ideal career path!</p>
+              <button onClick={() => navigate('/AssessmentPg')} className="primary-btn">
                 Start Assessment
               </button>
             </div>
           )}
-        </div>
+        </section>
       </div>
 
-      <section className="dashboard-section">
-        <div className="section-header">
-          <h2 className="section-title">Your Resumes</h2>
-          <button
-            onClick={() => navigate('/resume-builder', { state: { isNew: true } })}
-            className="primary-btn"
-            disabled={resumesToday >= 3}
-          >
-            <Plus size={16} /> New Resume
-          </button>
-        </div>
-
-        {profileData?.resumes?.length > 0 ? (
-          <div className="resumes-grid">
-            {profileData.resumes.map(resume => (
-              <ResumeCard
-                key={resume.id}
-                resume={resume}
-                onDelete={handleDeleteResume}
-                onEdit={(id) => navigate('/resume-builder', { state: { resumeId: id } })}
-                onView={(id) => navigate('/resume-builder', { state: { resumeId: id, isPreview: true } })}
-              />
-            ))}
-          </div>
-        ) : (
-          <div className="empty-state">
-            <FileX size={40} />
-            <p>No resumes yet. Create your first one!</p>
-            <button onClick={() => navigate('/resume-builder', { state: { isNew: true } })} className="primary-btn">
-              Create Resume
-            </button>
-          </div>
-        )}
-      </section>
-
-      <section className="dashboard-section">
-        <div className="section-header">
-          <h2 className="section-title">
-            Your Assessments
-            {totalAssessments > 3 && !showAllAssessments && (
-              <span className="assessment-count">showing 3 of {totalAssessments}</span>
-            )}
-          </h2>
-          <button onClick={() => navigate('/AssessmentPg')} className="secondary-btn">
-            <Plus size={16} /> New Assessment
-          </button>
-        </div>
-
-        {!isPro && <StorageBanner count={totalAssessments} limit={FREE_LIMITS.assessments} type="Assessment" />}
-
-        {profileData?.assessments?.length > 0 ? (
-          <>
-            <div className="assessments-list">
-              {displayedAssessments.map((assessment, index) => (
-                <AssessmentCard
-                  key={assessment.assessmentId || index}
-                  assessment={assessment}
-                  isExpanded={expandedAssessment === index}
-                  onToggle={() => setExpandedAssessment(expandedAssessment === index ? null : index)}
-                  onDelete={() => handleDeleteAssessment(assessment)}
-                  isBookmarked={isBookmarked(assessment.assessmentId)}
-                  onToggleBookmark={() => handleToggleBookmark(assessment)}
-                  bookmarkCount={bookmarkCount}
-                  bookmarkLimit={isPro ? Infinity : FREE_LIMITS.bookmarks}
-                />
-              ))}
-            </div>
-            {totalAssessments > 3 && (
-              <button className="view-all-btn" onClick={() => setShowAllAssessments(!showAllAssessments)}>
-                {showAllAssessments ? 'Show Less' : `View All ${totalAssessments} Assessments`}
-                <ArrowRight size={16} />
-              </button>
-            )}
-          </>
-        ) : (
-          <div className="empty-state">
-            <BrainCircuit size={40} />
-            <p>No assessments yet. Discover your ideal career path!</p>
-            <button onClick={() => navigate('/AssessmentPg')} className="primary-btn">
-              Start Assessment
-            </button>
-          </div>
-        )}
-      </section>
+      {selectedAssessment && (
+        <AssessmentModal
+          assessment={selectedAssessment}
+          onClose={() => setSelectedAssessment(null)}
+        />
+      )}
     </div>
   );
 };
