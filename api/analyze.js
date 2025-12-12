@@ -151,6 +151,11 @@ export default async function handler(req, res) {
     if (!matchedSkills || !Array.isArray(matchedSkills) || matchedSkills.length > 50) {
       return res.status(400).json({ error: 'Invalid skills data' });
     }
+    // Validate each skill is a string and reasonable length
+    if (!matchedSkills.every(s => typeof s === 'string' && s.length < 100)) {
+      return res.status(400).json({ error: 'Invalid skill format' });
+    }
+
     if (!interests || typeof interests !== 'string' || interests.length > 500) {
       return res.status(400).json({ error: 'Interests too long (max 500 chars)' });
     }
@@ -160,6 +165,7 @@ export default async function handler(req, res) {
 
     const safeInterests = sanitizeInput(interests, 500);
     const safeExperience = sanitizeInput(experience || '', 100);
+    const safeSkills = matchedSkills.map(s => sanitizeInput(s, 50)); // Double sanitize
     const validPersonas = ['highSchool', 'college', 'jobSeeker'];
     const safePersona = validPersonas.includes(persona) ? persona : 'college';
 
@@ -167,7 +173,7 @@ export default async function handler(req, res) {
 
     const validIcons = "Code, Database, Server, Cloud, Briefcase, BookOpen, GraduationCap, Award, Trophy, Target, Zap, TrendingUp, Rocket, Cpu, Globe, Lock, Key, Users, Palette, PenTool, Figma, Layout, Package, Settings, Shield, Terminal, FileCode, GitBranch, Layers, Box, Cog, CheckCircle, Star, Heart, ThumbsUp, Activity, BarChart, PieChart, LineChart, Workflow, Network, Link, Upload, Download, Edit, Eye, Search, MessageCircle, Calendar, Clock, Map, Navigation, Compass, Building, Store, Film, Music, Camera, Video, Laptop, HardDrive, Wifi, Lightbulb, Sparkles";
 
-    const prompt = `Act as a ${safePersona} career coach. Skills: ${JSON.stringify(matchedSkills)}. Interests: ${safeInterests}. Experience: ${safeExperience}. 
+    const prompt = `Act as a ${safePersona} career coach. Skills: ${JSON.stringify(safeSkills)}. Interests: ${safeInterests}. Experience: ${safeExperience}. 
     
 IMPORTANT: For ALL icon fields, you MUST use ONLY these exact lucide-react icon names: ${validIcons}
 

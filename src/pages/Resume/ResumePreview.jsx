@@ -35,12 +35,19 @@ const ResumePreview = ({ data }) => {
                             ))}
                         </section>
                     )}
-                     <section className="resume-section">
+                    <section className="resume-section">
                         <h2 className="resume-section-title"><Wrench size={18} /> Projects</h2>
                         {data.projects.map((proj, i) => (
                             <div key={i} className="project">
                                 <p className="project-title">{proj.title}</p>
-                                <a href={proj.link} target="_blank" rel="noopener noreferrer" className="project-link">{proj.link}</a>
+                                <a
+                                    href={proj.link && !proj.link.trim().toLowerCase().startsWith('javascript:') ? proj.link : '#'}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="project-link"
+                                >
+                                    {proj.link}
+                                </a>
                                 <ul className="project-description">{descriptionToList(proj.description).map((item, j) => <li key={j}>{item}</li>)}</ul>
                             </div>
                         ))}
@@ -66,7 +73,7 @@ const ResumePreview = ({ data }) => {
                     </section>
                     <section className="resume-section">
                         <h2 className="resume-section-title"><Star size={18} /> Skills</h2>
-                         <div className="skill-chips">{data.skills.split(',').map((skill, i) => <span key={i} className="skill-chip">{skill.trim()}</span>)}</div>
+                        <div className="skill-chips">{data.skills.split(',').map((skill, i) => <span key={i} className="skill-chip">{skill.trim()}</span>)}</div>
                     </section>
                 </aside>
             </div>
