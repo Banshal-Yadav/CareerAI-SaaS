@@ -63,8 +63,8 @@ const ChipTabContainer = () => {
                 {chipRows.map((row, rowIndex) => (
                     <div key={rowIndex} className={`marquee-track ${rowIndex % 2 === 1 ? 'reverse' : ''}`}>
                         <div className="marquee-content">
-                            {/* Duplicate chips for seamless loop */}
-                            {[...row, ...row].map((chipText, chipIndex) => (
+                            {/* Triple chips for seamless loop */}
+                            {[...row, ...row, ...row].map((chipText, chipIndex) => (
                                 <button
                                     key={chipIndex}
                                     className="marquee-chip"

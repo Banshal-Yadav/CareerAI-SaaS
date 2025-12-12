@@ -1,5 +1,7 @@
 .cardtab-container {
     width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
     overflow: hidden;
 }
 
@@ -18,26 +20,26 @@
     padding: 1rem 0;
 }
 
-/* Gradient fades on edges */
+/* Gradient fades on edges - using solid black */
 .marquee-wrapper::before,
 .marquee-wrapper::after {
     content: '';
     position: absolute;
     top: 0;
     bottom: 0;
-    width: 100px;
+    width: 80px;
     z-index: 10;
     pointer-events: none;
 }
 
 .marquee-wrapper::before {
     left: 0;
-    background: linear-gradient(to right, var(--primary-bg, #0a0a0a) 0%, transparent 100%);
+    background: linear-gradient(to right, #000 0%, transparent 100%);
 }
 
 .marquee-wrapper::after {
     right: 0;
-    background: linear-gradient(to left, var(--primary-bg, #0a0a0a) 0%, transparent 100%);
+    background: linear-gradient(to left, #000 0%, transparent 100%);
 }
 
 /* Individual marquee track */
@@ -69,7 +71,7 @@
         transform: translateX(0);
     }
     100% {
-        transform: translateX(-50%);
+        transform: translateX(-33.33%);
     }
 }
 
@@ -84,7 +86,7 @@
     font-size: 0.9rem;
     font-family: inherit;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
     white-space: nowrap;
 }
 
@@ -92,7 +94,6 @@
     border-color: var(--accent-primary, #fbbf24);
     color: var(--accent-primary, #fbbf24);
     background: rgba(251, 191, 36, 0.1);
-    transform: scale(1.05);
 }
 
 @media (max-width: 768px) {
@@ -103,7 +104,7 @@
     
     .marquee-wrapper::before,
     .marquee-wrapper::after {
-        width: 50px;
+        width: 40px;
     }
     
     .marquee-chip {
