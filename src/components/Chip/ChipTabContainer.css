@@ -1,12 +1,113 @@
+.cardtab-container {
+    width: 100%;
+    overflow: hidden;
+}
+
 .cardtab-container-title {
-    margin: 4rem 0 0.2rem 0;
+    margin: 4rem 0 1.5rem 0;
     font-size: 1.5rem;
     color: var(--text-secondary);
+    text-align: center;
+}
+
+/* Marquee Wrapper with edge fades */
+.marquee-wrapper {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    padding: 1rem 0;
+}
+
+/* Gradient fades on edges */
+.marquee-wrapper::before,
+.marquee-wrapper::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100px;
+    z-index: 10;
+    pointer-events: none;
+}
+
+.marquee-wrapper::before {
+    left: 0;
+    background: linear-gradient(to right, var(--primary-bg, #0a0a0a) 0%, transparent 100%);
+}
+
+.marquee-wrapper::after {
+    right: 0;
+    background: linear-gradient(to left, var(--primary-bg, #0a0a0a) 0%, transparent 100%);
+}
+
+/* Individual marquee track */
+.marquee-track {
+    display: flex;
+    width: 100%;
+    overflow: hidden;
+    margin: 0.5rem 0;
+}
+
+.marquee-content {
+    display: flex;
+    gap: 12px;
+    animation: marquee-scroll 35s linear infinite;
+    will-change: transform;
+}
+
+.marquee-track.reverse .marquee-content {
+    animation-direction: reverse;
+}
+
+/* Pause on hover for readability */
+.marquee-track:hover .marquee-content {
+    animation-play-state: paused;
+}
+
+@keyframes marquee-scroll {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+/* Chip style */
+.marquee-chip {
+    flex-shrink: 0;
+    padding: 0.6rem 1.2rem;
+    border-radius: 20px;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--text-secondary, #a0a0a0);
+    font-size: 0.9rem;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.marquee-chip:hover {
+    border-color: var(--accent-primary, #fbbf24);
+    color: var(--accent-primary, #fbbf24);
+    background: rgba(251, 191, 36, 0.1);
+    transform: scale(1.05);
 }
 
 @media (max-width: 768px) {
     .cardtab-container-title {
         font-size: 1.1rem;
-        margin: 3rem 1rem 0.2rem 1rem;
+        margin: 3rem 1rem 1rem 1rem;
+    }
+    
+    .marquee-wrapper::before,
+    .marquee-wrapper::after {
+        width: 50px;
+    }
+    
+    .marquee-chip {
+        padding: 0.5rem 1rem;
+        font-size: 0.8rem;
     }
 }
