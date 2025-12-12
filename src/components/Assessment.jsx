@@ -337,7 +337,7 @@ const Assessment = () => {
 
       const analysisResult = await getAiSkillAnalysis({
         persona,
-        matchedSkills,
+        matchedSkills: matchedSkills.map(s => s.name),
         relevantCareers,
         interests,
         experience: persona === 'jobSeeker' ? experience : null,
