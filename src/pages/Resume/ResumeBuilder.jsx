@@ -57,17 +57,29 @@ const ResumeBuilder = () => {
     script2.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
 
     let loadedCount = 0;
-    const checkAllLoaded = () => { if (++loadedCount === 2) setScriptsLoaded(true); };
+    let hasError = false;
+
+    const checkAllLoaded = () => {
+      if (++loadedCount === 2 && !hasError) setScriptsLoaded(true);
+    };
+
+    const handleScriptError = (scriptName) => () => {
+      hasError = true;
+      console.error(`Failed to load ${scriptName}`);
+      setFeedbackMessage('PDF feature unavailable. Please refresh the page.');
+    };
 
     script1.onload = checkAllLoaded;
     script2.onload = checkAllLoaded;
+    script1.onerror = handleScriptError('html2canvas');
+    script2.onerror = handleScriptError('jspdf');
 
     document.head.appendChild(script1);
     document.head.appendChild(script2);
 
     return () => {
-      document.head.removeChild(script1);
-      document.head.removeChild(script2);
+      if (document.head.contains(script1)) document.head.removeChild(script1);
+      if (document.head.contains(script2)) document.head.removeChild(script2);
     };
   }, []);
 
@@ -115,11 +127,27 @@ const ResumeBuilder = () => {
     });
   };
 
-  const handleShare = () => {
-    const textArea = document.createElement("textarea");
-    textArea.value = window.location.href;
-    textArea.style.position = "fixed";
-    textArea.style.left = "-9999px";
+  const handleShare = async () => {
+    const url = window.location.href;
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      try {
+        await navigator.clipboard.writeText(url);
+        setFeedbackMessage('resume link copied to clipboard');
+      } catch (err) {
+        fallbackCopyToClipboard(url);
+      }
+    } else {
+      fallbackCopyToClipboard(url);
+    }
+    setTimeout(() => setFeedbackMessage(''), 3000);
+  };
+
+  const fallbackCopyToClipboard = (text) => {
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    textArea.style.position = 'fixed';
+    textArea.style.left = '-9999px';
     document.body.appendChild(textArea);
     textArea.select();
     try {
@@ -129,7 +157,6 @@ const ResumeBuilder = () => {
       setFeedbackMessage('failed to copy link');
     }
     document.body.removeChild(textArea);
-    setTimeout(() => setFeedbackMessage(''), 3000);
   };
 
   const handleChange = (e, section, index) => {

@@ -5,6 +5,20 @@ export const config = {
   maxDuration: 60,
 };
 
+const ALLOWED_ORIGINS = [
+  'https://career-ai-saas.vercel.app',
+  'http://localhost:5173',
+  'http://localhost:3000',
+];
+
+const sanitizeInput = (input, maxLength = 500) => {
+  if (typeof input !== 'string') return '';
+  return input
+    .slice(0, maxLength)
+    .replace(/[<>{}]/g, '')
+    .trim();
+};
+
 if (!admin.apps.length) {
   try {
     admin.initializeApp({
@@ -20,8 +34,11 @@ if (!admin.apps.length) {
 }
 
 export default async function handler(req, res) {
+  const origin = req.headers.origin;
+  const isAllowedOrigin = ALLOWED_ORIGINS.includes(origin);
+
   res.setHeader('Access-Control-Allow-Credentials', true);
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Origin', isAllowedOrigin ? origin : ALLOWED_ORIGINS[0]);
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
   res.setHeader(
     'Access-Control-Allow-Headers',
@@ -63,12 +80,12 @@ export default async function handler(req, res) {
       const profileRef = db.collection('profiles').doc(uid);
       const docSnap = await profileRef.get();
 
+      const now = new Date();
+      const twentyFourHoursAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+
       if (docSnap.exists) {
         const data = docSnap.data();
         if (data.assessments && Array.isArray(data.assessments)) {
-          const now = new Date();
-          const twentyFourHoursAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
-
           const recentAssessments = data.assessments.filter(a => {
             const createdAt = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(a.createdAt);
             return createdAt > twentyFourHoursAgo;
@@ -104,11 +121,16 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Invalid experience data' });
     }
 
+    const safeInterests = sanitizeInput(interests, 500);
+    const safeExperience = sanitizeInput(experience || '', 100);
+    const validPersonas = ['highSchool', 'college', 'jobSeeker'];
+    const safePersona = validPersonas.includes(persona) ? persona : 'college';
+
     const baseStructure = JSON.stringify({ summary: "Brief summary.", strengths: [{ skill: "Skill", context: "Context", icon: "IconName" }], growthAreas: [{ skill: "Skill", context: "Context", icon: "IconName" }], careerAnalysis: [{ title: "Job Title", reasoning: "Reasoning", salaryRange: "₹5-7 LPA", jobOutlook: "Outlook", keyAlignments: [{ userTrait: "Trait", jobRequirement: "Req", icon: "Icon" }], skillsToBuild: [{ skill: "Skill", suggestedFirstStep: "Step", icon: "Icon" }], suggestedCertifications: [{ name: "Cert", issuer: "Issuer", icon: "Icon" }], suggestedCourses: [{ platform: "Platform", courseName: "Course", icon: "Icon" }], suggestedProjects: [{ title: "Title", objective: "Obj", skillsUsed: ["A"], difficulty: "Level", featureSuggestions: ["A"] }] }] });
 
     const validIcons = "Code, Database, Server, Cloud, Briefcase, BookOpen, GraduationCap, Award, Trophy, Target, Zap, TrendingUp, Rocket, Cpu, Globe, Lock, Key, Users, Palette, PenTool, Figma, Layout, Package, Settings, Shield, Terminal, FileCode, GitBranch, Layers, Box, Cog, CheckCircle, Star, Heart, ThumbsUp, Activity, BarChart, PieChart, LineChart, Workflow, Network, Link, Upload, Download, Edit, Eye, Search, MessageCircle, Calendar, Clock, Map, Navigation, Compass, Building, Store, Film, Music, Camera, Video, Laptop, HardDrive, Wifi, Lightbulb, Sparkles";
 
-    const prompt = `Act as a ${persona} career coach. Skills: ${JSON.stringify(matchedSkills)}. Interests: ${interests}. Experience: ${experience}. 
+    const prompt = `Act as a ${safePersona} career coach. Skills: ${JSON.stringify(matchedSkills)}. Interests: ${safeInterests}. Experience: ${safeExperience}. 
     
 IMPORTANT: For ALL icon fields, you MUST use ONLY these exact lucide-react icon names: ${validIcons}
 
@@ -129,7 +151,14 @@ Return JSON matching this structure: ${baseStructure}`;
 
     const result = await model.generateContent(prompt);
     const responseText = result.response.text();
-    return res.status(200).json(JSON.parse(responseText));
+
+    try {
+      const parsedResponse = JSON.parse(responseText);
+      return res.status(200).json(parsedResponse);
+    } catch (parseError) {
+      console.error('Failed to parse AI response:', parseError, 'Raw:', responseText.substring(0, 200));
+      return res.status(500).json({ error: 'AI returned invalid response format. Please try again.' });
+    }
 
   } catch (error) {
     console.error("AI Error:", error);
