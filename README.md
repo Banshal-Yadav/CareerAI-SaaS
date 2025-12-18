@@ -86,7 +86,7 @@ A modern, AI-powered application that helps users discover their ideal career pa
     GEMINI_API_KEY=your_gemini_api_key_here
 
     # Optional
-    GEMINI_MODEL=gemini-3-flash-preview
+    GEMINI_MODEL=gemini-2.5-flash
     ALLOWED_ORIGINS=http://localhost:5173,http://localhost:3000
     
     # Backend - Firebase Admin (from Service Account JSON)
