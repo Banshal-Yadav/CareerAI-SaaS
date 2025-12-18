@@ -199,6 +199,15 @@ careerGuide/
 *   **App shows blank page:** Check if `VITE_FIREBASE_PROJECT_ID` and other frontend variables are correct.
 *   **AI not generating:** Ensure `GEMINI_API_KEY` is added to Vercel Environment Variables (Backend).
 
+## Admin Pro Toggle (No Payments)
+
+If you want to demo/enable the **Pro** tier without integrating a payment gateway yet, this project includes an admin-only endpoint:
+
+- Endpoint: `POST /api/admin/set-pro`
+- Enable it by setting `ADMIN_EMAILS` (comma-separated emails) in your environment variables.
+
+The request must include a valid Firebase ID token for a user whose email is listed in `ADMIN_EMAILS`.
+
 ## License
 
 This project is available under **CodeCanyon's Regular or Extended License**.
