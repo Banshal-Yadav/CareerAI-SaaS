@@ -3,15 +3,13 @@
     padding: 0 0.5rem;
     display: flex;
     justify-content: center;
-    gap: 3rem;
+    gap: 2rem;
     max-width: 1200px;
 }
 
 .stats-card {
-    background: transparent !important;
-    border: none !important;
-    border-left: 1px solid #333 !important;
-    padding-left: 1.5rem;
+    background: linear-gradient(145deg, #1a1a1a, #111) !important;
+    border: 1px solid #333 !important;
     width: 100% !important;
     max-width: 300px;
     min-height: auto !important;
@@ -19,9 +17,9 @@
 }
 
 .stats-card:hover {
-    transform: none !important;
-    border-left-color: #d99999 !important;
-    box-shadow: none !important;
+    transform: translateY(-10px);
+    border-color: #555 !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
 }
 
 @media (max-width: 768px) {

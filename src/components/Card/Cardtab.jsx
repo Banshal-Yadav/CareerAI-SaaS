@@ -7,22 +7,26 @@ function Cardtab() {
     return (
         <div className='card_tab'>
             <Card
+              className="feature-card"
               icon={Brain }
               title="AI-Powered Career Guidance"
               info="Get personalized career advice and insights powered by advanced Ai technology."
             />
             <Card
+                className="feature-card"
                 icon={MessageSquare}
                 title="Interview preparation"
                 info="practice with role-specific question and get instant feedback to improve your performance"
                 />
             <Card
+                className="feature-card"
                 icon={BarChart3}
                 title="Industry Insight"
                 info="Stay ahead with real-time industr trends, salary data, and market analysis."
             />
 
                 <Card
+                    className="feature-card"
                     icon={FileText}
                     title="Smart Resume Creation"
                     info="generate ATS-optimized resumes with AI assistance"
