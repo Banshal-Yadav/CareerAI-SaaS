@@ -74,14 +74,14 @@
 .plan-number {
   font-size: 5rem;
   font-weight: 900;
-  color: #333;
+  color: #777;
   line-height: 1;
   margin-bottom: 0.5rem;
   letter-spacing: -3px;
 }
 
 .plan-card.pro .plan-number {
-  color: #444;
+  color: #999;
 }
 
 .plan-name {
@@ -178,30 +178,38 @@
 }
 
 .compare-section {
-  max-width: 700px;
+  max-width: 800px;
   margin: 0 auto;
+  text-align: center;
 }
 
 .compare-title {
   font-size: 2.5rem;
   font-weight: 800;
   color: #fff;
-  margin: 0 0 2rem 0;
+  margin: 0 0 3rem 0;
   letter-spacing: -1px;
 }
 
 .compare-grid {
-  background: #0a0a0a;
+  background: #050505;
   border: 1px solid #1a1a1a;
-  border-radius: 16px;
+  border-radius: 24px;
   overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
 }
 
 .compare-row {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr;
-  padding: 1rem 1.5rem;
-  border-bottom: 1px solid #1a1a1a;
+  padding: 1.25rem 2rem;
+  border-bottom: 1px solid #111;
+  align-items: center;
+  transition: background 0.2s;
+}
+
+.compare-row:not(.header):hover {
+  background: #0a0a0a;
 }
 
 .compare-row:last-child {
@@ -209,34 +217,70 @@
 }
 
 .compare-row.header {
-  background: #111;
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: #555;
+  background: #0a0a0a;
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid #1a1a1a;
+}
+
+.compare-row.header span {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #444;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 2px;
+}
+
+.compare-row.header span:nth-child(2),
+.compare-row.header span:nth-child(3) {
+  text-align: center;
 }
 
 .compare-row span {
-  color: #888;
-  font-size: 0.9rem;
+  color: #777;
+  font-size: 0.95rem;
+  text-align: left;
+}
+
+.compare-row span:nth-child(2),
+.compare-row span:nth-child(3) {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .compare-row span:first-child {
-  color: #ccc;
+  color: #eee;
+  font-weight: 500;
 }
 
 .pro-value {
   color: #fff !important;
-  font-weight: 600;
+  font-weight: 700;
+  position: relative;
+}
+
+/* Subtle highlight for the Pro column */
+.compare-row span:nth-child(3) {
+  background: rgba(255, 255, 255, 0.02);
+  height: 100%;
+  margin: -1.25rem 0;
+  padding: 1.25rem 0;
+}
+
+.compare-row.header span:nth-child(3) {
+  background: transparent;
+  margin: 0;
+  padding: 0;
 }
 
 .compare-row .yes {
   color: #22c55e;
+  filter: drop-shadow(0 0 8px rgba(34, 197, 94, 0.2));
 }
 
 .compare-row .no {
-  color: #444;
+  color: #333;
 }
 
 @media (max-width: 768px) {
@@ -261,6 +305,11 @@
   }
   
   .compare-row {
-    padding: 0.75rem 1rem;
+    padding: 1rem;
+    grid-template-columns: 1.5fr 1fr 1fr;
+  }
+  
+  .compare-row span {
+    font-size: 0.85rem;
   }
 }

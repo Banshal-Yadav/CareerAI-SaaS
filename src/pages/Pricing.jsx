@@ -22,7 +22,7 @@ const Pricing = ({ id }) => {
                     <div className="plan-number">01</div>
                     <h2 className="plan-name">Starter</h2>
                     <div className="plan-price">
-                        <span className="amount">₹0</span>
+                        <span className="amount">$0</span>
                         <span className="period">/month</span>
                     </div>
                     <p className="plan-desc">Perfect for exploring career paths</p>
@@ -42,7 +42,7 @@ const Pricing = ({ id }) => {
                     <div className="plan-number">02</div>
                     <h2 className="plan-name">Pro</h2>
                     <div className="plan-price">
-                        <span className="amount">₹499</span>
+                        <span className="amount">$9</span>
                         <span className="period">/month</span>
                     </div>
                     <p className="plan-desc">For serious career builders</p>
@@ -61,7 +61,7 @@ const Pricing = ({ id }) => {
             </div>
 
             <div className="compare-section">
-                <h3 className="compare-title">Compare</h3>
+                <h3 className="compare-title">Compare Plans</h3>
                 <div className="compare-grid">
                     <div className="compare-row header">
                         <span>Feature</span>
@@ -69,12 +69,12 @@ const Pricing = ({ id }) => {
                         <span>Pro</span>
                     </div>
                     <div className="compare-row">
-                        <span>Assessments/day</span>
+                        <span>Assessments per day</span>
                         <span>3</span>
                         <span className="pro-value">Unlimited</span>
                     </div>
                     <div className="compare-row">
-                        <span>Storage</span>
+                        <span>Total Storage</span>
                         <span>10</span>
                         <span className="pro-value">Unlimited</span>
                     </div>
@@ -84,14 +84,29 @@ const Pricing = ({ id }) => {
                         <span className="pro-value">Unlimited</span>
                     </div>
                     <div className="compare-row">
-                        <span>AI Analysis</span>
+                        <span>Resume Builder</span>
+                        <span>3 Resumes</span>
+                        <span className="pro-value">Unlimited</span>
+                    </div>
+                    <div className="compare-row">
+                        <span>AI Analysis Depth</span>
                         <span>Basic</span>
                         <span className="pro-value">Advanced</span>
                     </div>
                     <div className="compare-row">
+                        <span>PDF Exports</span>
+                        <span><X size={18} className="no" /></span>
+                        <span className="pro-value"><Check size={18} className="yes" /></span>
+                    </div>
+                    <div className="compare-row">
                         <span>Priority Support</span>
-                        <span><X size={16} className="no" /></span>
-                        <span><Check size={16} className="yes" /></span>
+                        <span><X size={18} className="no" /></span>
+                        <span className="pro-value"><Check size={18} className="yes" /></span>
+                    </div>
+                    <div className="compare-row">
+                        <span>Early Access Features</span>
+                        <span><X size={18} className="no" /></span>
+                        <span className="pro-value"><Check size={18} className="yes" /></span>
                     </div>
                 </div>
             </div>
