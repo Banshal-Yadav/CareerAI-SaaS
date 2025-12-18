@@ -42,11 +42,21 @@ if (!admin.apps.length) {
 
 export default async function handler(req, res) {
   const origin = req.headers.origin;
-  const isAllowedOrigin = !origin || ALLOWED_ORIGINS.includes(origin);
+  const host = req.headers.host;
+  const forwardedProto = req.headers['x-forwarded-proto'];
+  const proto = (Array.isArray(forwardedProto) ? forwardedProto[0] : forwardedProto) || 'https';
+  const selfOrigin = host ? `${proto}://${host}` : null;
+  const isAllowedOrigin =
+    !origin ||
+    (selfOrigin != null && origin === selfOrigin) ||
+    ALLOWED_ORIGINS.includes(origin);
 
   res.setHeader('Access-Control-Allow-Credentials', true);
   if (origin && isAllowedOrigin) {
     res.setHeader('Access-Control-Allow-Origin', origin);
+  } else if (!origin && selfOrigin) {
+    // Some environments omit the Origin header; allow same-origin by default.
+    res.setHeader('Access-Control-Allow-Origin', selfOrigin);
   }
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
   res.setHeader(
