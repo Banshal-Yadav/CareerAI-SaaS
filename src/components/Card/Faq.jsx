@@ -18,7 +18,7 @@ const faqData = [
   },
   {
     question: "How does the assessment work?",
-    answer: "The assessment analyzes your self-reported skills, interests, and education level. It uses this information to identify relevant career paths and provides a detailed report on your strengths, growth areas, and a personalized learning path powered by Gemini 2.5 Flash."
+    answer: "The assessment analyzes your self-reported skills, interests, and education level. It uses this information to identify relevant career paths and provides a detailed report on your strengths, growth areas, and a personalized learning path powered by Gemini 3 Flash."
   },
    {
     question:"who is eligible for giveing the assessment?",
