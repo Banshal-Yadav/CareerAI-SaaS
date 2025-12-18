@@ -13,7 +13,7 @@ A modern, AI-powered application that helps users discover their ideal career pa
 
 ## Tech Stack
 
-*   **Frontend:** React 18, Vite
+*   **Frontend:** React 19, Vite
 *   **Styling:** CSS3 with CSS Variables (Theming supported)
 *   **AI Integration:** Google Gemini API (`@google/generative-ai`)
 *   **Backend:** Vercel Serverless Functions (Node.js)
@@ -84,6 +84,10 @@ A modern, AI-powered application that helps users discover their ideal career pa
     
     # Backend - Gemini AI (from Google AI Studio)
     GEMINI_API_KEY=your_gemini_api_key_here
+
+    # Optional
+    GEMINI_MODEL=gemini-3-flash-preview
+    ALLOWED_ORIGINS=http://localhost:5173,http://localhost:3000
     
     # Backend - Firebase Admin (from Service Account JSON)
     FIREBASE_PROJECT_ID=your_project_id
@@ -146,6 +150,8 @@ This project is optimized for **Vercel** deployment with serverless functions.
     
     # Backend
     GEMINI_API_KEY
+    GEMINI_MODEL
+    ALLOWED_ORIGINS
     FIREBASE_PROJECT_ID
     FIREBASE_CLIENT_EMAIL
     FIREBASE_PRIVATE_KEY

@@ -5,10 +5,17 @@ export const config = {
   maxDuration: 60,
 };
 
-const ALLOWED_ORIGINS = [
-  'https://career-ai-saas.vercel.app',
+const DEFAULT_ALLOWED_ORIGINS = [
   'http://localhost:5173',
   'http://localhost:3000',
+];
+
+const ALLOWED_ORIGINS = [
+  ...(process.env.ALLOWED_ORIGINS || '')
+    .split(',')
+    .map((o) => o.trim())
+    .filter(Boolean),
+  ...DEFAULT_ALLOWED_ORIGINS,
 ];
 
 const sanitizeInput = (input, maxLength = 500) => {
@@ -35,10 +42,12 @@ if (!admin.apps.length) {
 
 export default async function handler(req, res) {
   const origin = req.headers.origin;
-  const isAllowedOrigin = ALLOWED_ORIGINS.includes(origin);
+  const isAllowedOrigin = !origin || ALLOWED_ORIGINS.includes(origin);
 
   res.setHeader('Access-Control-Allow-Credentials', true);
-  res.setHeader('Access-Control-Allow-Origin', isAllowedOrigin ? origin : ALLOWED_ORIGINS[0]);
+  if (origin && isAllowedOrigin) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  }
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
   res.setHeader(
     'Access-Control-Allow-Headers',
@@ -46,8 +55,12 @@ export default async function handler(req, res) {
   );
 
   if (req.method === 'OPTIONS') {
-    res.status(200).end();
+    res.status(isAllowedOrigin ? 200 : 403).end();
     return;
+  }
+
+  if (!isAllowedOrigin) {
+    return res.status(403).json({ error: 'Origin not allowed' });
   }
 
   if (req.method !== 'POST') {
@@ -142,7 +155,7 @@ export default async function handler(req, res) {
 
     const genAI = new GoogleGenerativeAI(apiKey);
     const model = genAI.getGenerativeModel({
-      model: "gemini-3-flash-preview",
+      model: process.env.GEMINI_MODEL || "gemini-3-flash-preview",
       generationConfig: { responseMimeType: "application/json" }
     });
 
@@ -177,7 +190,7 @@ export default async function handler(req, res) {
     
 IMPORTANT: For ALL icon fields, you MUST use ONLY these exact lucide-react icon names: ${validIcons}
 
-SALARY FORMAT: All salaryRange fields MUST be in USD format (e.g., $50k-70k, $80k-120k). Never use INR or other currencies.
+SALARY FORMAT: salaryRange MUST be a short human-readable range string (e.g., $50k-70k or ₹8-12 LPA). Use the currency/style that best matches the user's context.
 
 Choose icons that are semantically relevant. Examples:
 - For coding: Code, FileCode, Terminal, GitBranch

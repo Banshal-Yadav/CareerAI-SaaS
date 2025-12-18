@@ -24,7 +24,7 @@ export const getBasePromptStructure = () => ({
       icon: "a relevant lucide-react icon name (e.g., 'Cloud', 'Server', 'PenTool')"
     }],
     jobOutlook: "a brief, one-sentence overview of the job market.",
-    salaryRange: "salary in ₹X-Y LPA format for entry-level in India (e.g., ₹5-7 LPA or ₹8-12 LPA).",
+    salaryRange: "a short salary range string (e.g., $50k-70k or ₹8-12 LPA).",
     suggestedCertifications: [{
       name: "a relevant certification name.",
       issuer: "the issuing organization.",
