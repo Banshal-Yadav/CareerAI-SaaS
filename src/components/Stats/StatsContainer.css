@@ -1,9 +1,21 @@
 .Stats-Container {
-    /* background-color: #0a0a0a; Removed to show grid background */
-    padding: 4rem 1rem;
-    border-top: 1px solid #222;
+    padding: 5rem 1rem;
+    border-top: none;
     text-align: center;
-    margin-top: 8rem; /* Added significant spacing from the section above */
+    margin-top: 6rem;
+    position: relative;
+}
+
+.Stats-Container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    max-width: 600px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.5), transparent);
 }
 
 .stats-title {
