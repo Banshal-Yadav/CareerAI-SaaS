@@ -1,1 +1,128 @@
-.hero-section {\r\n    position: relative;\r\n    z-index: 1;\r\n    padding: 2rem 1rem 0;\r\n    overflow: hidden;\r\n}\r\n\r\n/* floating gradient orbs */\r\n.hero-orb {\r\n    position: absolute;\r\n    border-radius: 50%;\r\n    filter: blur(80px);\r\n    pointer-events: none;\r\n    z-index: -1;\r\n}\r\n\r\n.hero-orb-1 {\r\n    width: 400px;\r\n    height: 400px;\r\n    background: radial-gradient(circle, rgba(99, 102, 241, 0.3), transparent 70%);\r\n    top: -5%;\r\n    left: -5%;\r\n    animation: orb-float-1 8s ease-in-out infinite;\r\n}\r\n\r\n.hero-orb-2 {\r\n    width: 350px;\r\n    height: 350px;\r\n    background: radial-gradient(circle, rgba(168, 85, 247, 0.25), transparent 70%);\r\n    top: 10%;\r\n    right: -8%;\r\n    animation: orb-float-2 10s ease-in-out infinite;\r\n}\r\n\r\n.hero-orb-3 {\r\n    width: 250px;\r\n    height: 250px;\r\n    background: radial-gradient(circle, rgba(59, 130, 246, 0.2), transparent 70%);\r\n    bottom: 0;\r\n    left: 30%;\r\n    animation: orb-float-3 12s ease-in-out infinite;\r\n}\r\n\r\n@keyframes orb-float-1 {\r\n    0%, 100% { transform: translate(0, 0) scale(1); }\r\n    50% { transform: translate(30px, 20px) scale(1.1); }\r\n}\r\n\r\n@keyframes orb-float-2 {\r\n    0%, 100% { transform: translate(0, 0) scale(1); }\r\n    50% { transform: translate(-25px, 30px) scale(1.05); }\r\n}\r\n\r\n@keyframes orb-float-3 {\r\n    0%, 100% { transform: translate(0, 0) scale(1); }\r\n    50% { transform: translate(20px, -25px) scale(1.15); }\r\n}\r\n\r\n/* hero badge */\r\n.hero-badge {\r\n    display: inline-flex;\r\n    align-items: center;\r\n    gap: 0.5rem;\r\n    padding: 0.4rem 1rem;\r\n    border-radius: 50px;\r\n    background: rgba(99, 102, 241, 0.08);\r\n    border: 1px solid rgba(99, 102, 241, 0.25);\r\n    color: rgba(165, 160, 255, 0.9);\r\n    font-size: 0.85rem;\r\n    font-weight: 500;\r\n    letter-spacing: 0.3px;\r\n    margin-bottom: 1.5rem;\r\n    animation: badge-fade-in 0.8s ease-out;\r\n}\r\n\r\n.hero-badge svg {\r\n    color: #a78bfa;\r\n}\r\n\r\n@keyframes badge-fade-in {\r\n    from { opacity: 0; transform: translateY(-10px); }\r\n    to { opacity: 1; transform: translateY(0); }\r\n}\r\n\r\n.pg-title {\r\n    font-size: 4.5rem;\r\n    line-height: 1.1;\r\n    padding: 0 1rem;\r\n    margin: 0 0 1.5rem 0;\r\n    font-weight: 800;\r\n    background: linear-gradient(135deg, #ffffff 0%, #e0e0ff 40%, #c4b5fd 100%);\r\n    -webkit-background-clip: text;\r\n    -webkit-text-fill-color: transparent;\r\n    background-clip: text;\r\n    color: transparent;\r\n    letter-spacing: -1px;\r\n}\r\n\r\n.title-info {\r\n    font-size: 1.15rem;\r\n    font-weight: 400;\r\n    color: #888;\r\n    margin: 0;\r\n    padding: 0 1rem;\r\n    line-height: 1.7;\r\n}\r\n\r\n@media (max-width: 768px) {\r\n    .hero-section {\r\n        padding: 1rem 0.5rem 0;\r\n    }\r\n    .pg-title {\r\n        font-size: 2.2rem;\r\n        line-height: 1.2;\r\n        padding: 0 0.5rem;\r\n    }\r\n    .title-info {\r\n        font-size: 0.9rem;\r\n        padding: 0 0.5rem;\r\n    }\r\n    .hero-badge {\r\n        font-size: 0.75rem;\r\n        padding: 0.3rem 0.8rem;\r\n    }\r\n    .hero-orb-1 { width: 250px; height: 250px; }\r\n    .hero-orb-2 { width: 200px; height: 200px; }\r\n    .hero-orb-3 { width: 150px; height: 150px; }\r\n}\r\n
+.hero-section {
+    position: relative;
+    z-index: 1;
+    padding: 2rem 1rem 0;
+    overflow: hidden;
+}
+
+/* floating gradient orbs */
+.hero-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+    z-index: -1;
+}
+
+.hero-orb-1 {
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.3), transparent 70%);
+    top: -5%;
+    left: -5%;
+    animation: orb-float-1 8s ease-in-out infinite;
+}
+
+.hero-orb-2 {
+    width: 350px;
+    height: 350px;
+    background: radial-gradient(circle, rgba(168, 85, 247, 0.25), transparent 70%);
+    top: 10%;
+    right: -8%;
+    animation: orb-float-2 10s ease-in-out infinite;
+}
+
+.hero-orb-3 {
+    width: 250px;
+    height: 250px;
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.2), transparent 70%);
+    bottom: 0;
+    left: 30%;
+    animation: orb-float-3 12s ease-in-out infinite;
+}
+
+@keyframes orb-float-1 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(30px, 20px) scale(1.1); }
+}
+
+@keyframes orb-float-2 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(-25px, 30px) scale(1.05); }
+}
+
+@keyframes orb-float-3 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(20px, -25px) scale(1.15); }
+}
+
+/* hero badge */
+.hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 1rem;
+    border-radius: 50px;
+    background: rgba(99, 102, 241, 0.08);
+    border: 1px solid rgba(99, 102, 241, 0.25);
+    color: rgba(165, 160, 255, 0.9);
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    margin-bottom: 1.5rem;
+    animation: badge-fade-in 0.8s ease-out;
+}
+
+.hero-badge svg {
+    color: #a78bfa;
+}
+
+@keyframes badge-fade-in {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.pg-title {
+    font-size: 4.5rem;
+    line-height: 1.1;
+    padding: 0 1rem;
+    margin: 0 0 1.5rem 0;
+    font-weight: 800;
+    background: linear-gradient(135deg, #ffffff 0%, #e0e0ff 40%, #c4b5fd 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+    letter-spacing: -1px;
+}
+
+.title-info {
+    font-size: 1.15rem;
+    font-weight: 400;
+    color: #888;
+    margin: 0;
+    padding: 0 1rem;
+    line-height: 1.7;
+}
+
+@media (max-width: 768px) {
+    .hero-section {
+        padding: 1rem 0.5rem 0;
+    }
+    .pg-title {
+        font-size: 2.2rem;
+        line-height: 1.2;
+        padding: 0 0.5rem;
+    }
+    .title-info {
+        font-size: 0.9rem;
+        padding: 0 0.5rem;
+    }
+    .hero-badge {
+        font-size: 0.75rem;
+        padding: 0.3rem 0.8rem;
+    }
+    .hero-orb-1 { width: 250px; height: 250px; }
+    .hero-orb-2 { width: 200px; height: 200px; }
+    .hero-orb-3 { width: 150px; height: 150px; }
+}
