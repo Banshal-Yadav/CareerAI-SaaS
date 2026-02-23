@@ -21,8 +21,9 @@
 }
 
 .infographic-step:hover {
-    transform: translateY(-10px);
-    border-color: #555;
+    transform: translateY(-8px);
+    border-color: rgba(99, 102, 241, 0.35);
+    box-shadow: 0 12px 40px rgba(99, 102, 241, 0.1);
 }
 
 .step-header {
@@ -35,18 +36,23 @@
 .step-number {
     font-size: 3.5rem;
     font-weight: 800;
-    color: #333;
     line-height: 1;
     font-family: monospace;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.4), rgba(59, 130, 246, 0.2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
 }
 
 .step-highlight {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 2px;
-    color: #666;
-    border: 1px solid #333;
-    padding: 0.25rem 0.75rem;
+    color: rgba(147, 151, 255, 0.8);
+    border: 1px solid rgba(99, 102, 241, 0.25);
+    background: rgba(99, 102, 241, 0.06);
+    padding: 0.3rem 0.85rem;
     border-radius: 20px;
 }
 

@@ -4,17 +4,16 @@ export const config = {
   maxDuration: 60,
 };
 
-const DEFAULT_ALLOWED_ORIGINS = [
-  'http://localhost:5173',
-  'http://localhost:3000',
-];
+const DEV_ORIGINS = process.env.NODE_ENV === 'development'
+  ? ['http://localhost:5173', 'http://localhost:3000']
+  : [];
 
 const ALLOWED_ORIGINS = [
   ...(process.env.ALLOWED_ORIGINS || '')
     .split(',')
     .map((o) => o.trim())
     .filter(Boolean),
-  ...DEFAULT_ALLOWED_ORIGINS,
+  ...DEV_ORIGINS,
 ];
 
 const getSelfOrigin = (req) => {

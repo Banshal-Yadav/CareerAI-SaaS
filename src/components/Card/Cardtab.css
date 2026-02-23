@@ -18,16 +18,18 @@
 }
 
 .feature-card {
-    background: transparent !important;
+    background: rgba(255, 255, 255, 0.02) !important;
     border: none !important;
-    border-left: 1px solid #333 !important;
-    border-radius: 0 !important;
-    padding: 0 0 0 1.5rem !important;
+    border-left: 2px solid #333 !important;
+    border-radius: 0 12px 12px 0 !important;
+    padding: 1.5rem 1.5rem 1.5rem 1.5rem !important;
     box-shadow: none !important;
+    transition: all 0.3s ease !important;
 }
 
 .feature-card:hover {
     transform: none !important;
-    border-left-color: #3b82f6 !important;
+    border-left-color: #6366f1 !important;
+    background: rgba(99, 102, 241, 0.04) !important;
     box-shadow: none !important;
 }

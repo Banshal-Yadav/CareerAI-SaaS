@@ -1,6 +1,6 @@
 .stats-tab {
     margin: 0rem auto 0.5rem auto;
-    padding: 0 0.5rem;
+    padding: 0 1rem;
     display: flex;
     justify-content: center;
     gap: 2rem;
@@ -17,9 +17,9 @@
 }
 
 .stats-card:hover {
-    transform: translateY(-10px);
-    border-color: #555 !important;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    transform: translateY(-8px);
+    border-color: rgba(99, 102, 241, 0.35) !important;
+    box-shadow: 0 12px 40px rgba(99, 102, 241, 0.12);
 }
 
 @media (max-width: 768px) {
